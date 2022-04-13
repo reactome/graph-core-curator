@@ -217,7 +217,7 @@
                         </goals>
                         <configuration>
                             <excludes>
-                                <exclude>org/reactome/server/graph/Main.class</exclude>
+                                <exclude>org/reactome/server/graph/curator/Main.class</exclude>
                                 <exclude>**/logback.xml</exclude>
                             </excludes>
                         </configuration>

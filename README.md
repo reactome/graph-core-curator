@@ -157,9 +157,11 @@ private DatabaseObjectService service;
 
 Read more about [AspectJ and AOP](https://github.com/reactome/graph-core/tree/master/src/main/java/org/reactome/server/graph/aop/)
 
-The Graph core library provides lazy loading functionality. When using a getter of a relationship property, Objects will be loaded automatically if they are present in the Graph database. To deactivate this feature, which might be required in some cases: e.g. serializing results to json, add the following bean to your configuration ```mvc-dispatcher-servlet.xml```. 
+The Graph core library provides lazy loading functionality. When using a getter of a relationship property, Objects will be loaded automatically if they are present in the Graph database. To deactivate this feature, which might be required in some cases: e.g. serializing results to json, add the following bean to your configuration ```mvc-dispatcher-servlet.xml```.
+
 ```xml
-<bean class="org.reactome.server.graph.aop.LazyFetchAspect" factory-method="aspectOf">
+
+<bean class="org.reactome.server.graph.curator.aop.LazyFetchAspect" factory-method="aspectOf">
     <property name="enableAOP" value="false"/>
 </bean>
 ```
