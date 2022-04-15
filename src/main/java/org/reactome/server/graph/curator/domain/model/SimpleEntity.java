@@ -1,10 +1,11 @@
 package org.reactome.server.graph.curator.domain.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import org.reactome.server.graph.curator.domain.annotations.ReactomeProperty;
 import org.reactome.server.graph.curator.domain.annotations.ReactomeSchemaIgnore;
 import org.springframework.data.neo4j.core.schema.Node;
 import org.springframework.data.neo4j.core.schema.Relationship;
+
+import java.util.List;
 
 /**
  * A chemical species not encoded directly or indirectly in the genome, typically small molecules such as ATP or ethanol.
@@ -14,24 +15,16 @@ import org.springframework.data.neo4j.core.schema.Relationship;
 @Node
 public class SimpleEntity extends PhysicalEntity {
 
-    @ReactomeProperty(addedField = true)
-    private String referenceType;
-
     @Relationship(type = "referenceEntity")
     private ReferenceMolecule referenceEntity;
 
     @Relationship(type = "species")
     private Species species;
 
+    @Relationship(type = "compartment")
+    private List<Compartment> compartment;
+
     public SimpleEntity() {}
-
-    public String getReferenceType() {
-        return referenceType;
-    }
-
-    public void setReferenceType(String referenceType) {
-        this.referenceType = referenceType;
-    }
 
     public ReferenceMolecule getReferenceEntity() {
         return referenceEntity;
@@ -47,6 +40,14 @@ public class SimpleEntity extends PhysicalEntity {
 
     public void setSpecies(Species species) {
         this.species = species;
+    }
+
+    public List<Compartment> getCompartment() {
+        return compartment;
+    }
+
+    public void setCompartment(List<Compartment> compartment) {
+        this.compartment = compartment;
     }
 
     @ReactomeSchemaIgnore

@@ -30,24 +30,9 @@ public class SchemaService {
         return schemaRepository.getByClass(clazz);
     }
 
-    public <T> Collection<T> getByClass(Class<T> clazz, Object species) {
-        if (isValidSpeciesClass(clazz)) {
-            return getByClassAndSpecies(clazz,species);
-        }
-        return null;
-    }
-
     public <T> Collection<T> getByClassName(String className) throws ClassNotFoundException {
         Class clazz = DatabaseObjectUtils.getClassForName(className);
         return schemaRepository.getByClass(clazz);
-    }
-
-    public <T> Collection<T> getByClassName(String className, Object species) throws ClassNotFoundException {
-        Class clazz = DatabaseObjectUtils.getClassForName(className);
-        if (isValidSpeciesClass(clazz)) {
-            return getByClassAndSpecies(clazz,species);
-        }
-        return null;
     }
 
     // ------------------------------------ Query by Class (pageing) -----------------------------------------------
@@ -56,32 +41,9 @@ public class SchemaService {
         return schemaRepository.getByClass(clazz, page, offset);
     }
 
-    public <T> Collection<T> getByClass(Class<T> clazz, Object species, Integer page, Integer offset) {
-        if (isValidSpeciesClass(clazz)) {
-            return getByClassAndSpecies(clazz,species, page, offset);
-        }
-        return null;
-    }
-
     public <T> Collection<T> getByClassName(String className, Integer page, Integer offset) throws ClassNotFoundException {
         Class clazz = DatabaseObjectUtils.getClassForName(className);
         return schemaRepository.getByClass(clazz, page, offset);
-    }
-
-    public <T> Collection<T> getByClassName(String className, Object species, Integer page, Integer offset) throws ClassNotFoundException {
-        Class clazz = DatabaseObjectUtils.getClassForName(className);
-        if (isValidSpeciesClass(clazz)) {
-            return getByClassAndSpecies(clazz,species, page, offset);
-        }
-        return null;
-    }
-
-    public Integer countByClassAndSpecies(String className, Object species) throws ClassNotFoundException {
-        Class clazz = DatabaseObjectUtils.getClassForName(className);
-        if (isValidSpeciesClass(clazz)) {
-            return countByClassAndSpecies(clazz,species);
-        }
-        return 0;
     }
 
     // ---------------------------------------- Query by Class for SimpleObject ------------------------------------------------
@@ -90,24 +52,9 @@ public class SchemaService {
         return schemaRepository.getSimpleDatabaseObjectByClass(clazz);
     }
 
-    public Collection<SimpleDatabaseObject> getSimpleDatabaseObjectByClass(Class clazz, Object species) {
-        if (isValidSpeciesClass(clazz)) {
-            return getSimpleDatabaseObjectByClassAndSpecies(clazz,species);
-        }
-        return null;
-    }
-
     public Collection<SimpleDatabaseObject> getSimpleDatabaseObjectByClassName(String className) throws ClassNotFoundException {
         Class clazz = DatabaseObjectUtils.getClassForName(className);
         return schemaRepository.getSimpleDatabaseObjectByClass(clazz);
-    }
-
-    public Collection<SimpleDatabaseObject> getSimpleDatabaseObjectByClassName(String className, Object species) throws ClassNotFoundException {
-        Class clazz = DatabaseObjectUtils.getClassForName(className);
-        if (isValidSpeciesClass(clazz)) {
-            return getSimpleDatabaseObjectByClassAndSpecies(clazz,species);
-        }
-        return null;
     }
 
     // ---------------------------------------- Query by Class for SimpleObject (paging) ------------------------------------------------
@@ -116,24 +63,9 @@ public class SchemaService {
         return schemaRepository.getSimpleDatabaseObjectByClass(clazz, page, offset);
     }
 
-    public Collection<SimpleDatabaseObject> getSimpleDatabaseObjectByClass(Class clazz, Object species, Integer page, Integer offset) {
-        if (isValidSpeciesClass(clazz)) {
-            return getSimpleDatabaseObjectByClassAndSpecies(clazz,species, page, offset);
-        }
-        return null;
-    }
-
     public Collection<SimpleDatabaseObject> getSimpleDatabaseObjectByClassName(String className, Integer page, Integer offset) throws ClassNotFoundException {
         Class clazz = DatabaseObjectUtils.getClassForName(className);
         return schemaRepository.getSimpleDatabaseObjectByClass(clazz, page, offset);
-    }
-
-    public Collection<SimpleDatabaseObject> getSimpleDatabaseObjectByClassName(String className, Object species, Integer page, Integer offset) throws ClassNotFoundException {
-        Class clazz = DatabaseObjectUtils.getClassForName(className);
-        if (isValidSpeciesClass(clazz)) {
-            return getSimpleDatabaseObjectByClassAndSpecies(clazz,species, page, offset);
-        }
-        return null;
     }
 
     // ---------------------------------------- Query by Class for SimpleReferenceObject ------------------------------------------------
@@ -194,24 +126,9 @@ public class SchemaService {
         return schemaRepository.countEntries(clazz);
     }
 
-    public Long countEntries(Class<?> clazz, Object species){
-        if (isValidSpeciesClass(clazz)) {
-            return countEntriesWithSpecies(clazz, species);
-        }
-        return null;
-    }
-
     public Long countEntries(String className) throws ClassNotFoundException {
         Class clazz = DatabaseObjectUtils.getClassForName(className);
         return schemaRepository.countEntries(clazz);
-    }
-
-    public Long countEntries(String className, Object species) throws ClassNotFoundException {
-        Class clazz = DatabaseObjectUtils.getClassForName(className);
-        if (isValidSpeciesClass(clazz)) {
-            return countEntriesWithSpecies(clazz, species);
-        }
-        return null;
     }
 
     // ---------------------------------------- private methods ------------------------------------------------
@@ -228,60 +145,5 @@ public class SchemaService {
 
     private Boolean isValidReferenceClass(Class clazz) {
         return ReferenceEntity.class.isAssignableFrom(clazz) || ExternalOntology.class.isAssignableFrom(clazz);
-    }
-
-    private <T> Collection<T> getByClassAndSpecies(Class clazz, Object species) {
-        String speciesString = species instanceof Species ? ((Species) species).getTaxId() : species.toString();
-        if (StringUtils.isNumeric(speciesString)) {
-            return schemaRepository.getByClassAndSpeciesTaxId(clazz, speciesString);
-        } else {
-            return schemaRepository.getByClassAndSpeciesName(clazz, speciesString);
-        }
-    }
-
-    private <T> Collection<T> getByClassAndSpecies(Class clazz, Object species, Integer page, Integer offset) {
-        String speciesString = species instanceof Species ? ((Species) species).getTaxId() : species.toString();
-        if (StringUtils.isNumeric(speciesString)) {
-            return schemaRepository.getByClassAndSpeciesTaxId(clazz, speciesString, page, offset);
-        } else {
-            return schemaRepository.getByClassAndSpeciesName(clazz, speciesString, page, offset);
-        }
-    }
-
-
-    private Integer countByClassAndSpecies(Class clazz, Object species) {
-        String speciesString = species instanceof Species ? ((Species) species).getTaxId() : species.toString();
-        if (StringUtils.isNumeric(speciesString)) {
-            return schemaRepository.countByClassAndSpeciesTaxId(clazz, speciesString);
-        } else {
-            return schemaRepository.countByClassAndSpeciesName(clazz, speciesString);
-        }
-    }
-
-    private Collection<SimpleDatabaseObject> getSimpleDatabaseObjectByClassAndSpecies(Class clazz, Object species) {
-        String speciesString = species instanceof Species ? ((Species) species).getTaxId() : species.toString();
-        if (StringUtils.isNumeric(speciesString)) {
-            return schemaRepository.getSimpleDatabaseObjectByClassAndSpeciesTaxId(clazz,speciesString);
-        } else {
-            return schemaRepository.getSimpleDatabaseObjectByClassAndSpeciesName(clazz,speciesString);
-        }
-    }
-
-    private Collection<SimpleDatabaseObject> getSimpleDatabaseObjectByClassAndSpecies(Class clazz, Object species, Integer page, Integer offset) {
-        String speciesString = species instanceof Species ? ((Species) species).getTaxId() : species.toString();
-        if (StringUtils.isNumeric(speciesString)) {
-            return schemaRepository.getSimpleDatabaseObjectByClassAndSpeciesTaxId(clazz,speciesString, page, offset);
-        } else {
-            return schemaRepository.getSimpleDatabaseObjectByClassAndSpeciesName(clazz,speciesString, page, offset);
-        }
-    }
-
-    private Long countEntriesWithSpecies(Class clazz, Object species) {
-        String speciesString = species instanceof Species ? ((Species) species).getTaxId() : species.toString();
-        if (StringUtils.isNumeric(speciesString)) {
-            return schemaRepository.countEntriesWithSpeciesTaxId(clazz, speciesString);
-        } else {
-            return schemaRepository.countEntriesWithSpeciesName(clazz, speciesString);
-        }
     }
 }

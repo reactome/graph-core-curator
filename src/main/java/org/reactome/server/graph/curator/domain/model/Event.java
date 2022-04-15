@@ -1,11 +1,7 @@
 package org.reactome.server.graph.curator.domain.model;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.reactome.server.graph.curator.domain.annotations.ReactomeConstraint;
 import org.reactome.server.graph.curator.domain.annotations.ReactomeProperty;
-import org.reactome.server.graph.curator.domain.annotations.ReactomeSchemaIgnore;
-import org.reactome.server.graph.curator.domain.annotations.ReactomeTransient;
-import org.reactome.server.graph.curator.domain.relationship.HasCompartment;
 import org.springframework.data.neo4j.core.schema.Node;
 import org.springframework.data.neo4j.core.schema.Relationship;
 
@@ -18,20 +14,16 @@ public abstract class Event extends DatabaseObject {
 
     @ReactomeProperty
     private String definition;
-    //A simple flag to indicate if this Event object is a disease
-    @ReactomeProperty(addedField = true)
-    private Boolean isInDisease;
-    //A simple flag to indicate if this Event is inferred from another
-    @ReactomeProperty(addedField = true)
-    private Boolean isInferred;
+    @ReactomeProperty
+    private Boolean doRelease;
+
+
     @ReactomeProperty
     private List<String> name;
     @ReactomeProperty
     private String releaseDate;
     @ReactomeProperty
     private String releaseStatus;
-    @ReactomeProperty(addedField = true)
-    private String speciesName;
 
     @Relationship(type = "authored", direction = Relationship.Direction.INCOMING)
     private List<InstanceEdit> authored;
@@ -39,22 +31,11 @@ public abstract class Event extends DatabaseObject {
     @Relationship(type = "crossReference")
     private List<DatabaseIdentifier> crossReference;
 
-    @Relationship(type = "compartment")
-    private SortedSet<HasCompartment> compartment;
-
     @Relationship(type = "disease")
     private List<Disease> disease;
 
     @Relationship(type = "edited", direction = Relationship.Direction.INCOMING)
     private List<InstanceEdit> edited;
-
-    /**
-     * eventOf is not a field of the previous RestfulApi and will be ignored until needed
-     */
-    @JsonIgnore
-    @ReactomeTransient
-    @Relationship(type = "hasEvent", direction=Relationship.Direction.INCOMING)
-    private List<Pathway> eventOf;
 
     @Relationship(type = "evidenceType")
     private EvidenceType evidenceType;
@@ -65,24 +46,16 @@ public abstract class Event extends DatabaseObject {
     @Relationship(type = "precedingEvent")
     private List<Event> precedingEvent;
 
-    /**
-     * followingEvent is not a field of the previous RestfulApi and will be ignored until needed
-     */
-    @JsonIgnore
-    @ReactomeTransient
-    @Relationship(type = "precedingEvent", direction=Relationship.Direction.INCOMING)
-    private List<Event> followingEvent;
-
     @Relationship(type = "goBiologicalProcess")
     private GO_BiologicalProcess goBiologicalProcess;
 
-    @Relationship(type = "inferredTo", direction = Relationship.Direction.INCOMING)
+    @Relationship(type = "inferredFrom")
     private Set<Event> inferredFrom;
 
     @Relationship(type = "literatureReference")
     private List<Publication> literatureReference;
 
-    @Relationship(type = "inferredTo")
+    @Relationship(type = "orthologousEvent")
     private Set<Event> orthologousEvent;
 
     @Relationship(type = "relatedSpecies")
@@ -110,28 +83,20 @@ public abstract class Event extends DatabaseObject {
         super(dbId);
     }
 
+    public Boolean getDoRelease() {
+        return doRelease;
+    }
+
+    public void setDoRelease(Boolean doRelease) {
+        this.doRelease = doRelease;
+    }
+
     public String getDefinition() {
         return definition;
     }
 
     public void setDefinition(String definition) {
         this.definition = definition;
-    }
-
-    public Boolean getIsInDisease() {
-        return isInDisease;
-    }
-
-    public void setIsInDisease(Boolean isInDisease) {
-        this.isInDisease = isInDisease;
-    }
-
-    public Boolean getIsInferred() {
-        return isInferred;
-    }
-
-    public void setIsInferred(Boolean isInferred) {
-        this.isInferred = isInferred;
     }
 
     public List<String> getName() {
@@ -158,15 +123,6 @@ public abstract class Event extends DatabaseObject {
         this.releaseStatus = releaseStatus;
     }
 
-    @ReactomeSchemaIgnore
-    public String getSpeciesName() {
-        return speciesName;
-    }
-
-    public void setSpeciesName(String speciesName) {
-        this.speciesName = speciesName;
-    }
-
     public List<InstanceEdit> getAuthored() {
         return authored;
     }
@@ -181,32 +137,6 @@ public abstract class Event extends DatabaseObject {
 
     public void setCrossReference(List<DatabaseIdentifier> crossReference) {
         this.crossReference = crossReference;
-    }
-
-    public List<Compartment> getCompartment() {
-        if(compartment == null) return null;
-        List<Compartment> rtn = new ArrayList<>();
-        for (HasCompartment c : compartment) {
-            rtn.add(c.getCompartment());
-        }
-        return rtn;
-    }
-
-    // TODO This setCompartment break the reflection for testing against Relational DB. Renaming it fix the test, check impact
-    public void setHasCompartment(SortedSet<HasCompartment> compartment) {
-        this.compartment = compartment;
-    }
-
-    public void setCompartment(List<Compartment> compartment) {
-        this.compartment = new TreeSet<>();
-        int order = 0;
-        for (Compartment c : compartment) {
-            HasCompartment hc = new HasCompartment();
-//            hc.setSource(this);
-            hc.setCompartment(c);
-            hc.setOrder(order++);
-            this.compartment.add(hc);
-        }
     }
 
     public List<Disease> getDisease() {
@@ -229,14 +159,6 @@ public abstract class Event extends DatabaseObject {
         return evidenceType;
     }
 
-    public List<Pathway> getEventOf() {
-        return eventOf;
-    }
-
-    public void setEventOf(List<Pathway> eventOf) {
-        this.eventOf = eventOf;
-    }
-
     public void setEvidenceType(EvidenceType evidenceType) {
         this.evidenceType = evidenceType;
     }
@@ -247,14 +169,6 @@ public abstract class Event extends DatabaseObject {
 
     public void setFigure(List<Figure> figure) {
         this.figure = figure;
-    }
-
-    public List<Event> getFollowingEvent() {
-        return followingEvent;
-    }
-
-    public void setFollowingEvent(List<Event> followingEvent) {
-        this.followingEvent = followingEvent;
     }
 
     public GO_BiologicalProcess getGoBiologicalProcess() {

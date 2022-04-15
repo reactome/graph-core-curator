@@ -1,5 +1,6 @@
 package org.reactome.server.graph.curator.domain.model;
 
+import org.reactome.server.graph.curator.domain.annotations.ReactomeAllowedClasses;
 import org.reactome.server.graph.curator.domain.annotations.ReactomeProperty;
 import org.springframework.data.neo4j.core.schema.Node;
 import org.springframework.data.neo4j.core.schema.Relationship;
@@ -11,6 +12,7 @@ public class ModifiedNucleotide extends TranscriptionalModification {
     private Integer coordinate;
 
     @Relationship(type = "modification")
+    @ReactomeAllowedClasses(allowed = {EntitySet.class, Polymer.class, ReferenceMolecule.class, ReferenceGroup.class})
     private DatabaseObject modification;
 
     public ModifiedNucleotide() {

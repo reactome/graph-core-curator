@@ -1,9 +1,6 @@
 package org.reactome.server.graph.curator.domain.model;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.reactome.server.graph.curator.domain.annotations.ReactomeProperty;
-import org.reactome.server.graph.curator.domain.annotations.ReactomeRelationship;
-import org.reactome.server.graph.curator.domain.annotations.ReactomeSchemaIgnore;
 import org.springframework.data.neo4j.core.schema.Node;
 import org.springframework.data.neo4j.core.schema.Relationship;
 
@@ -13,16 +10,12 @@ import java.util.List;
 @Node
 public abstract class ReferenceEntity extends DatabaseObject {
 
-    // will be filled together with url
-    private String databaseName;
     @ReactomeProperty
     private String identifier;
     @ReactomeProperty
     private List<String> name;
     @ReactomeProperty
     private List<String> otherIdentifier;
-    @ReactomeProperty(addedField = true)
-    private String url;
 
     @Relationship(type = "crossReference")
     private List<DatabaseIdentifier> crossReference;
@@ -30,25 +23,7 @@ public abstract class ReferenceEntity extends DatabaseObject {
     @Relationship(type = "referenceDatabase")
     private ReferenceDatabase referenceDatabase;
 
-    @ReactomeRelationship
-    @Relationship(type = "referenceEntity", direction = Relationship.Direction.INCOMING)
-    private List<PhysicalEntity> physicalEntity;
-
     public ReferenceEntity() {}
-
-    public String getDatabaseName() {
-        return databaseName;
-    }
-
-    @ReactomeSchemaIgnore
-    @JsonIgnore
-    public String getSimplifiedDatabaseName() {
-        return databaseName.replace(" ", "-");
-    }
-
-    public void setDatabaseName(String databaseName) {
-        this.databaseName = databaseName;
-    }
 
     public String getIdentifier() {
         return identifier;
@@ -74,14 +49,6 @@ public abstract class ReferenceEntity extends DatabaseObject {
         this.otherIdentifier = otherIdentifier;
     }
 
-    public String getUrl() {
-        return url;
-    }
-
-    public void setUrl(String url) {
-        this.url = url;
-    }
-
     public List<DatabaseIdentifier> getCrossReference() {
         return crossReference;
     }
@@ -96,13 +63,5 @@ public abstract class ReferenceEntity extends DatabaseObject {
 
     public void setReferenceDatabase(ReferenceDatabase referenceDatabase) {
         this.referenceDatabase = referenceDatabase;
-    }
-
-    public List<PhysicalEntity> getPhysicalEntity() {
-        return physicalEntity;
-    }
-
-    public void setPhysicalEntity(List<PhysicalEntity> physicalEntity) {
-        this.physicalEntity = physicalEntity;
     }
 }

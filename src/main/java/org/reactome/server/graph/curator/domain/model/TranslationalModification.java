@@ -1,6 +1,5 @@
 package org.reactome.server.graph.curator.domain.model;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.reactome.server.graph.curator.domain.annotations.ReactomeProperty;
 import org.springframework.data.neo4j.core.schema.Node;
 import org.springframework.data.neo4j.core.schema.Relationship;
@@ -11,10 +10,6 @@ public abstract class TranslationalModification extends AbstractModifiedResidue 
 
     @ReactomeProperty
     private Integer coordinate;
-
-    @JsonIgnore
-    @ReactomeProperty(addedField = true) //filled by the diagram-converter
-    private String label;
 
     @Relationship(type = "psiMod")
     private PsiMod psiMod;
@@ -31,14 +26,6 @@ public abstract class TranslationalModification extends AbstractModifiedResidue 
 
     public void setCoordinate(Integer coordinate) {
         this.coordinate = coordinate;
-    }
-
-    public String getLabel() {
-        return label;
-    }
-
-    public void setLabel(String label) {
-        this.label = label;
     }
 
     public PsiMod getPsiMod() {

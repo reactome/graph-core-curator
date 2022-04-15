@@ -3,8 +3,6 @@ package org.reactome.server.graph.curator.domain.model;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.reactome.server.graph.curator.domain.annotations.ReactomeProperty;
 import org.reactome.server.graph.curator.domain.annotations.ReactomeSchemaIgnore;
-import org.reactome.server.graph.curator.domain.relationship.RepeatedUnit;
-import org.reactome.server.graph.curator.service.helper.StoichiometryObject;
 import org.springframework.data.neo4j.core.schema.Node;
 import org.springframework.data.neo4j.core.schema.Relationship;
 
@@ -26,10 +24,13 @@ public class Polymer extends PhysicalEntity {
     private Integer minUnitCount;
 
     @Relationship(type = "repeatedUnit")
-    private SortedSet<RepeatedUnit> repeatedUnit;
+    private List<PhysicalEntity> repeatedUnit;
 
     @Relationship(type = "species")
     private List<Species> species;
+
+    @Relationship(type = "compartment")
+    private List<Compartment> compartment;
 
     public Polymer() {}
 
@@ -53,50 +54,13 @@ public class Polymer extends PhysicalEntity {
         this.minUnitCount = minUnitCount;
     }
 
-    @JsonIgnore
-    public List<StoichiometryObject> fetchRepeatedUnit() {
-        List<StoichiometryObject> objects = new ArrayList<>();
-        if(repeatedUnit!=null) {
-            for (RepeatedUnit aux : repeatedUnit) {
-                objects.add(new StoichiometryObject(aux.getStoichiometry(), aux.getPhysicalEntity()));
-            }
-            Collections.sort(objects);
-        }
-
-        return objects;
-    }
-
     public List<PhysicalEntity> getRepeatedUnit() {
-        List<PhysicalEntity> rtn = null;
-        if (this.repeatedUnit != null) {
-            rtn = new ArrayList<>();
-            for (RepeatedUnit repeatedUnit : this.repeatedUnit) {
-                for (int i = 0; i < repeatedUnit.getStoichiometry(); i++) {
-                    rtn.add(repeatedUnit.getPhysicalEntity());
-                }
-            }
-        }
-        return rtn;
+        return repeatedUnit;
     }
 
     public void setRepeatedUnit(List<PhysicalEntity> repeatedUnit) {
-        if (repeatedUnit == null) return;
-        Map<Long, RepeatedUnit> repeatedUnits = new LinkedHashMap<>();
-        int order = 0;
-        for (PhysicalEntity physicalEntity : repeatedUnit) {
-            RepeatedUnit re = repeatedUnits.get(physicalEntity.getDbId());
-            if (re != null) {
-                re.setStoichiometry(re.getStoichiometry() + 1);
-            } else {
-                re = new RepeatedUnit();
-//                re.setPolymer(this);
-                re.setPhysicalEntity(physicalEntity);
-                re.setOrder(order++);
-                repeatedUnits.put(physicalEntity.getDbId(), re);
-            }
-        }
-        this.repeatedUnit = new TreeSet<>(repeatedUnits.values());
-    }
+        this.repeatedUnit = repeatedUnit;
+   }
 
     public List<Species> getSpecies() {
         return species;
@@ -104,6 +68,14 @@ public class Polymer extends PhysicalEntity {
 
     public void setSpecies(List<Species> species) {
         this.species = species;
+    }
+
+    public List<Compartment> getCompartment() {
+        return compartment;
+    }
+
+    public void setCompartment(List<Compartment> compartment) {
+        this.compartment = compartment;
     }
 
     @ReactomeSchemaIgnore

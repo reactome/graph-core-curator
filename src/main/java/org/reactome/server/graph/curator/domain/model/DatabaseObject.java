@@ -34,28 +34,11 @@ import java.util.Objects;
 @Node
 public abstract class DatabaseObject implements Serializable, Comparable<DatabaseObject>, DatabaseObjectLike {
 
-    @ReactomeTransient
-    public transient Boolean isLoaded = false;
-
-    @ReactomeTransient
-    public transient Boolean preventLazyLoading = false;
-
-//    @JsonIgnore
-//    @Id @GeneratedValue
-//    private Long id;
-
     @Id
     protected Long dbId;
 
+    @ReactomeProperty
     private String displayName;
-
-    @ReactomeProperty(addedField = true)
-    private String stId;
-
-    private String stIdVersion;
-
-    @JsonIgnore
-    private transient String oldStId;
 
     @Relationship(type = "created", direction = Relationship.Direction.INCOMING)
     private InstanceEdit created;
@@ -63,21 +46,15 @@ public abstract class DatabaseObject implements Serializable, Comparable<Databas
     @Relationship(type = "modified", direction = Relationship.Direction.INCOMING)
     private InstanceEdit modified;
 
+    @Relationship(type = "stableIdentifier")
+    private StableIdentifier stableIdentifier;
+
     public DatabaseObject() {
     }
 
     public DatabaseObject(Long dbId) {
         this.dbId = dbId;
     }
-
-//    @ReactomeSchemaIgnore
-//    public Long getId() {
-//        return id;
-//    }
-//
-//    public void setId(Long id) {
-//        this.id = id;
-//    }
 
     public Long getDbId() {
         return dbId;
@@ -96,29 +73,7 @@ public abstract class DatabaseObject implements Serializable, Comparable<Databas
     }
 
     public String getStId() {
-        return stId;
-    }
-
-    public void setStId(String stId) {
-        this.stId = stId;
-    }
-
-    @ReactomeSchemaIgnore
-    public String getStIdVersion() {
-        return stIdVersion;
-    }
-
-    public void setStIdVersion(String stIdVersion) {
-        this.stIdVersion = stIdVersion;
-    }
-
-    @ReactomeSchemaIgnore
-    public String getOldStId() {
-        return oldStId;
-    }
-
-    public void setOldStId(String oldStId) {
-        this.oldStId = oldStId;
+        return getStableIdentifier().getStId();
     }
 
     public InstanceEdit getCreated() {
@@ -137,10 +92,18 @@ public abstract class DatabaseObject implements Serializable, Comparable<Databas
         this.modified = modified;
     }
 
+    public StableIdentifier getStableIdentifier() {
+        return stableIdentifier;
+    }
+
+    public void setStableIdentifier(StableIdentifier  stableIdentifier) {
+        this.stableIdentifier = stableIdentifier;
+    }
+
     @Override
     public String toString() {
         return getClass().getSimpleName() + " {" +
-                (stId == null ? "dbId=" + dbId : "dbId=" + dbId + ", stId='" + stId + '\'') +
+                (stableIdentifier.getIdentifier() == null ? "dbId=" + dbId : "dbId=" + dbId + ", stId='" + stableIdentifier.getIdentifier() + '\'') +
                 ", displayName='" + displayName + '\'' +
                 "}";
     }
@@ -151,13 +114,16 @@ public abstract class DatabaseObject implements Serializable, Comparable<Databas
         if (o == null || getClass() != o.getClass()) return false;
 
         DatabaseObject that = (DatabaseObject) o;
-        return dbId != null ? dbId.equals(that.dbId) : that.dbId == null && (stId != null ? stId.equals(that.stId) : that.stId == null && Objects.equals(displayName, that.displayName));
+        return dbId != null ? dbId.equals(that.dbId) : that.dbId == null &&
+                (stableIdentifier.getIdentifier() != null ?
+                        stableIdentifier.getIdentifier().equals(that.stableIdentifier.getIdentifier()) :
+                        that.stableIdentifier.getIdentifier() == null && Objects.equals(displayName, that.displayName));
     }
 
     @Override
     public int hashCode() {
         int result = dbId != null ? dbId.hashCode() : 0;
-        result = 31 * result + (stId != null ? stId.hashCode() : 0);
+        result = 31 * result + (stableIdentifier.getIdentifier() != null ? stableIdentifier.getIdentifier().hashCode() : 0);
         result = 31 * result + (displayName != null ? displayName.hashCode() : 0);
         return result;
     }
@@ -204,68 +170,5 @@ public abstract class DatabaseObject implements Serializable, Comparable<Databas
         } catch (NoSuchMethodException | IllegalAccessException | InvocationTargetException e) {
             return new ArrayList<>();
         }
-    }
-
-    @ReactomeSchemaIgnore
-    @JsonIgnore
-    public <T extends DatabaseObject> T preventLazyLoading() {
-        return preventLazyLoading(true);
-    }
-
-    @SuppressWarnings({"unchecked", "WeakerAccess", "UnusedReturnValue"})
-    @ReactomeSchemaIgnore
-    @JsonIgnore
-    public <T extends DatabaseObject> T preventLazyLoading(boolean preventLazyLoading) {
-        if (this.preventLazyLoading == null) this.preventLazyLoading = false;
-        if (this.preventLazyLoading == preventLazyLoading) return (T) this;
-
-        this.preventLazyLoading = preventLazyLoading;
-
-        //Here we go through all the getters and prevent LazyLoading for all the objects
-        Method[] methods = getClass().getMethods();
-        for (Method method : methods) {
-            if (!method.getName().startsWith("get")) continue;
-            try {
-                Class<?> methodReturnClazz = method.getReturnType();
-
-                if (DatabaseObject.class.isAssignableFrom(methodReturnClazz)) {
-                    DatabaseObject object = (DatabaseObject) method.invoke(this);
-                    if (object != null) {
-                        if (object.preventLazyLoading == null) {
-                            object.preventLazyLoading = false;
-                        }
-                        if (object.preventLazyLoading != preventLazyLoading) {
-                            object.preventLazyLoading(preventLazyLoading);
-                        }
-                    }
-                }
-
-                if (Collection.class.isAssignableFrom(methodReturnClazz)) {
-                    ParameterizedType stringListType = (ParameterizedType) method.getGenericReturnType();
-                    Class<?> type = (Class<?>) stringListType.getActualTypeArguments()[0];
-                    String clazz = type.getSimpleName();
-                    if (DatabaseObject.class.isAssignableFrom(type)) {
-                        Collection<T> collection = (Collection<T>) method.invoke(this);
-                        if (collection != null) {
-                            for (DatabaseObject obj : collection) {
-                                DatabaseObject object = obj;
-                                if (object != null) {
-                                    if (object.preventLazyLoading == null) {
-                                        object.preventLazyLoading = false;
-                                    }
-                                    if (object.preventLazyLoading != preventLazyLoading) {
-                                        object.preventLazyLoading(preventLazyLoading);
-                                    }
-                                }
-                            }
-                        }
-                    }
-                }
-
-            } catch (IllegalAccessException | InvocationTargetException e) {
-                e.printStackTrace();
-            }
-        }
-        return (T) this;
     }
 }

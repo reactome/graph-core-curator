@@ -4,6 +4,8 @@ import org.reactome.server.graph.curator.domain.annotations.ReactomeProperty;
 import org.springframework.data.neo4j.core.schema.Node;
 import org.springframework.data.neo4j.core.schema.Relationship;
 
+import java.util.List;
+
 @SuppressWarnings("unused")
 @Node
 public class Book extends Publication {
@@ -16,6 +18,9 @@ public class Book extends Publication {
     private String pages;
     @ReactomeProperty
     private Integer year;
+
+    @Relationship(type = "chapterAuthors")
+    private List<Person> chapterAuthors;
 
     @Relationship(type = "publisher")
     private Affiliation publisher;
@@ -61,4 +66,13 @@ public class Book extends Publication {
     public void setPublisher(Affiliation publisher) {
         this.publisher = publisher;
     }
+
+    public List<Person> getChapterAuthors() {
+        return chapterAuthors;
+    }
+
+    public void setSummation(List<Person> chapterAuthors) {
+        this.chapterAuthors = chapterAuthors;
+    }
+
 }

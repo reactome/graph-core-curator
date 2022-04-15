@@ -3,7 +3,6 @@ package org.reactome.server.graph.curator.domain.model;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.reactome.server.graph.curator.domain.annotations.ReactomeProperty;
 import org.reactome.server.graph.curator.domain.annotations.ReactomeSchemaIgnore;
-import org.reactome.server.graph.curator.domain.relationship.HasModifiedResidue;
 import org.springframework.data.neo4j.core.schema.Node;
 import org.springframework.data.neo4j.core.schema.Relationship;
 
@@ -18,13 +17,11 @@ public class EntityWithAccessionedSequence extends GenomeEncodedEntity {
 
     @ReactomeProperty
     private Integer endCoordinate;
-    @ReactomeProperty(addedField = true)
-    private String referenceType;
     @ReactomeProperty
     private Integer startCoordinate;
 
     @Relationship(type = "hasModifiedResidue")
-    private SortedSet<HasModifiedResidue> hasModifiedResidue;
+    private List<AbstractModifiedResidue> hasModifiedResidue;
 
     @Relationship(type = "referenceEntity")
     private ReferenceSequence referenceEntity;
@@ -43,14 +40,6 @@ public class EntityWithAccessionedSequence extends GenomeEncodedEntity {
         this.endCoordinate = endCoordinate;
     }
 
-    public String getReferenceType() {
-        return referenceType;
-    }
-
-    public void setReferenceType(String referenceType) {
-        this.referenceType = referenceType;
-    }
-
     public Integer getStartCoordinate() {
         return startCoordinate;
     }
@@ -60,35 +49,11 @@ public class EntityWithAccessionedSequence extends GenomeEncodedEntity {
     }
 
     public List<AbstractModifiedResidue> getHasModifiedResidue() {
-        List<AbstractModifiedResidue> rtn = null;
-        if (hasModifiedResidue != null) {
-            rtn = new ArrayList<>();
-            for (HasModifiedResidue modifiedResidue : hasModifiedResidue) {
-                for (int i = 0; i < modifiedResidue.getStoichiometry(); i++) {
-                    rtn.add(modifiedResidue.getAbstractModifiedResidue());
-                }
-            }
-        }
-        return rtn;
+        return hasModifiedResidue;
     }
 
     public void setHasModifiedResidue(List<AbstractModifiedResidue> hasModifiedResidue) {
-        if (hasModifiedResidue == null) return;
-        int order = 0;
-        Map<Long, HasModifiedResidue> map = new HashMap<>();
-        for (AbstractModifiedResidue abstractModifiedResidue : hasModifiedResidue) {
-            HasModifiedResidue hmr = map.get(abstractModifiedResidue.getDbId());
-            if (hmr != null) {
-                hmr.setStoichiometry(hmr.getStoichiometry() + 1);
-            } else {
-                hmr = new HasModifiedResidue();
-//                hmr.setEntityWithAccessionedSequence(this);
-                hmr.setAbstractModifiedResidue(abstractModifiedResidue);
-                hmr.setOrder(order++);
-                map.put(abstractModifiedResidue.getDbId(), hmr);
-            }
-        }
-        this.hasModifiedResidue = new TreeSet<>(map.values());
+        this.hasModifiedResidue = hasModifiedResidue;
     }
 
     public ReferenceSequence getReferenceEntity() {
@@ -97,21 +62,6 @@ public class EntityWithAccessionedSequence extends GenomeEncodedEntity {
 
     public void setReferenceEntity(ReferenceSequence referenceEntity) {
         this.referenceEntity = referenceEntity;
-    }
-
-    @ReactomeSchemaIgnore
-    @Override
-    public String getClassName() {
-        switch (referenceType) {
-            case ("ReferenceGeneProduct"):
-                return "Protein";
-            case ("ReferenceDNASequence"):
-                return "DNA Sequence";
-            case ("ReferenceRNASequence"):
-                return "RNA Sequence";
-            default:
-                return super.getClassName();
-        }
     }
 
     @ReactomeSchemaIgnore

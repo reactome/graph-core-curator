@@ -3,9 +3,6 @@ package org.reactome.server.graph.curator.domain.model;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.reactome.server.graph.curator.domain.annotations.ReactomeProperty;
 import org.reactome.server.graph.curator.domain.annotations.ReactomeSchemaIgnore;
-import org.reactome.server.graph.curator.domain.relationship.HasCompartment;
-import org.reactome.server.graph.curator.domain.relationship.HasComponent;
-import org.reactome.server.graph.curator.service.helper.StoichiometryObject;
 import org.springframework.data.neo4j.core.schema.Node;
 import org.springframework.data.neo4j.core.schema.Relationship;
 
@@ -21,8 +18,11 @@ public class Complex extends PhysicalEntity {
     @ReactomeProperty
     private Boolean isChimeric;
 
+    @Relationship(type = "compartment")
+    private Compartment compartment;
+
     @Relationship(type = "hasComponent")
-    private SortedSet<HasComponent> hasComponent;
+    private List<PhysicalEntity> hasComponent;
 
     @ReactomeProperty
     private Boolean stoichiometryKnown;
@@ -31,7 +31,7 @@ public class Complex extends PhysicalEntity {
     private List<PhysicalEntity> entityOnOtherCell;
 
     @Relationship(type = "includedLocation")
-    private SortedSet<HasCompartment> includedLocation;
+    private List<Compartment> includedLocation;
 
     @Relationship(type = "species")
     private List<Species> species;
@@ -53,48 +53,12 @@ public class Complex extends PhysicalEntity {
         this.isChimeric = isChimeric;
     }
 
-    @JsonIgnore
-    public List<StoichiometryObject> fetchHasComponent() {
-        List<StoichiometryObject> objects = new ArrayList<>();
-        if(hasComponent!=null) {
-            for (HasComponent aux : hasComponent) {
-                objects.add(new StoichiometryObject(aux.getStoichiometry(), aux.getPhysicalEntity()));
-            }
-            Collections.sort(objects);
-        }
-
-        return objects;
-    }
-
     public List<PhysicalEntity> getHasComponent(){
-        List<PhysicalEntity> rtn = null;
-        if (this.hasComponent != null) {
-            rtn = new ArrayList<>();
-            for (HasComponent component : this.hasComponent) {
-                for (int i = 0; i < component.getStoichiometry(); i++) {
-                    rtn.add(component.getPhysicalEntity());
-                }
-            }
-        }
-        return rtn;
+        return hasComponent;
     }
 
     public void setHasComponent(List<PhysicalEntity> hasComponent) {
-        if (hasComponent == null) return;
-        Map<Long, HasComponent> components = new LinkedHashMap<>();
-        int order = 0;
-        for (PhysicalEntity physicalEntity : hasComponent) {
-            HasComponent component = components.get(physicalEntity.getDbId());
-            if (component != null) {
-                component.setStoichiometry(component.getStoichiometry() + 1);
-            } else {
-                component = new HasComponent();
-                component.setPhysicalEntity(physicalEntity);
-                component.setOrder(order++);
-                components.put(physicalEntity.getDbId(), component);
-            }
-        }
-        this.hasComponent = new TreeSet<>(components.values());
+        this.hasComponent = hasComponent;
     }
 
     public Boolean getStoichiometryKnown() {
@@ -114,28 +78,21 @@ public class Complex extends PhysicalEntity {
     }
 
     public List<Compartment> getIncludedLocation() {
-        if (includedLocation == null) return null;
-        List<Compartment> rtn = new ArrayList<>();
-        for (HasCompartment c : includedLocation) {
-            rtn.add(c.getCompartment());
-        }
-        return rtn;
-    }
-
-    public void setIncludedLocation(SortedSet<HasCompartment> includedLocation) {
-        this.includedLocation = includedLocation;
+        return includedLocation;
     }
 
     public void setIncludedLocation(List<Compartment> includedLocation) {
-        this.includedLocation = new TreeSet<>();
-        int order = 0;
-        for (Compartment c : includedLocation) {
-            HasCompartment hc = new HasCompartment();
-            hc.setCompartment(c);
-            hc.setOrder(order++);
-            this.includedLocation.add(hc);
-        }
+        this.includedLocation = includedLocation;
     }
+
+    public Compartment getCompartment() {
+        return compartment;
+    }
+
+    public void setCompartment(Compartment compartment) {
+        this.compartment = compartment;
+    }
+
 
     public List<Species> getSpecies() {
         return species;

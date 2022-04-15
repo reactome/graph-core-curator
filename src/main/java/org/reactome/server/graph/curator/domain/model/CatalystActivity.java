@@ -1,7 +1,5 @@
 package org.reactome.server.graph.curator.domain.model;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import org.reactome.server.graph.curator.domain.annotations.ReactomeTransient;
 import org.springframework.data.neo4j.core.schema.Node;
 import org.springframework.data.neo4j.core.schema.Relationship;
 
@@ -21,19 +19,8 @@ public class CatalystActivity extends DatabaseObject  {
     @Relationship(type = "activity")
     private GO_MolecularFunction activity;
 
-    /**
-     * catalyzedEvent is not a field of the previous RestfulApi and will be ignored until needed
-     */
-    @JsonIgnore
-    @ReactomeTransient
-    @Relationship(type = "catalystActivity", direction = Relationship.Direction.INCOMING)
-    private List<ReactionLikeEvent> catalyzedEvent;
-
     @Relationship(type = "physicalEntity")
     private PhysicalEntity physicalEntity;
-
-    @Relationship(type = "literatureReference")
-    private List<Publication> literatureReference;
 
     public CatalystActivity() {}
 
@@ -57,28 +44,12 @@ public class CatalystActivity extends DatabaseObject  {
         this.activity = activity;
     }
 
-    public List<ReactionLikeEvent> getCatalyzedEvent() {
-        return catalyzedEvent;
-    }
-
-    public void setCatalyzedEvent(List<ReactionLikeEvent> catalyzedEvent) {
-        this.catalyzedEvent = catalyzedEvent;
-    }
-
     public PhysicalEntity getPhysicalEntity() {
         return physicalEntity;
     }
 
     public void setPhysicalEntity(PhysicalEntity physicalEntity) {
         this.physicalEntity = physicalEntity;
-    }
-
-    public List<Publication> getLiteratureReference() {
-        return literatureReference;
-    }
-
-    public void setLiteratureReference(List<Publication> literatureReference) {
-        this.literatureReference = literatureReference;
     }
 
 }

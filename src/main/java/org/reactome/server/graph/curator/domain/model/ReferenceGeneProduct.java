@@ -13,6 +13,9 @@ public class ReferenceGeneProduct extends ReferenceSequence {
     @ReactomeProperty
     private List<String> chain;
 
+    @ReactomeProperty
+    private String chainChangeLog;
+
     @Relationship(type = "referenceGene")
     private List<ReferenceDNASequence> referenceGene;
 
@@ -20,6 +23,14 @@ public class ReferenceGeneProduct extends ReferenceSequence {
     private List<ReferenceRNASequence> referenceTranscript;
 
     public ReferenceGeneProduct() {}
+
+    public String getChainChangeLog() {
+        return chainChangeLog;
+    }
+
+    public void setChainChangeLog(String chainChangeLog) {
+        this.chainChangeLog = chainChangeLog;
+    }
 
     public List<String> getChain() {
         return chain;

@@ -1,5 +1,6 @@
 package org.reactome.server.graph.curator.domain.model;
 
+import org.reactome.server.graph.curator.domain.annotations.ReactomeAllowedClasses;
 import org.springframework.data.neo4j.core.schema.Node;
 import org.springframework.data.neo4j.core.schema.Relationship;
 
@@ -17,7 +18,8 @@ public class Cell extends PhysicalEntity {
     private Anatomy organ;
 
     @Relationship(type = "proteinMarker")
-    private List<EntityWithAccessionedSequence> proteinMarker;
+    @ReactomeAllowedClasses(allowed = {Complex.class, EntityWithAccessionedSequence.class})
+    private List<PhysicalEntity> proteinMarker;
 
     @Relationship(type = "species")
     private List<Taxon> species;
@@ -56,11 +58,12 @@ public class Cell extends PhysicalEntity {
         this.organ = organ;
     }
 
-    public List<EntityWithAccessionedSequence> getProteinMarker() {
+    @ReactomeAllowedClasses(allowed = {Complex.class, EntityWithAccessionedSequence.class})
+    public List<PhysicalEntity> getProteinMarker() {
         return proteinMarker;
     }
 
-    public void setProteinMarker(List<EntityWithAccessionedSequence> proteinMarker) {
+    public void setProteinMarker(List<PhysicalEntity> proteinMarker) {
         this.proteinMarker = proteinMarker;
     }
 

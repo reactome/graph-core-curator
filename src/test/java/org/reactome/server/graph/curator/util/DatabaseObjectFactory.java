@@ -6,6 +6,7 @@ import org.gk.persistence.MySQLAdaptor;
 import org.gk.schema.SchemaClass;
 import org.reactome.server.graph.curator.domain.model.DatabaseObject;
 import org.reactome.server.graph.curator.domain.model.Species;
+import org.reactome.server.graph.curator.domain.model.StableIdentifier;
 import org.reactome.server.graph.curator.service.util.DatabaseObjectUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -246,7 +247,7 @@ public class DatabaseObjectFactory {
                 try {
                     GKInstance stableIdentifier = (GKInstance) instance.getAttributeValue(ReactomeJavaConstants.stableIdentifier);
                     if (stableIdentifier != null) {
-                        databaseObject.setStId((String) stableIdentifier.getAttributeValue(ReactomeJavaConstants.identifier));
+                        databaseObject.setStableIdentifier((StableIdentifier) stableIdentifier.getAttributeValue(ReactomeJavaConstants.identifier));
                     }
                 }
                 catch (Exception e) {

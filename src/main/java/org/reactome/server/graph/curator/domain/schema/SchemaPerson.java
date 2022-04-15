@@ -13,7 +13,6 @@ public class SchemaPerson extends SchemaCreator {
     private final String givenName;
     private final String familyName;
     private final List<SchemaOrganization> affiliation = new ArrayList<>();
-    private final String url; //For the orcidId
 
     SchemaPerson(Person person) {
         this.givenName = person.getFirstname();
@@ -23,7 +22,6 @@ public class SchemaPerson extends SchemaCreator {
                 this.affiliation.add(new SchemaOrganization(a));
             }
         }
-        url = "http://europepmc.org/authors/" + person.getOrcidId();
     }
 
     public String getGivenName() {
@@ -36,10 +34,6 @@ public class SchemaPerson extends SchemaCreator {
 
     public List<SchemaOrganization> getAffiliation() {
         return affiliation;
-    }
-
-    public String getUrl() {
-        return url;
     }
 
     @JsonGetter(value = "@type")

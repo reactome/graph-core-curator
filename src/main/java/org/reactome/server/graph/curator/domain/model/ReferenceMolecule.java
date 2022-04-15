@@ -1,8 +1,6 @@
 package org.reactome.server.graph.curator.domain.model;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.reactome.server.graph.curator.domain.annotations.ReactomeProperty;
-import org.reactome.server.graph.curator.domain.annotations.ReactomeSchemaIgnore;
 import org.springframework.data.neo4j.core.schema.Node;
 
 @SuppressWarnings("unused")
@@ -12,10 +10,8 @@ public class ReferenceMolecule extends ReferenceEntity {
     @ReactomeProperty
     private String formula;
 
-    @ReactomeProperty(addedField = true)
-    private Boolean trivial;
-
-    public ReferenceMolecule() {}
+    public ReferenceMolecule() {
+    }
 
     public String getFormula() {
         return formula;
@@ -23,15 +19,5 @@ public class ReferenceMolecule extends ReferenceEntity {
 
     public void setFormula(String formula) {
         this.formula = formula;
-    }
-
-    @JsonIgnore
-    @ReactomeSchemaIgnore
-    public Boolean getTrivial() {
-        return trivial;
-    }
-
-    public void setTrivial(Boolean trivial) {
-        this.trivial = trivial;
     }
 }

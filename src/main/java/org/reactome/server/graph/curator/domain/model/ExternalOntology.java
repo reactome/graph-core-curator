@@ -10,8 +10,6 @@ import java.util.List;
 @Node
 public abstract class ExternalOntology extends DatabaseObject {
 
-    // will be filled together with url
-    private String databaseName;
     @ReactomeProperty
     private String definition;
     @ReactomeProperty
@@ -20,8 +18,6 @@ public abstract class ExternalOntology extends DatabaseObject {
     private List<String> name;
     @ReactomeProperty
     private List<String> synonym;
-    @ReactomeProperty(addedField = true)
-    private String url;
 
     @Relationship(type = "instanceOf")
     private List<ExternalOntology> instanceOf;
@@ -30,14 +26,6 @@ public abstract class ExternalOntology extends DatabaseObject {
     private ReferenceDatabase referenceDatabase;
 
     public ExternalOntology() {}
-
-    public String getDatabaseName() {
-        return databaseName;
-    }
-
-    public void setDatabaseName(String databaseName) {
-        this.databaseName = databaseName;
-    }
 
     public String getDefinition() {
         return definition;
@@ -69,14 +57,6 @@ public abstract class ExternalOntology extends DatabaseObject {
 
     public void setSynonym(List<String> synonym) {
         this.synonym = synonym;
-    }
-
-    public String getUrl() {
-        return url;
-    }
-
-    public void setUrl(String url) {
-        this.url = url;
     }
 
     public List<ExternalOntology> getInstanceOf() {

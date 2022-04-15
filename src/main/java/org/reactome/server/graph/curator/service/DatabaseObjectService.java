@@ -33,7 +33,6 @@ public class DatabaseObjectService {
         } else if (DatabaseObjectUtils.isDbId(id)) {
             rtn = databaseObjectRepository.findByDbId(Long.parseLong(id));
         }
-        if (rtn != null) rtn.isLoaded = true;
         return rtn;
     }
 

@@ -1,13 +1,8 @@
 package org.reactome.server.graph.curator.domain.model;
 
-import com.fasterxml.jackson.annotation.JsonGetter;
 import org.reactome.server.graph.curator.domain.annotations.ReactomeProperty;
-import org.reactome.server.graph.curator.domain.annotations.ReactomeTransient;
-import org.reactome.server.graph.curator.domain.relationship.AuthorPublication;
 import org.springframework.data.neo4j.core.schema.Node;
 import org.springframework.data.neo4j.core.schema.Relationship;
-
-import java.util.ArrayList;
 import java.util.List;
 
 @SuppressWarnings("unused")
@@ -18,23 +13,21 @@ public class Person extends DatabaseObject {
     private String firstname;
     @ReactomeProperty
     private String initial;
-    @ReactomeProperty(addedField = true)
-    private String orcidId;
     @ReactomeProperty
     private String project;
     @ReactomeProperty
     private String surname;
+    @ReactomeProperty
+    private String url;
 
     @Relationship(type = "affiliation")
     private List<Affiliation> affiliation;
 
-    @Deprecated
+    @Relationship(type = "figure")
+    private List<Figure> figure;
+
     @Relationship(type = "crossReference")
     private List<DatabaseIdentifier> crossReference;
-
-    @ReactomeTransient
-    @Relationship(type = "author")
-    private List<AuthorPublication> publicationAuthorList;
 
     public Person() {}
 
@@ -52,14 +45,6 @@ public class Person extends DatabaseObject {
 
     public void setInitial(String initial) {
         this.initial = initial;
-    }
-
-    public String getOrcidId() {
-        return orcidId;
-    }
-
-    public void setOrcidId(String orcidId) {
-        this.orcidId = orcidId;
     }
 
     public String getProject() {
@@ -86,23 +71,27 @@ public class Person extends DatabaseObject {
         this.affiliation = affiliation;
     }
 
-    @Deprecated
+    public List<Figure> getFigure() {
+        return figure;
+    }
+
+    public void setFigure(List<Figure> figure) {
+        this.figure = figure;
+    }
+
+    public String getUrl() {
+        return url;
+    }
+
+    public void setUrl(String url) {
+        this.url = url;
+    }
+
     public List<DatabaseIdentifier> getCrossReference() {
         return crossReference;
     }
 
-    @Deprecated
     public void setCrossReference(List<DatabaseIdentifier> crossReference) {
         this.crossReference = crossReference;
-    }
-
-    @JsonGetter("publications")
-    public List<Publication> getPublications() {
-        if (publicationAuthorList == null) return null;
-        List<Publication> rtn = new ArrayList<>();
-        for (AuthorPublication publicationAuthor : publicationAuthorList) {
-            rtn.add(publicationAuthor.getPublication());
-        }
-        return rtn;
     }
 }

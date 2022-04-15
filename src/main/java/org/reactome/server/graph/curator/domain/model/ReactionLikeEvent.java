@@ -1,11 +1,7 @@
 package org.reactome.server.graph.curator.domain.model;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.reactome.server.graph.curator.domain.annotations.ReactomeProperty;
 import org.reactome.server.graph.curator.domain.annotations.ReactomeSchemaIgnore;
-import org.reactome.server.graph.curator.domain.relationship.Input;
-import org.reactome.server.graph.curator.domain.relationship.Output;
-import org.reactome.server.graph.curator.service.helper.StoichiometryObject;
 import org.springframework.data.neo4j.core.schema.Node;
 import org.springframework.data.neo4j.core.schema.Relationship;
 
@@ -25,8 +21,6 @@ public abstract class ReactionLikeEvent extends Event {
     private Boolean isChimeric;
     @ReactomeProperty
     private String systematicName;
-    @ReactomeProperty
-    private String category;
 
     @Relationship(type = "catalystActivity")
     private List<CatalystActivity> catalystActivity;
@@ -41,10 +35,10 @@ public abstract class ReactionLikeEvent extends Event {
     private List<PhysicalEntity> entityOnOtherCell;
 
     @Relationship(type = "input")
-    private Set<Input> input;
+    private List<PhysicalEntity> input;
 
     @Relationship(type = "output")
-    private Set<Output> output;
+    private List<PhysicalEntity> output;
 
     @Relationship(type = "normalReaction")
     private ReactionLikeEvent normalReaction;
@@ -63,6 +57,9 @@ public abstract class ReactionLikeEvent extends Event {
 
     @Relationship(type = "reactionType")
     private List<ReactionType> reactionType;
+
+    @Relationship(type = "compartment")
+    private List<Compartment> compartment;
 
     public ReactionLikeEvent() {
     }
@@ -85,14 +82,6 @@ public abstract class ReactionLikeEvent extends Event {
 
     public void setSystematicName(String systematicName) {
         this.systematicName = systematicName;
-    }
-
-    public String getCategory() {
-        return category;
-    }
-
-    public void setCategory(String category) {
-        this.category = category;
     }
 
     public List<CatalystActivity> getCatalystActivity() {
@@ -175,97 +164,28 @@ public abstract class ReactionLikeEvent extends Event {
         this.reactionType = reactionType;
     }
 
-    @JsonIgnore
-    public List<StoichiometryObject> fetchInput() {
-        List<StoichiometryObject> objects = new ArrayList<>();
-        if (input != null) {
-            for (Input aux : input) {
-                objects.add(new StoichiometryObject(aux.getStoichiometry(), aux.getPhysicalEntity()));
-            }
-            Collections.sort(objects);
-        }
-        return objects;
+    public List<Compartment> getCompartment() {
+        return compartment;
+    }
+
+    public void setCompartment(List<Compartment> compartment) {
+        this.compartment = compartment;
     }
 
     public List<PhysicalEntity> getInput() {
-        List<PhysicalEntity> rtn = null;
-        if (input != null) {
-            rtn = new ArrayList<>();
-            for (Input aux : input) {
-                for (int i = 0; i < aux.getStoichiometry(); i++) {
-                    rtn.add(aux.getPhysicalEntity());
-                }
-            }
-        }
-        return rtn;
+        return input;
     }
 
-    public void setInput(List<PhysicalEntity> inputs) {
-        if (inputs == null) return;
-        // Using LinkedHashMap in order to keep the Collection Sorted previously by AOP
-        Map<Long, Input> map = new LinkedHashMap<>();
-        for (PhysicalEntity physicalEntity : inputs) {
-            Input input = map.get(physicalEntity.getDbId());
-            if (input == null) {
-                input = new Input();
-//                input.setReactionLikeEvent(this);
-                input.setPhysicalEntity(physicalEntity);
-                map.put(physicalEntity.getDbId(), input);
-            } else {
-                input.setStoichiometry(input.getStoichiometry() + 1);
-            }
-        }
-        this.input = new HashSet<>(map.values());
+    public void setInput(List<PhysicalEntity> input) {
+        this.input = input;
     }
 
-    @JsonIgnore
-    public List<StoichiometryObject> fetchOutput() {
-        List<StoichiometryObject> objects = new ArrayList<>();
-        if (output != null) {
-            for (Output aux : output) {
-                objects.add(new StoichiometryObject(aux.getStoichiometry(), aux.getPhysicalEntity()));
-            }
-            Collections.sort(objects);
-        }
-        return objects;
-    }
-    //public Set<Output> getOutput(){
-    //    return this.output;
-    //}
-
-    public void setOutput(Set<Output> output) {
+    public void setOutput(List<PhysicalEntity> output) {
         this.output = output;
     }
 
     public List<PhysicalEntity> getOutput() {
-        List<PhysicalEntity> rtn = null;
-        if (output != null) {
-            rtn = new ArrayList<>();
-            for (Output aux : output) {
-                for (int i = 0; i < aux.getStoichiometry(); i++) {
-                    rtn.add(aux.getPhysicalEntity());
-                }
-            }
-        }
-        return rtn;
-    }
-
-    public void setOutput(List<PhysicalEntity> outputs) {
-        if (outputs == null) return;
-        // Using LinkedHashMap in order to keep the Collection Sorted previously by AOP
-        Map<Long, Output> map = new LinkedHashMap<>();
-        for (PhysicalEntity physicalEntity : outputs) {
-            Output output = map.get(physicalEntity.getDbId());
-            if (output == null) {
-                output = new Output();
-//                output.setReactionLikeEvent(this);
-                output.setPhysicalEntity(physicalEntity);
-                map.put(physicalEntity.getDbId(), output);
-            } else {
-                output.setStoichiometry(output.getStoichiometry() + 1);
-            }
-        }
-        this.output = new HashSet<>(map.values());
+        return output;
     }
 
     @ReactomeSchemaIgnore

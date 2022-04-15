@@ -5,6 +5,8 @@ import org.reactome.server.graph.curator.domain.annotations.ReactomeSchemaIgnore
 import org.springframework.data.neo4j.core.schema.Node;
 import org.springframework.data.neo4j.core.schema.Relationship;
 
+import java.util.List;
+
 /**
  * A peptide or polynucleotide whose sequence is unknown and thus cannot be linked to external sequence databases or used for orthology inference.
  */
@@ -15,6 +17,9 @@ public class GenomeEncodedEntity extends PhysicalEntity {
 
     @Relationship(type = "species")
     private Taxon species;
+
+    @Relationship(type = "compartment")
+    private List<Compartment> compartment;
 
     public GenomeEncodedEntity() {}
 
@@ -28,6 +33,14 @@ public class GenomeEncodedEntity extends PhysicalEntity {
 
     public void setSpecies(Taxon species) {
         this.species = species;
+    }
+
+    public List<Compartment> getCompartment() {
+        return compartment;
+    }
+
+    public void setCompartment(List<Compartment> compartment) {
+        this.compartment = compartment;
     }
 
     @ReactomeSchemaIgnore

@@ -2,7 +2,6 @@ package org.reactome.server.graph.curator.domain.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.reactome.server.graph.curator.domain.annotations.ReactomeSchemaIgnore;
-import org.reactome.server.graph.curator.domain.relationship.HasCandidate;
 import org.springframework.data.neo4j.core.schema.Node;
 import org.springframework.data.neo4j.core.schema.Relationship;
 
@@ -16,35 +15,16 @@ import java.util.*;
 public class CandidateSet extends EntitySet {
 
     @Relationship(type = "hasCandidate")
-    private SortedSet<HasCandidate> hasCandidate;
+    private List<PhysicalEntity> hasCandidate;
 
     public CandidateSet() {}
 
     public List<PhysicalEntity> getHasCandidate() {
-        List<PhysicalEntity> rtn = null;
-        if (hasCandidate != null) {
-            rtn = new ArrayList<>();
-            //stoichiometry does NOT need to be taken into account here
-            for (HasCandidate candidate : hasCandidate) {
-                rtn.add(candidate.getPhysicalEntity());
-            }
-        }
-        return rtn;
+        return hasCandidate;
     }
 
     public void setHasCandidate(List<PhysicalEntity> hasCandidate) {
-        if (hasCandidate == null) return;
-        Map<Long, HasCandidate> components = new LinkedHashMap<>();
-        int order = 0;
-        for (PhysicalEntity physicalEntity : hasCandidate) {
-            //stoichiometry does NOT need to be taken into account here
-            HasCandidate aux = new HasCandidate();
-//            aux.setEntitySet(this);
-            aux.setPhysicalEntity(physicalEntity);
-            aux.setOrder(order++);
-            components.put(physicalEntity.getDbId(), aux);
-        }
-        this.hasCandidate = new TreeSet<>(components.values());
+        this.hasCandidate = hasCandidate;
     }
 
     @ReactomeSchemaIgnore

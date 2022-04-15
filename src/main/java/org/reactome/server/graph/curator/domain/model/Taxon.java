@@ -12,8 +12,6 @@ public class Taxon extends DatabaseObject {
 
     @ReactomeProperty
     private List<String> name;
-    @ReactomeProperty(addedField = true)
-    private String taxId;
 
     @Deprecated
     @Relationship(type = "crossReference")
@@ -30,14 +28,6 @@ public class Taxon extends DatabaseObject {
 
     public void setName(List<String> name) {
         this.name = name;
-    }
-
-    public String getTaxId() {
-        return taxId;
-    }
-
-    public void setTaxId(String taxId) {
-        this.taxId = taxId;
     }
 
     @Deprecated

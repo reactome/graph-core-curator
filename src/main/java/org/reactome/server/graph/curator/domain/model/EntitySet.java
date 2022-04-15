@@ -3,7 +3,6 @@ package org.reactome.server.graph.curator.domain.model;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.reactome.server.graph.curator.domain.annotations.ReactomeProperty;
 import org.reactome.server.graph.curator.domain.annotations.ReactomeSchemaIgnore;
-import org.reactome.server.graph.curator.domain.relationship.HasMember;
 import org.springframework.data.neo4j.core.schema.Node;
 import org.springframework.data.neo4j.core.schema.Relationship;
 
@@ -19,8 +18,11 @@ public abstract class EntitySet extends PhysicalEntity {
     @ReactomeProperty
     private Boolean isOrdered;
 
+    @Relationship(type = "compartment")
+    private Compartment compartment;
+
     @Relationship(type = "hasMember")
-    private SortedSet<HasMember> hasMember;
+    private List<PhysicalEntity> hasMember;
 
     @Relationship(type = "species")
     private List<Species> species;
@@ -39,31 +41,11 @@ public abstract class EntitySet extends PhysicalEntity {
     }
 
     public List<PhysicalEntity> getHasMember() {
-        List<PhysicalEntity> rtn = null;
-        if (hasMember != null) {
-            rtn = new ArrayList<>();
-            //stoichiometry does NOT need to be taken into account here
-            for (HasMember component : hasMember) {
-                rtn.add(component.getPhysicalEntity());
-            }
-        }
-        return rtn;
+        return hasMember;
     }
 
     public void setHasMember(List<PhysicalEntity> hasMember) {
-        if (hasMember == null) return;
-        Map<Long, HasMember> components = new LinkedHashMap<>();
-        int order = 0;
-        for (PhysicalEntity physicalEntity : hasMember) {
-            //stoichiometry does NOT need to be taken into account here
-            HasMember aux = new HasMember();
-//            aux.setEntitySet(this);
-            aux.setPhysicalEntity(physicalEntity);
-            aux.setOrder(order++);
-            components.put(physicalEntity.getDbId(), aux);
-
-        }
-        this.hasMember = new TreeSet<>(components.values());
+        this.hasMember = hasMember;
     }
 
     public List<Species> getSpecies() {
@@ -81,6 +63,15 @@ public abstract class EntitySet extends PhysicalEntity {
     public void setRelatedSpecies(List<Species> relatedSpecies) {
         this.relatedSpecies = relatedSpecies;
     }
+
+    public Compartment getCompartment() {
+        return compartment;
+    }
+
+    public void setCompartment(Compartment compartment) {
+        this.compartment = compartment;
+    }
+
 
     @ReactomeSchemaIgnore
     @Override
