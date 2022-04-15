@@ -7,6 +7,7 @@ import org.springframework.data.neo4j.core.schema.Node;
 @Node
 public class FragmentReplacedModification extends FragmentModification {
 
+    @ReactomeConstraint(constraint = ReactomeConstraint.Constraint.OPTIONAL);
     @ReactomeProperty
     private String alteredAminoAcidFragment;
     

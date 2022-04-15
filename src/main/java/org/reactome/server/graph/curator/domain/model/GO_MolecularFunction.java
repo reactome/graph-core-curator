@@ -10,15 +10,20 @@ import java.util.List;
 @Node
 public class GO_MolecularFunction extends DatabaseObject {
 
+    @ReactomeConstraint(constraint = ReactomeConstraint.Constraint.MANDATORY);
     @ReactomeProperty
     private List<String> name;
+    @ReactomeConstraint(constraint = ReactomeConstraint.Constraint.MANDATORY);
     @ReactomeProperty
     private String accession;
+    @ReactomeConstraint(constraint = ReactomeConstraint.Constraint.OPTIONAL);
     @ReactomeProperty
     private String definition;
+    @ReactomeConstraint(constraint = ReactomeConstraint.Constraint.OPTIONAL);
     @ReactomeProperty
     private String ecNumber;
 
+    @ReactomeConstraint(constraint = ReactomeConstraint.Constraint.MANDATORY);
     @Relationship(type = "referenceDatabase")
     private ReferenceDatabase referenceDatabase;
 

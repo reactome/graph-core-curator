@@ -14,6 +14,7 @@ import java.util.*;
 @Node
 public class CandidateSet extends EntitySet {
 
+    @ReactomeConstraint(constraint = ReactomeConstraint.Constraint.MANDATORY);
     @Relationship(type = "hasCandidate")
     private List<PhysicalEntity> hasCandidate;
 

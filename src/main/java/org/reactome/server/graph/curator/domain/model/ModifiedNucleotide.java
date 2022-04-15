@@ -8,10 +8,12 @@ import org.springframework.data.neo4j.core.schema.Relationship;
 @Node
 public class ModifiedNucleotide extends TranscriptionalModification {
 
+    @ReactomeConstraint(constraint = ReactomeConstraint.Constraint.MANDATORY);
     @ReactomeProperty
     private Integer coordinate;
 
     @Relationship(type = "modification")
+    @ReactomeConstraint(constraint = ReactomeConstraint.Constraint.MANDATORY);
     @ReactomeAllowedClasses(allowed = {EntitySet.class, Polymer.class, ReferenceMolecule.class, ReferenceGroup.class})
     private DatabaseObject modification;
 

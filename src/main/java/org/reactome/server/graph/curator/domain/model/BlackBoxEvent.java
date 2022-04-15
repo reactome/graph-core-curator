@@ -19,6 +19,7 @@ public class BlackBoxEvent extends ReactionLikeEvent {
 
     }
 
+    @ReactomeConstraint(constraint = ReactomeConstraint.Constraint.OPTIONAL);
     @Relationship(type = "templateEvent")
     private Event templateEvent;
 

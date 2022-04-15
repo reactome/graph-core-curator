@@ -13,12 +13,15 @@ import java.util.Set;
 @Node
 public class CatalystActivity extends DatabaseObject  {
 
+    @ReactomeConstraint(constraint = ReactomeConstraint.Constraint.OPTIONAL);
     @Relationship(type = "activeUnit")
     private Set<PhysicalEntity> activeUnit;
 
+    @ReactomeConstraint(constraint = ReactomeConstraint.Constraint.REQUIRED);
     @Relationship(type = "activity")
     private GO_MolecularFunction activity;
 
+    @ReactomeConstraint(constraint = ReactomeConstraint.Constraint.MANDATORY);
     @Relationship(type = "physicalEntity")
     private PhysicalEntity physicalEntity;
 

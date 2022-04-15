@@ -9,12 +9,16 @@ import java.util.List;
 @Node
 public class ReferenceDatabase extends DatabaseObject {
 
+    @ReactomeConstraint(constraint = ReactomeConstraint.Constraint.MANDATORY);
     @ReactomeProperty
     private String accessUrl;
+    @ReactomeConstraint(constraint = ReactomeConstraint.Constraint.MANDATORY);
     @ReactomeProperty
     private List<String> name;
+    @ReactomeConstraint(constraint = ReactomeConstraint.Constraint.MANDATORY);
     @ReactomeProperty
     private String url;
+    @ReactomeConstraint(constraint = ReactomeConstraint.Constraint.OPTIONAL);
     @ReactomeProperty
     private String resourceIdentifier;
 

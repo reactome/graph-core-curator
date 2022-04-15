@@ -10,16 +10,21 @@ import java.util.List;
 @Node
 public abstract class ReferenceEntity extends DatabaseObject {
 
+    @ReactomeConstraint(constraint = ReactomeConstraint.Constraint.MANDATORY);
     @ReactomeProperty
     private String identifier;
+    @ReactomeConstraint(constraint = ReactomeConstraint.Constraint.OPTIONAL);
     @ReactomeProperty
     private List<String> name;
+    @ReactomeConstraint(constraint = ReactomeConstraint.Constraint.OPTIONAL);
     @ReactomeProperty
     private List<String> otherIdentifier;
 
+    @ReactomeConstraint(constraint = ReactomeConstraint.Constraint.OPTIONAL);
     @Relationship(type = "crossReference")
     private List<DatabaseIdentifier> crossReference;
 
+    @ReactomeConstraint(constraint = ReactomeConstraint.Constraint.MANDATORY);
     @Relationship(type = "referenceDatabase")
     private ReferenceDatabase referenceDatabase;
 

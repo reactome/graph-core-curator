@@ -15,27 +15,35 @@ import java.util.*;
 @Node
 public class Complex extends PhysicalEntity {
 
+    @ReactomeConstraint(constraint = ReactomeConstraint.Constraint.OPTIONAL);
     @ReactomeProperty
     private Boolean isChimeric;
 
+    @ReactomeConstraint(constraint = ReactomeConstraint.Constraint.MANDATORY);
     @Relationship(type = "compartment")
     private Compartment compartment;
 
+    @ReactomeConstraint(constraint = ReactomeConstraint.Constraint.MANDATORY);
     @Relationship(type = "hasComponent")
     private List<PhysicalEntity> hasComponent;
 
+    @ReactomeConstraint(constraint = ReactomeConstraint.Constraint.OPTIONAL);
     @ReactomeProperty
     private Boolean stoichiometryKnown;
 
+    @ReactomeConstraint(constraint = ReactomeConstraint.Constraint.OPTIONAL);
     @Relationship(type = "entityOnOtherCell")
     private List<PhysicalEntity> entityOnOtherCell;
 
+    @ReactomeConstraint(constraint = ReactomeConstraint.Constraint.NOMANUALEDIT);
     @Relationship(type = "includedLocation")
     private List<Compartment> includedLocation;
 
+    @ReactomeConstraint(constraint = ReactomeConstraint.Constraint.REQUIRED);
     @Relationship(type = "species")
     private List<Species> species;
 
+    @ReactomeConstraint(constraint = ReactomeConstraint.Constraint.OPTIONAL);
     @Relationship(type = "relatedSpecies")
     private List<Species> relatedSpecies;
 

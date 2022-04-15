@@ -10,9 +10,11 @@ import java.util.List;
 @Node
 public class Summation extends DatabaseObject {
 
+    @ReactomeConstraint(constraint = ReactomeConstraint.Constraint.MANDATORY);
     @ReactomeProperty
     private String text;
 
+    @ReactomeConstraint(constraint = ReactomeConstraint.Constraint.OPTIONAL);
     @Relationship(type = "literatureReference")
     private List<Publication> literatureReference;
 

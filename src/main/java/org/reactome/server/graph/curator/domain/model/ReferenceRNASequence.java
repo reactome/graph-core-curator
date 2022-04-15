@@ -9,6 +9,7 @@ import java.util.List;
 @Node
 public class ReferenceRNASequence extends ReferenceSequence {
 
+    @ReactomeConstraint(constraint = ReactomeConstraint.Constraint.OPTIONAL);
     @Relationship(type = "referenceGene")
     private List<ReferenceDNASequence> referenceGene;
     

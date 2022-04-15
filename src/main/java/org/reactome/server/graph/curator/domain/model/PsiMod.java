@@ -7,6 +7,7 @@ import org.springframework.data.neo4j.core.schema.Node;
 @Node
 public class PsiMod extends ExternalOntology {
 
+    @ReactomeConstraint(constraint = ReactomeConstraint.Constraint.REQUIRED);
     @ReactomeProperty
     private String label;
 

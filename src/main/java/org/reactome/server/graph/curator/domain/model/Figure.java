@@ -9,6 +9,7 @@ import org.springframework.data.neo4j.core.schema.Property;
 public class Figure extends DatabaseObject {
 
     @ReactomeProperty
+    @ReactomeConstraint(constraint = ReactomeConstraint.Constraint.MANDATORY);
     @Property
     private String url;
 

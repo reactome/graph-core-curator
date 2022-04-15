@@ -10,9 +10,11 @@ import java.util.Set;
 @Node
 public class InterChainCrosslinkedResidue extends CrosslinkedResidue {
 
+    @ReactomeConstraint(constraint = ReactomeConstraint.Constraint.MANDATORY);
     @Relationship(type = "equivalentTo")
     private List<InterChainCrosslinkedResidue> equivalentTo;
 
+    @ReactomeConstraint(constraint = ReactomeConstraint.Constraint.MANDATORY);
     @Relationship(type = "secondReferenceSequence")
     private Set<ReferenceSequence> secondReferenceSequence;
     

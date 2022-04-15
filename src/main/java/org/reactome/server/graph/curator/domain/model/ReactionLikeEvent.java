@@ -17,47 +17,62 @@ import java.util.*;
 @Node
 public abstract class ReactionLikeEvent extends Event {
 
+    @ReactomeConstraint(constraint = ReactomeConstraint.Constraint.OPTIONAL);
     @ReactomeProperty
     private Boolean isChimeric;
+    @ReactomeConstraint(constraint = ReactomeConstraint.Constraint.OPTIONAL);
     @ReactomeProperty
     private String systematicName;
 
+    @ReactomeConstraint(constraint = ReactomeConstraint.Constraint.REQUIRED);
     @Relationship(type = "catalystActivity")
     private List<CatalystActivity> catalystActivity;
 
+    @ReactomeConstraint(constraint = ReactomeConstraint.Constraint.OPTIONAL);
     @Relationship(type = "catalystActivityReference")
     private CatalystActivityReference catalystActivityReference;
 
+    @ReactomeConstraint(constraint = ReactomeConstraint.Constraint.OPTIONAL);
     @Relationship(type = "entityFunctionalStatus")
     private List<EntityFunctionalStatus> entityFunctionalStatus;
 
+    @ReactomeConstraint(constraint = ReactomeConstraint.Constraint.OPTIONAL);
     @Relationship(type = "entityOnOtherCell")
     private List<PhysicalEntity> entityOnOtherCell;
 
+    @ReactomeConstraint(constraint = ReactomeConstraint.Constraint.MANDATORY);
     @Relationship(type = "input")
     private List<PhysicalEntity> input;
 
+    @ReactomeConstraint(constraint = ReactomeConstraint.Constraint.MANDATORY);
     @Relationship(type = "output")
     private List<PhysicalEntity> output;
 
+    @ReactomeConstraint(constraint = ReactomeConstraint.Constraint.OPTIONAL);
     @Relationship(type = "normalReaction")
     private ReactionLikeEvent normalReaction;
 
+    @ReactomeConstraint(constraint = ReactomeConstraint.Constraint.OPTIONAL);
     @Relationship(type = "regulatedBy")
     private List<Regulation> regulatedBy;
 
+    @ReactomeConstraint(constraint = ReactomeConstraint.Constraint.OPTIONAL);
     @Relationship(type = "regulationReference")
     private List<RegulationReference> regulationReference;
 
+    @ReactomeConstraint(constraint = ReactomeConstraint.Constraint.OPTIONAL);
     @Relationship(type = "requiredInputComponent")
     private Set<PhysicalEntity> requiredInputComponent;
 
+    @ReactomeConstraint(constraint = ReactomeConstraint.Constraint.OPTIONAL);
     @Relationship(type = "hasInteraction")
     private List<InteractionEvent> hasInteraction;
 
+    @ReactomeConstraint(constraint = ReactomeConstraint.Constraint.OPTIONAL);
     @Relationship(type = "reactionType")
     private List<ReactionType> reactionType;
 
+    @ReactomeConstraint(constraint = ReactomeConstraint.Constraint.MANDATORY);
     @Relationship(type = "compartment")
     private List<Compartment> compartment;
 

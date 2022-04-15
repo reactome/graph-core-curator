@@ -7,6 +7,7 @@ import org.springframework.data.neo4j.core.schema.Node;
 @Node
 public class Species extends Taxon {
 
+    @ReactomeConstraint(constraint = ReactomeConstraint.Constraint.MANDATORY);
     @ReactomeProperty
     private String abbreviation;
 

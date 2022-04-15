@@ -9,13 +9,16 @@ import java.util.List;
 @Node
 public class EntityFunctionalStatus extends DatabaseObject {
 
+    @ReactomeConstraint(constraint = ReactomeConstraint.Constraint.MANDATORY);
     @Relationship(type = "functionalStatus")
     private List<FunctionalStatus> functionalStatus;
 
     //Formerly "physicalEntity"
+    @ReactomeConstraint(constraint = ReactomeConstraint.Constraint.MANDATORY);
     @Relationship(type = "diseaseEntity")
     private PhysicalEntity diseaseEntity;
 
+    @ReactomeConstraint(constraint = ReactomeConstraint.Constraint.REQUIRED);
     @Relationship(type = "normalEntity")
     private PhysicalEntity normalEntity;
 

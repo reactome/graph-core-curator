@@ -6,6 +6,7 @@ import org.springframework.data.neo4j.core.schema.Relationship;
 @Node
 public class CatalystActivityReference extends ControlReference {
 
+    @ReactomeConstraint(constraint = ReactomeConstraint.Constraint.MANDATORY);
     @Relationship(type = "catalystActivity")
     private CatalystActivity catalystActivity;
 

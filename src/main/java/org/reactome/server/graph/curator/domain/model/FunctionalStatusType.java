@@ -9,8 +9,10 @@ import java.util.List;
 @Node
 public class FunctionalStatusType extends DatabaseObject {
 
+    @ReactomeConstraint(constraint = ReactomeConstraint.Constraint.OPTIONAL);
     @ReactomeProperty
     private String definition;
+    @ReactomeConstraint(constraint = ReactomeConstraint.Constraint.MANDATORY);
     @ReactomeProperty
     private List<String> name;
 

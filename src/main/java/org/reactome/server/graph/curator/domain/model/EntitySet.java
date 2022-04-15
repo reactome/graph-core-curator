@@ -15,18 +15,23 @@ import java.util.*;
 @Node
 public abstract class EntitySet extends PhysicalEntity {
 
+    @ReactomeConstraint(constraint = ReactomeConstraint.Constraint.OPTIONAL);
     @ReactomeProperty
     private Boolean isOrdered;
 
+    @ReactomeConstraint(constraint = ReactomeConstraint.Constraint.MANDATORY);
     @Relationship(type = "compartment")
     private Compartment compartment;
 
+    @ReactomeConstraint(constraint = ReactomeConstraint.Constraint.MANDATORY);
     @Relationship(type = "hasMember")
     private List<PhysicalEntity> hasMember;
 
+    @ReactomeConstraint(constraint = ReactomeConstraint.Constraint.REQUIRED);
     @Relationship(type = "species")
     private List<Species> species;
 
+    @ReactomeConstraint(constraint = ReactomeConstraint.Constraint.OPTIONAL);
     @Relationship(type = "relatedSpecies")
     private List<Species> relatedSpecies;
 

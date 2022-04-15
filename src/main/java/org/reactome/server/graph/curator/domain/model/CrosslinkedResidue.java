@@ -9,10 +9,12 @@ import org.springframework.data.neo4j.core.schema.Relationship;
 @Node
 public abstract class CrosslinkedResidue extends TranslationalModification {
 
+    @ReactomeConstraint(constraint = ReactomeConstraint.Constraint.REQUIRED);
     @ReactomeProperty
     private Integer secondCoordinate;
 
     @Relationship(type = "modification")
+    @ReactomeConstraint(constraint = ReactomeConstraint.Constraint.OPTIONAL);
     @ReactomeAllowedClasses(allowed = {EntitySet.class, Polymer.class, ReferenceGroup.class})
     private DatabaseObject modification;
 

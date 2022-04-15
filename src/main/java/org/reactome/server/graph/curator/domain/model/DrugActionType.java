@@ -8,6 +8,7 @@ import java.util.List;
 @Node
 public class DrugActionType extends ReactionType {
 
+    @ReactomeConstraint(constraint = ReactomeConstraint.Constraint.OPTIONAL);
     @Relationship(type = "instanceOf")
     private List<DrugActionType> instanceOf;
 

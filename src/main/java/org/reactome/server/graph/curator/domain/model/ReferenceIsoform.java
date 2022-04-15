@@ -10,9 +10,11 @@ import java.util.List;
 @Node
 public class ReferenceIsoform extends ReferenceGeneProduct {
 
+    @ReactomeConstraint(constraint = ReactomeConstraint.Constraint.MANDATORY);
     @ReactomeProperty
     private String variantIdentifier;
 
+    @ReactomeConstraint(constraint = ReactomeConstraint.Constraint.MANDATORY);
     @Relationship(type = "isoformParent")
     private List<ReferenceGeneProduct> isoformParent;
 

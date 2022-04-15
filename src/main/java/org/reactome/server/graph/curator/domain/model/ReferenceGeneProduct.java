@@ -10,9 +10,11 @@ import java.util.List;
 @Node
 public class ReferenceGeneProduct extends ReferenceSequence {
 
+    @ReactomeConstraint(constraint = ReactomeConstraint.Constraint.OPTIONAL);
     @ReactomeProperty
     private List<String> chain;
 
+    @ReactomeConstraint(constraint = ReactomeConstraint.Constraint.OPTIONAL);
     @ReactomeProperty
     private String chainChangeLog;
 

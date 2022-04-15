@@ -10,12 +10,15 @@ import java.util.List;
 @Node
 public class DatabaseIdentifier extends DatabaseObject {
 
+    @ReactomeConstraint(constraint = ReactomeConstraint.Constraint.MANDATORY);
     @ReactomeProperty
     private String identifier;
 
+    @ReactomeConstraint(constraint = ReactomeConstraint.Constraint.OPTIONAL);
     @Relationship(type = "crossReference")
     private List<DatabaseIdentifier> crossReference;
 
+    @ReactomeConstraint(constraint = ReactomeConstraint.Constraint.MANDATORY);
     @Relationship(type = "referenceDatabase")
     private ReferenceDatabase referenceDatabase;
 

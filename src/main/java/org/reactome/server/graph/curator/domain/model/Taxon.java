@@ -10,13 +10,16 @@ import java.util.List;
 @Node
 public class Taxon extends DatabaseObject {
 
+    @ReactomeConstraint(constraint = ReactomeConstraint.Constraint.MANDATORY);
     @ReactomeProperty
     private List<String> name;
 
     @Deprecated
+    @ReactomeConstraint(constraint = ReactomeConstraint.Constraint.MANDATORY);
     @Relationship(type = "crossReference")
     private List<DatabaseIdentifier> crossReference;
 
+    @ReactomeConstraint(constraint = ReactomeConstraint.Constraint.REQUIRED);
     @Relationship(type = "superTaxon")
     private Taxon superTaxon;
     

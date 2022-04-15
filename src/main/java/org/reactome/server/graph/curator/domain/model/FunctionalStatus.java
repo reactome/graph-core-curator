@@ -7,9 +7,11 @@ import org.springframework.data.neo4j.core.schema.Relationship;
 @Node
 public class FunctionalStatus extends DatabaseObject {
 
+    @ReactomeConstraint(constraint = ReactomeConstraint.Constraint.MANDATORY);
     @Relationship(type = "functionalStatusType")
     private FunctionalStatusType functionalStatusType;
 
+    @ReactomeConstraint(constraint = ReactomeConstraint.Constraint.MANDATORY);
     @Relationship(type = "structuralVariant")
     private SequenceOntology structuralVariant;
     

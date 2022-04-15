@@ -8,25 +8,32 @@ import java.util.List;
 
 @Node
 public class Cell extends PhysicalEntity {
+    @ReactomeConstraint(constraint = ReactomeConstraint.Constraint.REQUIRED);
     @Relationship(type = "rnaMarker")
     private List<EntityWithAccessionedSequence> RNAMarker;
 
+    @ReactomeConstraint(constraint = ReactomeConstraint.Constraint.REQUIRED);
     @Relationship(type = "markerReference")
     private List<MarkerReference> markerReference;
 
+    @ReactomeConstraint(constraint = ReactomeConstraint.Constraint.OPTIONAL);
     @Relationship(type = "organ")
     private Anatomy organ;
 
     @Relationship(type = "proteinMarker")
+    @ReactomeConstraint(constraint = ReactomeConstraint.Constraint.REQUIRED);
     @ReactomeAllowedClasses(allowed = {Complex.class, EntityWithAccessionedSequence.class})
     private List<PhysicalEntity> proteinMarker;
 
+    @ReactomeConstraint(constraint = ReactomeConstraint.Constraint.MANDATORY);
     @Relationship(type = "species")
     private List<Taxon> species;
 
+    @ReactomeConstraint(constraint = ReactomeConstraint.Constraint.MANDATORY);
     @Relationship(type = "tissue")
     private Anatomy tissue;
 
+    @ReactomeConstraint(constraint = ReactomeConstraint.Constraint.OPTIONAL);
     @Relationship(type = "tissueLayer")
     private Anatomy tissueLayer;
 

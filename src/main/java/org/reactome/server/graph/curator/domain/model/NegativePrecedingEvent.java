@@ -9,12 +9,15 @@ import java.util.List;
 @Node
 public class NegativePrecedingEvent extends DatabaseObject {
 
+    @ReactomeConstraint(constraint = ReactomeConstraint.Constraint.OPTIONAL);
     @ReactomeProperty
     private String comment;
 
+    @ReactomeConstraint(constraint = ReactomeConstraint.Constraint.MANDATORY);
     @Relationship(type = "negativePrecedingEvent", direction = Relationship.Direction.INCOMING)
     private List<Event> precedingEvent;
 
+    @ReactomeConstraint(constraint = ReactomeConstraint.Constraint.REQUIRED);
     @Relationship(type = "reason")
     private NegativePrecedingEventReason reason;
 

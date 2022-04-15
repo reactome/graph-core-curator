@@ -12,6 +12,7 @@ import org.springframework.data.neo4j.core.schema.Relationship;
 @Node
 public class Reaction extends ReactionLikeEvent {
 
+    @ReactomeConstraint(constraint = ReactomeConstraint.Constraint.OPTIONAL);
     @Relationship(type = "reverseReaction")
     private Reaction reverseReaction;
 

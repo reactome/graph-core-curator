@@ -37,15 +37,19 @@ public abstract class DatabaseObject implements Serializable, Comparable<Databas
     @Id
     protected Long dbId;
 
+    @ReactomeConstraint(constraint = ReactomeConstraint.Constraint.NOMANUALEDIT);
     @ReactomeProperty
     private String displayName;
 
+    @ReactomeConstraint(constraint = ReactomeConstraint.Constraint.NOMANUALEDIT);
     @Relationship(type = "created", direction = Relationship.Direction.INCOMING)
     private InstanceEdit created;
 
+    @ReactomeConstraint(constraint = ReactomeConstraint.Constraint.NOMANUALEDIT);
     @Relationship(type = "modified", direction = Relationship.Direction.INCOMING)
     private InstanceEdit modified;
 
+    @ReactomeConstraint(constraint = ReactomeConstraint.Constraint.NOMANUALEDIT);
     @Relationship(type = "stableIdentifier")
     private StableIdentifier stableIdentifier;
 

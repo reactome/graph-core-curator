@@ -9,6 +9,7 @@ import java.util.List;
 @Node
 public abstract class ControlReference extends DatabaseObject {
 
+    @ReactomeConstraint(constraint = ReactomeConstraint.Constraint.MANDATORY);
     @Relationship(type = "literatureReference")
     private List<Publication> literatureReference;
 

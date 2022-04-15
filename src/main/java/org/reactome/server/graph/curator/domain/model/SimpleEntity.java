@@ -15,12 +15,15 @@ import java.util.List;
 @Node
 public class SimpleEntity extends PhysicalEntity {
 
+    @ReactomeConstraint(constraint = ReactomeConstraint.Constraint.MANDATORY);
     @Relationship(type = "referenceEntity")
     private ReferenceMolecule referenceEntity;
 
+    @ReactomeConstraint(constraint = ReactomeConstraint.Constraint.OPTIONAL);
     @Relationship(type = "species")
     private Species species;
 
+    @ReactomeConstraint(constraint = ReactomeConstraint.Constraint.MANDATORY);
     @Relationship(type = "compartment")
     private List<Compartment> compartment;
 

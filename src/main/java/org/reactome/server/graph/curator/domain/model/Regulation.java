@@ -14,19 +14,24 @@ import java.util.List;
 public abstract class Regulation extends DatabaseObject {
 
     @ReactomeProperty
+    @ReactomeConstraint(constraint = ReactomeConstraint.Constraint.OPTIONAL);
     @Relationship(type = "activeUnit")
     private List<PhysicalEntity> activeUnit;
 
     @ReactomeProperty
+    @ReactomeConstraint(constraint = ReactomeConstraint.Constraint.OPTIONAL);
     @Relationship(type = "activity")
     private GO_MolecularFunction activity;
 
+    @ReactomeConstraint(constraint = ReactomeConstraint.Constraint.OPTIONAL);
     @Relationship(type = "goBiologicalProcess")
     private GO_BiologicalProcess goBiologicalProcess;
 
+    @ReactomeConstraint(constraint = ReactomeConstraint.Constraint.MANDATORY);
     @Relationship(type = "regulator")
     private PhysicalEntity regulator;
 
+    @ReactomeConstraint(constraint = ReactomeConstraint.Constraint.OPTIONAL);
     @Relationship(type = "summation")
     private List<Summation> summation;
 

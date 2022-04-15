@@ -8,6 +8,7 @@ import java.util.List;
 @Node
 public class InteractionEvent extends Event {
 
+    @ReactomeConstraint(constraint = ReactomeConstraint.Constraint.MANDATORY);
     @Relationship(type = "partners")
     private List<PhysicalEntity> partners;
 

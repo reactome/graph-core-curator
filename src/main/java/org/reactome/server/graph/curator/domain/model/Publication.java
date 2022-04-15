@@ -9,9 +9,11 @@ import java.util.List;
 @Node
 public abstract class Publication extends DatabaseObject {
 
+    @ReactomeConstraint(constraint = ReactomeConstraint.Constraint.MANDATORY);
     @ReactomeProperty
     private String title;
 
+    @ReactomeConstraint(constraint = ReactomeConstraint.Constraint.MANDATORY);
     @Relationship(type = "author", direction = Relationship.Direction.INCOMING)
     private List<Person> author;
 

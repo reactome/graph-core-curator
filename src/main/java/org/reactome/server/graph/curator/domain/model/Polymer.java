@@ -18,17 +18,22 @@ import java.util.*;
 @Node
 public class Polymer extends PhysicalEntity {
 
+    @ReactomeConstraint(constraint = ReactomeConstraint.Constraint.OPTIONAL);
     @ReactomeProperty
     private Integer maxUnitCount;
+    @ReactomeConstraint(constraint = ReactomeConstraint.Constraint.OPTIONAL);
     @ReactomeProperty
     private Integer minUnitCount;
 
+    @ReactomeConstraint(constraint = ReactomeConstraint.Constraint.MANDATORY);
     @Relationship(type = "repeatedUnit")
     private List<PhysicalEntity> repeatedUnit;
 
+    @ReactomeConstraint(constraint = ReactomeConstraint.Constraint.REQUIRED);
     @Relationship(type = "species")
     private List<Species> species;
 
+    @ReactomeConstraint(constraint = ReactomeConstraint.Constraint.MANDATORY);
     @Relationship(type = "compartment")
     private List<Compartment> compartment;
 

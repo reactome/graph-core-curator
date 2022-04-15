@@ -10,9 +10,11 @@ import java.util.List;
 @Node
 public class ReplacedResidue extends GeneticallyModifiedResidue {
 
+    @ReactomeConstraint(constraint = ReactomeConstraint.Constraint.REQUIRED);
     @ReactomeProperty
     private Integer coordinate;
 
+    @ReactomeConstraint(constraint = ReactomeConstraint.Constraint.MANDATORY);
     @Relationship(type = "psiMod")
     private List<PsiMod> psiMod;
     

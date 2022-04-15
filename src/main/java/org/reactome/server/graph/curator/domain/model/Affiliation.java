@@ -9,8 +9,10 @@ import java.util.List;
 @Node
 public class Affiliation extends  DatabaseObject{
 
+    @ReactomeConstraint(constraint = ReactomeConstraint.Constraint.REQUIRED);
     @ReactomeProperty
     private String address;
+    @ReactomeConstraint(constraint = ReactomeConstraint.Constraint.MANDATORY);
     @ReactomeProperty
     private List<String> name;
 

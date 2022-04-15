@@ -9,9 +9,11 @@ import java.util.List;
 @Node
 public abstract class Drug extends PhysicalEntity {
 
+    @ReactomeConstraint(constraint = ReactomeConstraint.Constraint.MANDATORY);
     @Relationship(type = "referenceEntity")
     private ReferenceTherapeutic referenceEntity;
 
+    @ReactomeConstraint(constraint = ReactomeConstraint.Constraint.MANDATORY);
     @Relationship(type = "compartment")
     private List<Compartment> compartment;
 

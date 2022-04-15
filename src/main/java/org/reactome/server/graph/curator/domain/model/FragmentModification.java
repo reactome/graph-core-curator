@@ -7,8 +7,10 @@ import org.springframework.data.neo4j.core.schema.Node;
 @Node
 public abstract class FragmentModification extends GeneticallyModifiedResidue {
 
+    @ReactomeConstraint(constraint = ReactomeConstraint.Constraint.MANDATORY);
     @ReactomeProperty
     private Integer endPositionInReferenceSequence;
+    @ReactomeConstraint(constraint = ReactomeConstraint.Constraint.MANDATORY);
     @ReactomeProperty
     private Integer startPositionInReferenceSequence;
     

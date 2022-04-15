@@ -15,9 +15,11 @@ import java.util.List;
 public class GenomeEncodedEntity extends PhysicalEntity {
 
 
+    @ReactomeConstraint(constraint = ReactomeConstraint.Constraint.MANDATORY);
     @Relationship(type = "species")
     private Taxon species;
 
+    @ReactomeConstraint(constraint = ReactomeConstraint.Constraint.MANDATORY);
     @Relationship(type = "compartment")
     private List<Compartment> compartment;
 

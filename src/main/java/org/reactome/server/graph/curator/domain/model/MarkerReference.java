@@ -8,6 +8,7 @@ import java.util.List;
 @Node
 public class MarkerReference extends ControlReference {
 
+    @ReactomeConstraint(constraint = ReactomeConstraint.Constraint.MANDATORY);
     @Relationship(type = "marker")
     private List<EntityWithAccessionedSequence> marker;
 

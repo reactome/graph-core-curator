@@ -16,6 +16,7 @@ public class OtherEntity extends PhysicalEntity {
 
     public OtherEntity() {}
 
+    @ReactomeConstraint(constraint = ReactomeConstraint.Constraint.MANDATORY);
     @Relationship(type = "compartment")
     private List<Compartment> compartment;
 

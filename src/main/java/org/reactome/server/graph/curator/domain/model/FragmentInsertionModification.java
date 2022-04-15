@@ -7,6 +7,7 @@ import org.springframework.data.neo4j.core.schema.Node;
 @Node
 public class FragmentInsertionModification extends FragmentModification {
 
+    @ReactomeConstraint(constraint = ReactomeConstraint.Constraint.REQUIRED);
     @ReactomeProperty
     private Integer coordinate;
     
