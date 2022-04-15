@@ -19,7 +19,7 @@ public abstract class ReferenceSequence extends ReferenceEntity {
     @ReactomeProperty
     private List<String> geneName;
     @ReactomeProperty
-    private String isSequenceChanged;
+    private Boolean isSequenceChanged;
     @ReactomeProperty
     private List<String> keyword;
     @ReactomeProperty
@@ -64,11 +64,11 @@ public abstract class ReferenceSequence extends ReferenceEntity {
         this.geneName = geneName;
     }
 
-    public String getIsSequenceChanged() {
+    public Boolean getIsSequenceChanged() {
         return isSequenceChanged;
     }
 
-    public void setIsSequenceChanged(String isSequenceChanged) {
+    public void setIsSequenceChanged(Boolean isSequenceChanged) {
         this.isSequenceChanged = isSequenceChanged;
     }
 
