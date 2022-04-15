@@ -8,7 +8,7 @@ import java.lang.annotation.Target;
 @Target({ElementType.FIELD, ElementType.METHOD})
 @Retention(RetentionPolicy.RUNTIME)
 public @interface ReactomeConstraint {
-    Constraint constraint() default Constraint.OPTIONAL;
+    public Constraint constraint() default Constraint.OPTIONAL;
 
      enum Constraint {
         NOMANUALEDIT,
