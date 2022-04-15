@@ -1,6 +1,7 @@
 package org.reactome.server.graph.curator.domain.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import org.reactome.server.graph.curator.domain.annotations.ReactomeConstraint;
 import org.reactome.server.graph.curator.domain.annotations.ReactomeSchemaIgnore;
 import org.springframework.data.neo4j.core.schema.Node;
 import org.springframework.data.neo4j.core.schema.Relationship;
@@ -16,7 +17,7 @@ public class OtherEntity extends PhysicalEntity {
 
     public OtherEntity() {}
 
-    @ReactomeConstraint(constraint = ReactomeConstraint.Constraint.MANDATORY);
+    @ReactomeConstraint(constraint = ReactomeConstraint.Constraint.MANDATORY)
     @Relationship(type = "compartment")
     private List<Compartment> compartment;
 

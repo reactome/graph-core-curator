@@ -1,5 +1,6 @@
 package org.reactome.server.graph.curator.domain.model;
 
+import org.reactome.server.graph.curator.domain.annotations.ReactomeConstraint;
 import org.reactome.server.graph.curator.domain.annotations.ReactomeProperty;
 import org.springframework.data.neo4j.core.schema.Node;
 import org.springframework.data.neo4j.core.schema.Relationship;
@@ -9,15 +10,15 @@ import java.util.List;
 @Node
 public class NegativePrecedingEvent extends DatabaseObject {
 
-    @ReactomeConstraint(constraint = ReactomeConstraint.Constraint.OPTIONAL);
+    @ReactomeConstraint(constraint = ReactomeConstraint.Constraint.OPTIONAL)
     @ReactomeProperty
     private String comment;
 
-    @ReactomeConstraint(constraint = ReactomeConstraint.Constraint.MANDATORY);
+    @ReactomeConstraint(constraint = ReactomeConstraint.Constraint.MANDATORY)
     @Relationship(type = "negativePrecedingEvent", direction = Relationship.Direction.INCOMING)
     private List<Event> precedingEvent;
 
-    @ReactomeConstraint(constraint = ReactomeConstraint.Constraint.REQUIRED);
+    @ReactomeConstraint(constraint = ReactomeConstraint.Constraint.REQUIRED)
     @Relationship(type = "reason")
     private NegativePrecedingEventReason reason;
 

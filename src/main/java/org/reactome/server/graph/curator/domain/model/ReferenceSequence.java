@@ -1,5 +1,6 @@
 package org.reactome.server.graph.curator.domain.model;
 
+import org.reactome.server.graph.curator.domain.annotations.ReactomeConstraint;
 import org.reactome.server.graph.curator.domain.annotations.ReactomeProperty;
 import org.springframework.data.neo4j.core.schema.Node;
 import org.springframework.data.neo4j.core.schema.Relationship;
@@ -10,31 +11,31 @@ import java.util.List;
 @Node
 public abstract class ReferenceSequence extends ReferenceEntity {
 
-    @ReactomeConstraint(constraint = ReactomeConstraint.Constraint.NOMANUALEDIT);
+    @ReactomeConstraint(constraint = ReactomeConstraint.Constraint.NOMANUALEDIT)
     @ReactomeProperty
     private String checksum;
-    @ReactomeConstraint(constraint = ReactomeConstraint.Constraint.OPTIONAL);
+    @ReactomeConstraint(constraint = ReactomeConstraint.Constraint.OPTIONAL)
     @ReactomeProperty
     private List<String> comment;
-    @ReactomeConstraint(constraint = ReactomeConstraint.Constraint.OPTIONAL);
+    @ReactomeConstraint(constraint = ReactomeConstraint.Constraint.OPTIONAL)
     @ReactomeProperty
     private List<String> description;
-    @ReactomeConstraint(constraint = ReactomeConstraint.Constraint.OPTIONAL);
+    @ReactomeConstraint(constraint = ReactomeConstraint.Constraint.OPTIONAL)
     @ReactomeProperty
     private List<String> geneName;
-    @ReactomeConstraint(constraint = ReactomeConstraint.Constraint.OPTIONAL);
+    @ReactomeConstraint(constraint = ReactomeConstraint.Constraint.OPTIONAL)
     @ReactomeProperty
     private Boolean isSequenceChanged;
-    @ReactomeConstraint(constraint = ReactomeConstraint.Constraint.OPTIONAL);
+    @ReactomeConstraint(constraint = ReactomeConstraint.Constraint.OPTIONAL)
     @ReactomeProperty
     private List<String> keyword;
-    @ReactomeConstraint(constraint = ReactomeConstraint.Constraint.OPTIONAL);
+    @ReactomeConstraint(constraint = ReactomeConstraint.Constraint.OPTIONAL)
     @ReactomeProperty
     private List<String> secondaryIdentifier;
     @ReactomeProperty
     private Integer sequenceLength;
 
-    @ReactomeConstraint(constraint = ReactomeConstraint.Constraint.MANDATORY);
+    @ReactomeConstraint(constraint = ReactomeConstraint.Constraint.MANDATORY)
     @Relationship(type = "species")
     private Species species;
 

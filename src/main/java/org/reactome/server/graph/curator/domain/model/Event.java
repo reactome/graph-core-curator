@@ -12,90 +12,89 @@ import java.util.*;
 @Node
 public abstract class Event extends DatabaseObject {
 
-    @ReactomeConstraint(constraint = ReactomeConstraint.Constraint.OPTIONAL);
+    @ReactomeConstraint(constraint = ReactomeConstraint.Constraint.OPTIONAL)
     @ReactomeProperty
     private String definition;
-    @ReactomeConstraint(constraint = ReactomeConstraint.Constraint.OPTIONAL);
+    @ReactomeConstraint(constraint = ReactomeConstraint.Constraint.OPTIONAL)
     @ReactomeProperty
     private Boolean doRelease;
 
 
-    @ReactomeConstraint(constraint = ReactomeConstraint.Constraint.MANDATORY);
+    @ReactomeConstraint(constraint = ReactomeConstraint.Constraint.MANDATORY)
     @ReactomeProperty
     private List<String> name;
-    @ReactomeConstraint(constraint = ReactomeConstraint.Constraint.MANDATORY);
+    @ReactomeConstraint(constraint = ReactomeConstraint.Constraint.MANDATORY)
     @ReactomeProperty
     private String releaseDate;
-    @ReactomeConstraint(constraint = ReactomeConstraint.Constraint.NOMANUALEDIT);
+    @ReactomeConstraint(constraint = ReactomeConstraint.Constraint.NOMANUALEDIT)
     @ReactomeProperty
     private String releaseStatus;
 
-    @ReactomeConstraint(constraint = ReactomeConstraint.Constraint.OPTIONAL);
+    @ReactomeConstraint(constraint = ReactomeConstraint.Constraint.OPTIONAL)
     @Relationship(type = "authored", direction = Relationship.Direction.INCOMING)
     private List<InstanceEdit> authored;
 
-    @ReactomeConstraint(constraint = ReactomeConstraint.Constraint.OPTIONAL);
+    @ReactomeConstraint(constraint = ReactomeConstraint.Constraint.OPTIONAL)
     @Relationship(type = "crossReference")
     private List<DatabaseIdentifier> crossReference;
 
-    @ReactomeConstraint(constraint = ReactomeConstraint.Constraint.OPTIONAL);
+    @ReactomeConstraint(constraint = ReactomeConstraint.Constraint.OPTIONAL)
     @Relationship(type = "disease")
     private List<Disease> disease;
 
-    @ReactomeConstraint(constraint = ReactomeConstraint.Constraint.OPTIONAL);
+    @ReactomeConstraint(constraint = ReactomeConstraint.Constraint.OPTIONAL)
     @Relationship(type = "edited", direction = Relationship.Direction.INCOMING)
     private List<InstanceEdit> edited;
 
-    @ReactomeConstraint(constraint = ReactomeConstraint.Constraint.OPTIONAL);
+    @ReactomeConstraint(constraint = ReactomeConstraint.Constraint.OPTIONAL)
     @Relationship(type = "evidenceType")
     private EvidenceType evidenceType;
 
-    @ReactomeConstraint(constraint = ReactomeConstraint.Constraint.OPTIONAL);
+    @ReactomeConstraint(constraint = ReactomeConstraint.Constraint.OPTIONAL)
     @Relationship(type = "figure")
     private List<Figure> figure;
 
-    @ReactomeConstraint(constraint = ReactomeConstraint.Constraint.OPTIONAL);
+    @ReactomeConstraint(constraint = ReactomeConstraint.Constraint.OPTIONAL)
     @Relationship(type = "precedingEvent")
     private List<Event> precedingEvent;
 
-    @ReactomeConstraint(constraint = ReactomeConstraint.Constraint.NOMANUALEDIT);
+    @ReactomeConstraint(constraint = ReactomeConstraint.Constraint.NOMANUALEDIT)
     @Relationship(type = "goBiologicalProcess")
     private GO_BiologicalProcess goBiologicalProcess;
 
-    @ReactomeConstraint(constraint = ReactomeConstraint.Constraint.OPTIONAL);
+    @ReactomeConstraint(constraint = ReactomeConstraint.Constraint.OPTIONAL)
     @Relationship(type = "inferredFrom")
     private Set<Event> inferredFrom;
 
-    @ReactomeConstraint(constraint = ReactomeConstraint.Constraint.OPTIONAL);
+    @ReactomeConstraint(constraint = ReactomeConstraint.Constraint.OPTIONAL)
     @Relationship(type = "literatureReference")
     private List<Publication> literatureReference;
 
-    @ReactomeConstraint(constraint = ReactomeConstraint.Constraint.OPTIONAL);
+    @ReactomeConstraint(constraint = ReactomeConstraint.Constraint.OPTIONAL)
     @Relationship(type = "orthologousEvent")
     private Set<Event> orthologousEvent;
 
-    @ReactomeConstraint(constraint = ReactomeConstraint.Constraint.OPTIONAL);
+    @ReactomeConstraint(constraint = ReactomeConstraint.Constraint.OPTIONAL)
     @Relationship(type = "relatedSpecies")
     private List<Species> relatedSpecies;
 
-    @ReactomeConstraint(constraint = ReactomeConstraint.Constraint.REQUIRED);
+    @ReactomeConstraint(constraint = ReactomeConstraint.Constraint.REQUIRED)
     @Relationship(type = "reviewed", direction = Relationship.Direction.INCOMING)
     private List<InstanceEdit> reviewed;
 
-    @ReactomeConstraint(constraint = ReactomeConstraint.Constraint.OPTIONAL);
+    @ReactomeConstraint(constraint = ReactomeConstraint.Constraint.OPTIONAL)
     @Relationship(type = "revised", direction = Relationship.Direction.INCOMING)
     private List<InstanceEdit> revised;
 
     @Relationship(type = "species")
-    @ReactomeConstraint(constraint = ReactomeConstraint.Constraint.MANDATORY);
     @ReactomeConstraint(constraint = ReactomeConstraint.Constraint.MANDATORY)
     private List<Species> species;
 
-    @ReactomeConstraint(constraint = ReactomeConstraint.Constraint.MANDATORY);
+    @ReactomeConstraint(constraint = ReactomeConstraint.Constraint.MANDATORY)
     @Relationship(type = "summation")
     private List<Summation> summation;
 
-    @ReactomeConstraint(constraint = ReactomeConstraint.Constraint.OPTIONAL);
+    @ReactomeConstraint(constraint = ReactomeConstraint.Constraint.OPTIONAL)
     @Relationship(type = "negativePrecedingEvent")
     private List<NegativePrecedingEvent> negativePrecedingEvent;
 

@@ -1,6 +1,7 @@
 package org.reactome.server.graph.curator.domain.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import org.reactome.server.graph.curator.domain.annotations.ReactomeConstraint;
 import org.reactome.server.graph.curator.domain.annotations.ReactomeProperty;
 import org.reactome.server.graph.curator.domain.annotations.ReactomeSchemaIgnore;
 import org.springframework.data.neo4j.core.schema.Node;
@@ -18,22 +19,22 @@ import java.util.*;
 @Node
 public class Polymer extends PhysicalEntity {
 
-    @ReactomeConstraint(constraint = ReactomeConstraint.Constraint.OPTIONAL);
+    @ReactomeConstraint(constraint = ReactomeConstraint.Constraint.OPTIONAL)
     @ReactomeProperty
     private Integer maxUnitCount;
-    @ReactomeConstraint(constraint = ReactomeConstraint.Constraint.OPTIONAL);
+    @ReactomeConstraint(constraint = ReactomeConstraint.Constraint.OPTIONAL)
     @ReactomeProperty
     private Integer minUnitCount;
 
-    @ReactomeConstraint(constraint = ReactomeConstraint.Constraint.MANDATORY);
+    @ReactomeConstraint(constraint = ReactomeConstraint.Constraint.MANDATORY)
     @Relationship(type = "repeatedUnit")
     private List<PhysicalEntity> repeatedUnit;
 
-    @ReactomeConstraint(constraint = ReactomeConstraint.Constraint.REQUIRED);
+    @ReactomeConstraint(constraint = ReactomeConstraint.Constraint.REQUIRED)
     @Relationship(type = "species")
     private List<Species> species;
 
-    @ReactomeConstraint(constraint = ReactomeConstraint.Constraint.MANDATORY);
+    @ReactomeConstraint(constraint = ReactomeConstraint.Constraint.MANDATORY)
     @Relationship(type = "compartment")
     private List<Compartment> compartment;
 

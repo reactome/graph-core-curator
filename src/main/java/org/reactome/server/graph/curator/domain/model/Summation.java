@@ -1,5 +1,6 @@
 package org.reactome.server.graph.curator.domain.model;
 
+import org.reactome.server.graph.curator.domain.annotations.ReactomeConstraint;
 import org.reactome.server.graph.curator.domain.annotations.ReactomeProperty;
 import org.springframework.data.neo4j.core.schema.Node;
 import org.springframework.data.neo4j.core.schema.Relationship;
@@ -10,11 +11,11 @@ import java.util.List;
 @Node
 public class Summation extends DatabaseObject {
 
-    @ReactomeConstraint(constraint = ReactomeConstraint.Constraint.MANDATORY);
+    @ReactomeConstraint(constraint = ReactomeConstraint.Constraint.MANDATORY)
     @ReactomeProperty
     private String text;
 
-    @ReactomeConstraint(constraint = ReactomeConstraint.Constraint.OPTIONAL);
+    @ReactomeConstraint(constraint = ReactomeConstraint.Constraint.OPTIONAL)
     @Relationship(type = "literatureReference")
     private List<Publication> literatureReference;
 

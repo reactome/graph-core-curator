@@ -1,5 +1,6 @@
 package org.reactome.server.graph.curator.domain.model;
 
+import org.reactome.server.graph.curator.domain.annotations.ReactomeConstraint;
 import org.reactome.server.graph.curator.domain.annotations.ReactomeProperty;
 import org.springframework.data.neo4j.core.schema.Node;
 import org.springframework.data.neo4j.core.schema.Relationship;
@@ -10,16 +11,16 @@ import java.util.List;
 @Node
 public class Taxon extends DatabaseObject {
 
-    @ReactomeConstraint(constraint = ReactomeConstraint.Constraint.MANDATORY);
+    @ReactomeConstraint(constraint = ReactomeConstraint.Constraint.MANDATORY)
     @ReactomeProperty
     private List<String> name;
 
     @Deprecated
-    @ReactomeConstraint(constraint = ReactomeConstraint.Constraint.MANDATORY);
+    @ReactomeConstraint(constraint = ReactomeConstraint.Constraint.MANDATORY)
     @Relationship(type = "crossReference")
     private List<DatabaseIdentifier> crossReference;
 
-    @ReactomeConstraint(constraint = ReactomeConstraint.Constraint.REQUIRED);
+    @ReactomeConstraint(constraint = ReactomeConstraint.Constraint.REQUIRED)
     @Relationship(type = "superTaxon")
     private Taxon superTaxon;
     

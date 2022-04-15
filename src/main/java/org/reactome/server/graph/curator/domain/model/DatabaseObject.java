@@ -3,6 +3,7 @@ package org.reactome.server.graph.curator.domain.model;
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
+import org.reactome.server.graph.curator.domain.annotations.ReactomeConstraint;
 import org.reactome.server.graph.curator.domain.annotations.ReactomeProperty;
 import org.reactome.server.graph.curator.domain.annotations.ReactomeSchemaIgnore;
 import org.reactome.server.graph.curator.domain.annotations.ReactomeTransient;
@@ -37,19 +38,19 @@ public abstract class DatabaseObject implements Serializable, Comparable<Databas
     @Id
     protected Long dbId;
 
-    @ReactomeConstraint(constraint = ReactomeConstraint.Constraint.NOMANUALEDIT);
+    @ReactomeConstraint(constraint = ReactomeConstraint.Constraint.NOMANUALEDIT)
     @ReactomeProperty
     private String displayName;
 
-    @ReactomeConstraint(constraint = ReactomeConstraint.Constraint.NOMANUALEDIT);
+    @ReactomeConstraint(constraint = ReactomeConstraint.Constraint.NOMANUALEDIT)
     @Relationship(type = "created", direction = Relationship.Direction.INCOMING)
     private InstanceEdit created;
 
-    @ReactomeConstraint(constraint = ReactomeConstraint.Constraint.NOMANUALEDIT);
+    @ReactomeConstraint(constraint = ReactomeConstraint.Constraint.NOMANUALEDIT)
     @Relationship(type = "modified", direction = Relationship.Direction.INCOMING)
     private InstanceEdit modified;
 
-    @ReactomeConstraint(constraint = ReactomeConstraint.Constraint.NOMANUALEDIT);
+    @ReactomeConstraint(constraint = ReactomeConstraint.Constraint.NOMANUALEDIT)
     @Relationship(type = "stableIdentifier")
     private StableIdentifier stableIdentifier;
 
