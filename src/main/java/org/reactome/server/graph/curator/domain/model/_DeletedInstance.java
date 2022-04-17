@@ -13,7 +13,7 @@ public class _DeletedInstance extends DatabaseObject{
     @ReactomeProperty
     private String className;
     @ReactomeProperty
-    private Integer deletedInstanceDB_ID;
+    private Long deletedInstanceDB_ID;
     @ReactomeProperty
     private String name;
 
@@ -38,11 +38,11 @@ public class _DeletedInstance extends DatabaseObject{
         this.name = name;
     }
 
-    public Integer getDeletedInstanceDB_ID() {
+    public Long getDeletedInstanceDB_ID() {
         return deletedInstanceDB_ID;
     }
 
-    public void setDeletedInstanceDB_ID(Integer deletedInstanceDB_ID) {
+    public void setDeletedInstanceDB_ID(Long deletedInstanceDB_ID) {
         this.deletedInstanceDB_ID = deletedInstanceDB_ID;
     }
 

@@ -13,18 +13,16 @@ public class _Deleted extends DatabaseObject{
     private String curatorComment;
 
     @ReactomeProperty
-    private DeletedControlledVocabulary reason;
+    private List<Long> deletedInstanceDB_ID;
 
-    @ReactomeProperty
-    private List<Integer> deletedInstanceDB_ID;
+    @Relationship(type = "reason")
+    private DeletedControlledVocabulary reason;
 
     @Relationship(type = "deletedInstance")
     private List<_DeletedInstance> deletedInstance;
 
     @Relationship(type = "replacementInstances")
     private List<DatabaseObject> replacementInstances;
-
-
 
     public String getCuratorComment() { return this.curatorComment; }
 
@@ -38,11 +36,11 @@ public class _Deleted extends DatabaseObject{
         this.reason = reason;
     }
 
-    public List<Integer> getDeletedInstanceDB_ID() {
+    public List<Long> getDeletedInstanceDB_ID() {
         return deletedInstanceDB_ID;
     }
 
-    public void setDeletedInstanceDB_ID(List<Integer> deletedInstanceDB_ID) {
+    public void setDeletedInstanceDB_ID(List<Long> deletedInstanceDB_ID) {
         this.deletedInstanceDB_ID = deletedInstanceDB_ID;
     }
 
