@@ -15,7 +15,7 @@ public class InstanceEdit extends DatabaseObject {
     @ReactomeProperty
     private String note;
     @ReactomeProperty
-    private String applyToAllEditedInstances;
+    private String _applyToAllEditedInstances;
 
     @Relationship(type = "author", direction = Relationship.Direction.INCOMING)
     private List<Person> author;
@@ -50,11 +50,11 @@ public class InstanceEdit extends DatabaseObject {
         this.author = author;
     }
 
-    public String getApplyToAllEditedInstances() {
-        return this.applyToAllEditedInstances;
+    public String get_applyToAllEditedInstances() {
+        return this._applyToAllEditedInstances;
     }
 
-    public void setApplyToAllEditedInstances(String applyToAllEditedInstances) {
-        this.applyToAllEditedInstances = applyToAllEditedInstances;
+    public void set_applyToAllEditedInstances(String applyToAllEditedInstances) {
+        this._applyToAllEditedInstances = applyToAllEditedInstances;
     }
 }

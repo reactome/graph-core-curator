@@ -7,7 +7,7 @@ public class SchemaOrganization extends SchemaCreator {
     private final String name;
 
     SchemaOrganization(Affiliation affiliation) {
-        this.name = affiliation.getDisplayName();
+        this.name = affiliation.get_displayName();
     }
 
     public String getName() {

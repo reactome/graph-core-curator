@@ -31,6 +31,6 @@ public interface PersonRepository extends Neo4jRepository<Person, Long>{
     @Query(" MATCH (n:Person{dbId:$dbId}) " +
             "OPTIONAL MATCH (n)-[r]->(m) WHERE NOT (m:InstanceEdit) " +
             "RETURN n, COLLECT(r), COLLECT(m)")
-    Person findPersonByDbId(@Param("dbId") Long dbId);
+    Person findPersonByDbId(@Param("DB_ID") Long dbId);
 
 }

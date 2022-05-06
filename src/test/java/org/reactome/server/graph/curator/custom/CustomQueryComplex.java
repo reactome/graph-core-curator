@@ -63,7 +63,7 @@ public class CustomQueryComplex implements CustomQuery {
     @Override
     public CustomQuery build(Record r) {
         this.setStId(r.get("stId").asString());
-        this.setDisplayName(r.get("displayName").asString());
+        this.setDisplayName(r.get("_displayName").asString());
         for (Value value : r.get("customReferences").values()) {
             this.getCustomReferences().add(new CustomReference(value.get("database").asString(), value.get("identifier").asString()));
         }

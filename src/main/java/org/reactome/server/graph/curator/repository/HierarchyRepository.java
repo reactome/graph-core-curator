@@ -250,7 +250,7 @@ public class HierarchyRepository {
                 "RETURN [n.stId, n.displayName, n.hasDiagram, n.speciesName, n.schemaClass, labels(n), 0] AS db, " +
                 "collect( [rel IN r | [endNode(rel).stId, endNode(rel).displayName, endNode(rel).hasDiagram, endNode(rel).speciesName, endNode(rel).schemaClass, labels(endNode(rel)), rel.order ]] ) AS nodePairCollection";
 
-        return queryHierarchyWrapper(query, Collections.singletonMap("dbId", dbId));
+        return queryHierarchyWrapper(query, Collections.singletonMap("DB_ID", dbId));
     }
 
     private Collection<HierarchyWrapper> getSubHierarchyByStIdRaw(String stId) {
@@ -325,7 +325,7 @@ public class HierarchyRepository {
                 "RETURN [n.stId, n.displayName, n.hasDiagram, n.speciesName, n.schemaClass, labels(n), 0] AS db, " +
                 "collect( [rel IN relationships(path)| [startNode(rel).stId, startNode(rel).displayName, startNode(rel).hasDiagram,startNode(rel).speciesName, startNode(rel).schemaClass, labels(endNode(rel)), rel.order ]] ) AS nodePairCollection";
 
-        return queryHierarchyWrapper(query, Collections.singletonMap("dbId", dbId));
+        return queryHierarchyWrapper(query, Collections.singletonMap("DB_ID", dbId));
     }
 
     /**
@@ -367,7 +367,7 @@ public class HierarchyRepository {
                 "RETURN [n.stId, n.displayName, n.hasDiagram, n.speciesName, n.schemaClass, labels(n), 0] AS db, " +
                 "collect( [rel IN relationships(path) | [startNode(rel).stId, startNode(rel).displayName, startNode(rel).hasDiagram,startNode(rel).speciesName, startNode(rel).schemaClass, labels(endNode(rel)), rel.order ]] ) AS nodePairCollection";
 
-        return queryHierarchyWrapper(query, Collections.singletonMap("dbId", dbId));
+        return queryHierarchyWrapper(query, Collections.singletonMap("DB_ID", dbId));
     }
 
     public Collection<HierarchyBranch> getLocationInPathwayBrowserForPathwaysRaw(List<?> pathways) {
@@ -387,7 +387,7 @@ public class HierarchyRepository {
         List<Long> dbIds = new ArrayList<>();
         for (Object aux : pathways) {
             if (aux instanceof DatabaseObject) {
-                dbIds.add(((DatabaseObject) aux).getDbId());
+                dbIds.add(((DatabaseObject) aux).getDB_ID());
             } else {
                 String identifier = String.valueOf(aux);
                 if (DatabaseObjectUtils.isStId(identifier)) {

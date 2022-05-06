@@ -45,7 +45,7 @@ public class EventAncestorsRepository {
                 .mappedBy((typeSystem, record) -> getEventProjectionWrapper(record)).all();
     }
 
-    public Collection<EventProjectionWrapper> getEventAncestorsByDbId(@Param("dbId") Long dbId) {
+    public Collection<EventProjectionWrapper> getEventAncestorsByDbId(@Param("DB_ID") Long dbId) {
         //language=Cypher
         String query = " " +
                 "MATCH (n:TopLevelPathway{dbId:$dbId}) " +
@@ -58,7 +58,7 @@ public class EventAncestorsRepository {
 
         return neo4jClient.query(query)
                 .in(databaseName)
-                .bindAll(Collections.singletonMap("dbId", dbId))
+                .bindAll(Collections.singletonMap("DB_ID", dbId))
                 .fetchAs(EventProjectionWrapper.class)
                 .mappedBy((typeSystem, record) -> getEventProjectionWrapper(record)).all();
     }

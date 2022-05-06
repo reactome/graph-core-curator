@@ -22,7 +22,7 @@ public class Participant {
     public static Participant build(Record record) {
         Participant participant = new Participant();
         participant.setPeDbId(record.get("peDbId").asLong());
-        participant.setDisplayName(record.get("displayName").asString(null));
+        participant.setDisplayName(record.get("_displayName").asString(null));
         participant.setSchemaClass(record.get("schemaClass").asString(null));
         participant.setRefEntities(record.get("refEntities").asList(ParticipantRefEntities::build));
         return participant;
@@ -70,10 +70,10 @@ public class Participant {
 
         public static ParticipantRefEntities build(Value value) {
             ParticipantRefEntities participantRefEntities = new ParticipantRefEntities();
-            participantRefEntities.setDbId(value.get("dbId").asLong());
+            participantRefEntities.setDbId(value.get("DB_ID").asLong());
             participantRefEntities.setIdentifier(value.get("identifier").asString());
             participantRefEntities.setSchemaClass(value.get("schemaClass").asString());
-            participantRefEntities.setDisplayName(value.get("displayName").asString());
+            participantRefEntities.setDisplayName(value.get("_displayName").asString());
             participantRefEntities.setIcon(value.get("icon").asString());
             participantRefEntities.setUrl(value.get("url").asString());
             return participantRefEntities;

@@ -23,7 +23,7 @@ public class SchemaDataSet {
     private static final String license = "https://creativecommons.org/licenses/by/4.0/";
 
     public SchemaDataSet(Event event, Integer version) {
-        this.name = event.getDisplayName();
+        this.name = event.get_displayName();
         this.description = event.getSummation() != null ? event.getSummation().get(0).getText() : "";
         this.url = "https://reactome.org/PathwayBrowser/#/" + event.getStId();
         this.version = "" + version;
@@ -51,7 +51,7 @@ public class SchemaDataSet {
                 } else if (publication instanceof Book) {
                     str = ((Book) publication).getISBN();
                 } else {
-                    str = publication.getDisplayName();
+                    str = publication.get_displayName();
                 }
                 if (str != null) this.citation.add(str);
             }

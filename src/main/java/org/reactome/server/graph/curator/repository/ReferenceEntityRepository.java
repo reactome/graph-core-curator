@@ -19,7 +19,7 @@ public interface ReferenceEntityRepository extends Neo4jRepository<ReferenceEnti
 
     @Query(" MATCH (n:DatabaseObject{dbId:$dbId})-[:hasEvent|input|output|catalystActivity|physicalEntity|entityFunctionalStatus|diseaseEntity|regulatedBy|regulator|hasComponent|hasMember|hasCandidate|repeatedUnit|referenceEntity*]->(m:ReferenceEntity) " +
             "RETURN DISTINCT m")
-    Collection<ReferenceEntity> getParticipatingReferenceEntities(@Param("dbId") Long dbId);
+    Collection<ReferenceEntity> getParticipatingReferenceEntities(@Param("DB_ID") Long dbId);
 
     @Query(" MATCH (n:DatabaseObject{stId:$stId})-[:hasEvent|input|output|catalystActivity|physicalEntity|entityFunctionalStatus|diseaseEntity|regulatedBy|regulator|hasComponent|hasMember|hasCandidate|repeatedUnit|referenceEntity*]->(m:ReferenceEntity) " +
             "RETURN DISTINCT m")

@@ -10,25 +10,22 @@ public class _DeletedInstance extends DatabaseObject{
 
     public _DeletedInstance() {}
 
-    @ReactomeProperty
-    private String className;
+    @ReactomeConstraint(constraint = ReactomeConstraint.Constraint.NOMANUALEDIT)
     @ReactomeProperty
     private Long deletedInstanceDB_ID;
+    @ReactomeConstraint(constraint = ReactomeConstraint.Constraint.NOMANUALEDIT)
     @ReactomeProperty
     private String name;
+    @ReactomeConstraint(constraint = ReactomeConstraint.Constraint.NOMANUALEDIT)
+    @ReactomeProperty
+    private String className;
 
+    @ReactomeConstraint(constraint = ReactomeConstraint.Constraint.NOMANUALEDIT)
     @Relationship(type = "deletedStableIdentifier")
     private StableIdentifier deletedStableIdentifier;
+    @ReactomeConstraint(constraint = ReactomeConstraint.Constraint.NOMANUALEDIT)
     @Relationship(type = "species")
     private List<Taxon> species;
-
-    public String getClassName() {
-        return this.className;
-    }
-
-    public void setClassName(String className) {
-        this.className = className;
-    }
 
     public String getName() {
         return this.name;
@@ -36,6 +33,14 @@ public class _DeletedInstance extends DatabaseObject{
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public String getClassName() {
+        return this.className;
+    }
+
+    public void setClassName(String className) {
+        this.className = className;
     }
 
     public Long getDeletedInstanceDB_ID() {

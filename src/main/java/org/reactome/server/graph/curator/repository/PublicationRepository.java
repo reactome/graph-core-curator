@@ -15,7 +15,7 @@ public interface PublicationRepository extends Neo4jRepository<Publication, Long
     Collection<Publication> getPublicationsOfPersonByOrcidId(@Param("orcidId") String orcidId);
 
     @Query("MATCH (:Person{dbId:$dbId})-[:author]-(pub:Publication) RETURN pub")
-    Collection<Publication> getPublicationsOfPersonByDbId(@Param("dbId") Long dbId);
+    Collection<Publication> getPublicationsOfPersonByDbId(@Param("DB_ID") Long dbId);
 
     @Query("MATCH (:Person{eMailAddress:$email})-[:author]-(pub:Publication) RETURN pub")
     Collection<Publication> getPublicationsOfPersonByEmail(@Param("email") String email);

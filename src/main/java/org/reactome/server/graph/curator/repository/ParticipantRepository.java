@@ -43,7 +43,7 @@ public class ParticipantRepository {
                 "              icon: icon " +
                 "       })) AS refEntities";
 
-        return neo4jClient.query(query).in(databaseName).bindAll(Collections.singletonMap("dbId", dbId)).fetchAs(Participant.class).mappedBy( (t, record) -> Participant.build(record)).all();
+        return neo4jClient.query(query).in(databaseName).bindAll(Collections.singletonMap("DB_ID", dbId)).fetchAs(Participant.class).mappedBy( (t, record) -> Participant.build(record)).all();
     }
 
 

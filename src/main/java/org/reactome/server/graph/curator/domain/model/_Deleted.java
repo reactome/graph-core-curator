@@ -1,5 +1,6 @@
 package org.reactome.server.graph.curator.domain.model;
 
+import org.reactome.server.graph.curator.domain.annotations.ReactomeConstraint;
 import org.reactome.server.graph.curator.domain.annotations.ReactomeProperty;
 import org.springframework.data.neo4j.core.schema.Relationship;
 
@@ -9,18 +10,23 @@ public class _Deleted extends DatabaseObject{
 
     public _Deleted() {}
 
+    @ReactomeConstraint(constraint = ReactomeConstraint.Constraint.NOMANUALEDIT)
     @ReactomeProperty
     private String curatorComment;
 
+    @ReactomeConstraint(constraint = ReactomeConstraint.Constraint.NOMANUALEDIT)
     @ReactomeProperty
     private List<Long> deletedInstanceDB_ID;
 
+    @ReactomeConstraint(constraint = ReactomeConstraint.Constraint.NOMANUALEDIT)
     @Relationship(type = "reason")
     private DeletedControlledVocabulary reason;
 
+    @ReactomeConstraint(constraint = ReactomeConstraint.Constraint.NOMANUALEDIT)
     @Relationship(type = "deletedInstance")
     private List<_DeletedInstance> deletedInstance;
 
+    @ReactomeConstraint(constraint = ReactomeConstraint.Constraint.NOMANUALEDIT)
     @Relationship(type = "replacementInstances")
     private List<DatabaseObject> replacementInstances;
 

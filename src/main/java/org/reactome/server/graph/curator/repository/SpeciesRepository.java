@@ -21,7 +21,7 @@ public interface SpeciesRepository extends Neo4jRepository<Species, Long> {
     Species getSpeciesByTaxId(@Param("taxId") String taxId);
 
     @Query("MATCH (n:Species{dbId:$dbId}) RETURN n")
-    Species getSpeciesByDbId(@Param("dbId") Long dbId);
+    Species getSpeciesByDbId(@Param("DB_ID") Long dbId);
 
     @Query("MATCH (n:Species) WHERE $name IN n.name RETURN n")
     Species getSpeciesByName(@Param("name") String name);

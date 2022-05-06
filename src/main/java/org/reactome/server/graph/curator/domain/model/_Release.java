@@ -1,13 +1,16 @@
 package org.reactome.server.graph.curator.domain.model;
 
+import org.reactome.server.graph.curator.domain.annotations.ReactomeConstraint;
 import org.reactome.server.graph.curator.domain.annotations.ReactomeProperty;
 
 public class _Release extends DatabaseObject{
 
     public _Release() {}
 
+    @ReactomeConstraint(constraint = ReactomeConstraint.Constraint.MANDATORY)
     @ReactomeProperty
     private Integer releaseNumber;
+    @ReactomeConstraint(constraint = ReactomeConstraint.Constraint.MANDATORY)
     @ReactomeProperty
     private String releaseDate;
 

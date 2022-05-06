@@ -40,7 +40,7 @@ public interface PathwayRepository extends Neo4jRepository<Pathway, Long> {
             "UNION " +
             "MATCH (p:Pathway{dbId:$dbId}) " +
             "RETURN DISTINCT p")
-    Collection<Pathway> getPathwaysForByDbId(@Param("dbId") Long dbId);
+    Collection<Pathway> getPathwaysForByDbId(@Param("DB_ID") Long dbId);
 
     @Query(" MATCH (:DatabaseObject{dbId:$dbId})<-[:regulatedBy|regulator|catalystActivity|physicalEntity|entityFunctionalStatus|diseaseEntity|hasMember|hasCandidate|hasComponent|repeatedUnit|input|output*]-()<-[:hasEvent]-(p:Pathway)-[:species]->(:Species{taxId:$taxId}) " +
             "RETURN DISTINCT p " +
@@ -50,7 +50,7 @@ public interface PathwayRepository extends Neo4jRepository<Pathway, Long> {
             "UNION " +
             "MATCH (p:Pathway{dbId:$dbId})-[:species]->(:Species{taxId:$taxId}) " +
             "RETURN DISTINCT p")
-    Collection<Pathway> getPathwaysForByDbIdAndSpeciesTaxId(@Param("dbId") Long dbId, @Param("taxId") String taxId);
+    Collection<Pathway> getPathwaysForByDbIdAndSpeciesTaxId(@Param("DB_ID") Long dbId, @Param("taxId") String taxId);
 
 
     @Query(" MATCH (:DatabaseObject{stId:$stId})-[:regulator|hasComponent|repeatedUnit|hasMember|hasCandidate|referenceEntity*]->(re:ReferenceEntity) " +
@@ -69,13 +69,13 @@ public interface PathwayRepository extends Neo4jRepository<Pathway, Long> {
             "WITH re " +
             "MATCH (re)<-[:referenceEntity]-(:PhysicalEntity)<-[:regulatedBy|regulator|catalystActivity|physicalEntity|entityFunctionalStatus|diseaseEntity|hasMember|hasCandidate|hasComponent|repeatedUnit|input|output*]-(:ReactionLikeEvent)<-[:hasEvent]-(p:Pathway) " +
             "RETURN DISTINCT p")
-    Collection<Pathway> getPathwaysForAllFormsOfByDbId(@Param("dbId") Long dbId);
+    Collection<Pathway> getPathwaysForAllFormsOfByDbId(@Param("DB_ID") Long dbId);
 
     @Query(" MATCH (:DatabaseObject{dbId:$dbId})-[:regulator|hasComponent|repeatedUnit|hasMember|hasCandidate|referenceEntity*]->(re:ReferenceEntity) " +
             "WITH re " +
             "MATCH (re)<-[:referenceEntity]-(:PhysicalEntity)<-[:regulatedBy|regulator|catalystActivity|physicalEntity|entityFunctionalStatus|diseaseEntity|hasMember|hasCandidate|hasComponent|repeatedUnit|input|output*]-(:ReactionLikeEvent)<-[:hasEvent]-(p:Pathway)-[:species]->(:Species{taxId:$taxId}) " +
             "RETURN DISTINCT p")
-    Collection<Pathway> getPathwaysForAllFormsOfByDbIdAndSpeciesTaxId(@Param("dbId") Long dbId, @Param("taxId") String taxId);
+    Collection<Pathway> getPathwaysForAllFormsOfByDbIdAndSpeciesTaxId(@Param("DB_ID") Long dbId, @Param("taxId") String taxId);
 
 
     @Query(" MATCH (:PhysicalEntity{stId:$stId})<-[:regulatedBy|regulator|catalystActivity|physicalEntity|entityFunctionalStatus|diseaseEntity|hasMember|hasCandidate|hasComponent|repeatedUnit|input|output*]-(r:ReactionLikeEvent)<-[:hasEvent*]-(p:Pathway{hasDiagram:True}) " +
@@ -116,7 +116,7 @@ public interface PathwayRepository extends Neo4jRepository<Pathway, Long> {
             "MATCH (o:Pathway{dbId:$dbId})-[:hasEvent*]->(p:Pathway{hasDiagram:True}) " +
             "WITH o, HEAD(COLLECT(p)) AS m " +
             "RETURN DISTINCT m")
-    Collection<Pathway> getPathwaysWithDiagramForByDbId(@Param("dbId") Long dbId);
+    Collection<Pathway> getPathwaysWithDiagramForByDbId(@Param("DB_ID") Long dbId);
 
     @Query(" MATCH (:PhysicalEntity{dbId:$dbId})<-[:regulatedBy|regulator|catalystActivity|physicalEntity|entityFunctionalStatus|diseaseEntity|hasMember|hasCandidate|hasComponent|repeatedUnit|input|output*]-(r:ReactionLikeEvent)<-[:hasEvent*]-(p:Pathway{hasDiagram:True})-[:species]->(Species{taxId:$taxId}) " +
             "WITH r, HEAD(COLLECT(p)) AS m " +
@@ -129,7 +129,7 @@ public interface PathwayRepository extends Neo4jRepository<Pathway, Long> {
             "MATCH (o:Pathway{dbId:$dbId})-[:hasEvent*]->(p:Pathway{hasDiagram:True})-[:species]->(s:Species{taxId:$taxId}) " +
             "WITH o, HEAD(COLLECT(p)) AS m " +
             "RETURN DISTINCT m")
-    Collection<Pathway> getPathwaysWithDiagramForByDbIdAndSpeciesTaxId(@Param("dbId") Long dbId, @Param("taxId") String taxId);
+    Collection<Pathway> getPathwaysWithDiagramForByDbIdAndSpeciesTaxId(@Param("DB_ID") Long dbId, @Param("taxId") String taxId);
 
 
     @Query(" MATCH (:PhysicalEntity{stId:$stId})-[:regulator|hasComponent|repeatedUnit|hasMember|hasCandidate|referenceEntity*]->(re:ReferenceEntity) " +
@@ -152,14 +152,14 @@ public interface PathwayRepository extends Neo4jRepository<Pathway, Long> {
             "MATCH (re)<-[:referenceEntity]-(:PhysicalEntity)<-[:regulatedBy|regulator|catalystActivity|physicalEntity|entityFunctionalStatus|diseaseEntity|hasMember|hasCandidate|hasComponent|repeatedUnit|input|output*]-(r:ReactionLikeEvent)<-[:hasEvent*]-(p:Pathway{hasDiagram:True}) " +
             "WITH r, HEAD(COLLECT(p)) AS m " +
             "RETURN DISTINCT m")
-    Collection<Pathway> getPathwaysWithDiagramForAllFormsOfByDbId(@Param("dbId") Long dbId);
+    Collection<Pathway> getPathwaysWithDiagramForAllFormsOfByDbId(@Param("DB_ID") Long dbId);
 
     @Query(" MATCH (:PhysicalEntity{dbId:$dbId})-[:regulator|hasComponent|repeatedUnit|hasMember|hasCandidate|referenceEntity*]->(re:ReferenceEntity) " +
             "WITH re " +
             "MATCH (re)<-[:referenceEntity]-(:PhysicalEntity)<-[:regulatedBy|regulator|catalystActivity|physicalEntity|entityFunctionalStatus|diseaseEntity|hasMember|hasCandidate|hasComponent|repeatedUnit|input|output*]-(r:ReactionLikeEvent)<-[:hasEvent*]-(p:Pathway{hasDiagram:True})-[:species]->(Species{taxId:$taxId}) " +
             "WITH r, HEAD(COLLECT(p)) AS m " +
             "RETURN DISTINCT m")
-    Collection<Pathway> getPathwaysWithDiagramForAllFormsOfByDbIdAndSpeciesTaxId(@Param("dbId") Long dbId, @Param("taxId") String taxId);
+    Collection<Pathway> getPathwaysWithDiagramForAllFormsOfByDbIdAndSpeciesTaxId(@Param("DB_ID") Long dbId, @Param("taxId") String taxId);
 
 
     @Query(" MATCH (rd:ReferenceDatabase)<--(n)<-[:referenceEntity|referenceSequence|crossReference|referenceGene*]-(pe:PhysicalEntity) " +
@@ -191,7 +191,7 @@ public interface PathwayRepository extends Neo4jRepository<Pathway, Long> {
             "WITH ps + COLLECT(DISTINCT cep) AS all " +
             "UNWIND all AS p " +
             "RETURN DISTINCT p")
-    Collection<Pathway> getLowerLevelPathwaysIncludingEncapsulation(@Param("dbId") Long dbId);
+    Collection<Pathway> getLowerLevelPathwaysIncludingEncapsulation(@Param("DB_ID") Long dbId);
 
     @Query("OPTIONAL MATCH path=(p1:Pathway)-[:hasEvent|input|output|catalystActivity|physicalEntity|entityFunctionalStatus|diseaseEntity|regulatedBy|regulator|hasComponent|hasMember|hasCandidate|repeatedUnit*]->(:DatabaseObject{stId:$stId}) " +
             "WHERE SINGLE(x IN NODES(path) WHERE (x:Pathway))  " +

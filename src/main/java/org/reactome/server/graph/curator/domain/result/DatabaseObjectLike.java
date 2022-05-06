@@ -1,8 +1,8 @@
 package org.reactome.server.graph.curator.domain.result;
 
 public interface DatabaseObjectLike {
-    Long getDbId();
+    Long getDB_ID();
     String getStId();
-    String getDisplayName();
+    String get_displayName();
     String getSchemaClass();
 }

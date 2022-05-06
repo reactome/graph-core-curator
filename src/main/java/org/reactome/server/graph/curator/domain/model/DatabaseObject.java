@@ -13,6 +13,7 @@ import org.springframework.data.neo4j.core.schema.Node;
 import org.springframework.data.neo4j.core.schema.Relationship;
 import org.springframework.lang.NonNull;
 
+
 import java.io.Serializable;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
@@ -31,16 +32,16 @@ import java.util.Objects;
  * the best thing is to remove the mentioned property
  */
 @SuppressWarnings("unused")
-@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "dbId")
+@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "DB_ID")
 @Node
 public abstract class DatabaseObject implements Serializable, Comparable<DatabaseObject>, DatabaseObjectLike {
 
     @Id
-    protected Long dbId;
+    protected Long DB_ID;
 
     @ReactomeConstraint(constraint = ReactomeConstraint.Constraint.NOMANUALEDIT)
     @ReactomeProperty
-    private String displayName;
+    private String _displayName;
 
     @ReactomeConstraint(constraint = ReactomeConstraint.Constraint.NOMANUALEDIT)
     @Relationship(type = "created", direction = Relationship.Direction.INCOMING)
@@ -57,24 +58,24 @@ public abstract class DatabaseObject implements Serializable, Comparable<Databas
     public DatabaseObject() {
     }
 
-    public DatabaseObject(Long dbId) {
-        this.dbId = dbId;
+    public DatabaseObject(Long DB_ID) {
+        this.DB_ID = DB_ID;
     }
 
-    public Long getDbId() {
-        return dbId;
+    public Long getDB_ID() {
+        return DB_ID;
     }
 
-    public void setDbId(Long dbId) {
-        this.dbId = dbId;
+    public void setDB_ID(Long DB_ID) {
+        this.DB_ID = DB_ID;
     }
 
-    public String getDisplayName() {
-        return displayName;
+    public String get_displayName() {
+        return _displayName;
     }
 
-    public void setDisplayName(String displayName) {
-        this.displayName = displayName;
+    public void set_displayName(String displayName) {
+        this._displayName = displayName;
     }
 
     public String getStId() {
@@ -108,8 +109,8 @@ public abstract class DatabaseObject implements Serializable, Comparable<Databas
     @Override
     public String toString() {
         return getClass().getSimpleName() + " {" +
-                (stableIdentifier.getIdentifier() == null ? "dbId=" + dbId : "dbId=" + dbId + ", stId='" + stableIdentifier.getIdentifier() + '\'') +
-                ", displayName='" + displayName + '\'' +
+                (stableIdentifier.getIdentifier() == null ? "DB_ID=" + DB_ID : "DB_ID=" + DB_ID + ", stId='" + stableIdentifier.getIdentifier() + '\'') +
+                ", displayName='" + _displayName + '\'' +
                 "}";
     }
 
@@ -119,23 +120,23 @@ public abstract class DatabaseObject implements Serializable, Comparable<Databas
         if (o == null || getClass() != o.getClass()) return false;
 
         DatabaseObject that = (DatabaseObject) o;
-        return dbId != null ? dbId.equals(that.dbId) : that.dbId == null &&
+        return DB_ID != null ? DB_ID.equals(that.DB_ID) : that.DB_ID == null &&
                 (stableIdentifier.getIdentifier() != null ?
                         stableIdentifier.getIdentifier().equals(that.stableIdentifier.getIdentifier()) :
-                        that.stableIdentifier.getIdentifier() == null && Objects.equals(displayName, that.displayName));
+                        that.stableIdentifier.getIdentifier() == null && Objects.equals(_displayName, that._displayName));
     }
 
     @Override
     public int hashCode() {
-        int result = dbId != null ? dbId.hashCode() : 0;
+        int result = DB_ID != null ? DB_ID.hashCode() : 0;
         result = 31 * result + (stableIdentifier.getIdentifier() != null ? stableIdentifier.getIdentifier().hashCode() : 0);
-        result = 31 * result + (displayName != null ? displayName.hashCode() : 0);
+        result = 31 * result + (_displayName != null ? _displayName.hashCode() : 0);
         return result;
     }
 
     @Override
     public int compareTo(@NonNull DatabaseObject o) {
-        return this.dbId.compareTo(o.dbId);
+        return this.DB_ID.compareTo(o.DB_ID);
     }
 
     public final String getSchemaClass() {

@@ -10,7 +10,7 @@ public class SchemaDataDownload {
     private final String encodingFormat = "UTF-8";
 
     public SchemaDataDownload(SchemaDataDownloadType dataDownloadType, Event event) {
-        this.contentUrl = dataDownloadType.getUrl(event.getDbId());
+        this.contentUrl = dataDownloadType.getUrl(event.getDB_ID());
         this.fileFormat = dataDownloadType.getFormat();
     }
 

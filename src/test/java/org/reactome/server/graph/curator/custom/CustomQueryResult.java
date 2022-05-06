@@ -61,7 +61,7 @@ public class CustomQueryResult implements CustomQuery {
 
     @Override
     public CustomQuery build(Record r) {
-        this.setDbId(r.get("dbId").asLong());
+        this.setDbId(r.get("DB_ID").asLong());
         this.setName(r.get("name").asString());
         this.setEvents(r.get("events").asList(Value::asLong));
         this.setEventsArray(r.get("eventsArray").asList(Value::asString).toArray(new String[0]));

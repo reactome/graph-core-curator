@@ -156,7 +156,7 @@ public class DatabaseObjectFactory {
             fill(databaseObject,instance);
         } catch (Exception e) {
             logger.error("An error occurred while trying to fill " + databaseObject.getSchemaClass() + ": " +
-                    databaseObject.getDbId() + " " + databaseObject,e);
+                    databaseObject.getDB_ID() + " " + databaseObject,e);
         }
     }
 
@@ -241,8 +241,8 @@ public class DatabaseObjectFactory {
         try {
             Class<DatabaseObject> clazz = (Class<DatabaseObject>) Class.forName(clazzName);
             DatabaseObject databaseObject = clazz.newInstance();
-            databaseObject.setDbId(instance.getDBID());
-            databaseObject.setDisplayName(instance.getDisplayName());
+            databaseObject.setDB_ID(instance.getDBID());
+            databaseObject.set_displayName(instance.getDisplayName());
             if (instance.getSchemClass().isValidAttribute(ReactomeJavaConstants.stableIdentifier)) {
                 try {
                     GKInstance stableIdentifier = (GKInstance) instance.getAttributeValue(ReactomeJavaConstants.stableIdentifier);

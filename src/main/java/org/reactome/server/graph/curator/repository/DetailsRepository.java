@@ -42,7 +42,7 @@ public class DetailsRepository {
                 "OPTIONAL MATCH (m:EntityFunctionalStatus)-[q:diseaseEntity|normalEntity|functionalStatus]-(s)-[a:functionalStatusType|structuralVariant]-(b)" +
                 "RETURN n, COLLECT(r), COLLECT(m),COLLECT(l),COLLECT(e),COLLECT(t),COLLECT(z),COLLECT(u),COLLECT(i),COLLECT(o),COLLECT(p),COLLECT(q),COLLECT(s),COLLECT(a),COLLECT(b)";
 
-        return neo4jTemplate.findOne(query, Map.of("dbId", dbId), DatabaseObject.class).orElse(null);
+        return neo4jTemplate.findOne(query, Map.of("DB_ID", dbId), DatabaseObject.class).orElse(null);
     }
 }
 

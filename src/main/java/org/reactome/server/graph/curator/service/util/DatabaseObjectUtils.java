@@ -92,7 +92,7 @@ public class DatabaseObjectUtils {
                             break;
                     }
                 } catch (IllegalAccessException | InvocationTargetException | NoSuchMethodException e) {
-                    logger.error("An error occurred while invoking " + databaseObject.getDisplayName() + " with method " + method.getName());
+                    logger.error("An error occurred while invoking " + databaseObject.get_displayName() + " with method " + method.getName());
                 }
             }
         }
@@ -174,7 +174,7 @@ public class DatabaseObjectUtils {
 
     public static String getIdentifier(Object id) {
         if (id instanceof DatabaseObject) {
-            return "" + ((DatabaseObject) id).getDbId();
+            return "" + ((DatabaseObject) id).getDB_ID();
         } else if (id instanceof String) {
             String aux = trimId((String) id);
             if (aux.startsWith("REACT_")) { //In case the provided identifier is an OLD style one, we translate to the new one
@@ -284,7 +284,11 @@ public class DatabaseObjectUtils {
 
     private static AttributeProperties getAttributeProperties(Method method) {
         AttributeProperties properties = new AttributeProperties();
-        properties.setName(lowerFirst(method.getName().substring(3)));
+        String fieldName = method.getName().substring(3);
+        if (!method.getName().equals("getDB_ID")) {
+            fieldName = lowerFirst(fieldName);
+        }
+        properties.setName(fieldName);
         Type returnType = method.getGenericReturnType();
         Annotation annotation = method.getAnnotation(ReactomeAllowedClasses.class);
         if (returnType instanceof ParameterizedType) {

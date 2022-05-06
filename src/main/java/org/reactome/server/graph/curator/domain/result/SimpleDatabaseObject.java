@@ -10,19 +10,19 @@ import java.util.Objects;
 @SuppressWarnings("unused")
 public class SimpleDatabaseObject implements DatabaseObjectLike {
 
-    private Long dbId;
+    private Long DB_ID;
     private String stId;
-    private String displayName;
+    private String _displayName;
     private String schemaClass;
 
     public SimpleDatabaseObject() {}
 
-    public Long getDbId() {
-        return dbId;
+    public Long getDB_ID() {
+        return DB_ID;
     }
 
-    public void setDbId(Long dbId) {
-        this.dbId = dbId;
+    public void setDB_ID(Long dbId) {
+        this.DB_ID = DB_ID;
     }
 
     public String getStId() {
@@ -33,12 +33,12 @@ public class SimpleDatabaseObject implements DatabaseObjectLike {
         this.stId = stId;
     }
 
-    public String getDisplayName() {
-        return displayName;
+    public String get_displayName() {
+        return _displayName;
     }
 
-    public void setDisplayName(String displayName) {
-        this.displayName = displayName;
+    public void set_displayName(String displayName) {
+        this._displayName = displayName;
     }
 
     public String getSchemaClass() {
@@ -51,18 +51,18 @@ public class SimpleDatabaseObject implements DatabaseObjectLike {
 
     public static SimpleDatabaseObject build(Record record) {
         SimpleDatabaseObject simpleDatabaseObject = new SimpleDatabaseObject();
-        simpleDatabaseObject.setDbId(record.get("dbId").asLong());
+        simpleDatabaseObject.setDB_ID(record.get("DB_ID").asLong());
         simpleDatabaseObject.setStId(record.get("stId").asString(null));
-        simpleDatabaseObject.setDisplayName(record.get("displayName").asString());
+        simpleDatabaseObject.set_displayName(record.get("_displayName").asString());
         simpleDatabaseObject.setLabels(record.get("labels").asList(Value::asString));
         return simpleDatabaseObject;
     }
 
     public static SimpleDatabaseObject build(Value value) {
         SimpleDatabaseObject simpleDatabaseObject = new SimpleDatabaseObject();
-        simpleDatabaseObject.setDbId(value.get("dbId").asLong());
+        simpleDatabaseObject.setDB_ID(value.get("DB_ID").asLong());
         simpleDatabaseObject.setStId(value.get("stId").asString(null));
-        simpleDatabaseObject.setDisplayName(value.get("displayName").asString());
+        simpleDatabaseObject.set_displayName(value.get("_displayName").asString());
         if(!value.get("labels").isNull()) {
             simpleDatabaseObject.setLabels(value.get("labels").asList(Value::asString));
         } else {
@@ -82,11 +82,11 @@ public class SimpleDatabaseObject implements DatabaseObjectLike {
 
         SimpleDatabaseObject that = (SimpleDatabaseObject) o;
 
-        return Objects.equals(dbId, that.dbId);
+        return Objects.equals(DB_ID, that.DB_ID);
     }
 
     @Override
     public int hashCode() {
-        return dbId != null ? dbId.hashCode() : 0;
+        return DB_ID != null ? DB_ID.hashCode() : 0;
     }
 }

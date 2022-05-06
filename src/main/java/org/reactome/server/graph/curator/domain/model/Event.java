@@ -17,7 +17,7 @@ public abstract class Event extends DatabaseObject {
     private String definition;
     @ReactomeConstraint(constraint = ReactomeConstraint.Constraint.OPTIONAL)
     @ReactomeProperty
-    private Boolean doRelease;
+    private Boolean _doRelease;
 
 
     @ReactomeConstraint(constraint = ReactomeConstraint.Constraint.MANDATORY)
@@ -104,12 +104,12 @@ public abstract class Event extends DatabaseObject {
         super(dbId);
     }
 
-    public Boolean getDoRelease() {
-        return doRelease;
+    public Boolean get_doRelease() {
+        return _doRelease;
     }
 
-    public void setDoRelease(Boolean doRelease) {
-        this.doRelease = doRelease;
+    public void set_doRelease(Boolean doRelease) {
+        this._doRelease = doRelease;
     }
 
     public String getDefinition() {

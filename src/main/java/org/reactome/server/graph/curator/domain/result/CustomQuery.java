@@ -8,7 +8,7 @@ import org.neo4j.driver.Record;
  * 
  *     public CustomQuery build(Record r) {
  *         this.setStId(r.get("stId").asString());
- *         this.setDisplayName(r.get("displayName").asString());
+ *         this.setDisplayName(r.get("_displayName").asString());
  *         this.setCustomReference(new CustomReference(r.get("customReference").get("database").asString(), r.get("customReference").get("identifier").asString()));
  *         return this;
  *     }

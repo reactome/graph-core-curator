@@ -52,7 +52,7 @@ public class SortingAspect {
             returnedValueAsList.sort(new Comparator<DatabaseObject>() {
                 @Override
                 public int compare(DatabaseObject o1, DatabaseObject o2) {
-                    return o1.getDisplayName().compareTo(o2.getDisplayName());
+                    return o1.get_displayName().compareTo(o2.get_displayName());
                 }
             });
 
@@ -81,7 +81,7 @@ public class SortingAspect {
             returnedValueAsList.sort(new Comparator<DatabaseObject>() {
                 @Override
                 public int compare(DatabaseObject o1, DatabaseObject o2) {
-                    return o1.getDisplayName().compareTo(o2.getDisplayName());
+                    return o1.get_displayName().compareTo(o2.get_displayName());
                 }
             });
 

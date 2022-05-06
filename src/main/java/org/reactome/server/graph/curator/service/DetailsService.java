@@ -49,8 +49,8 @@ public class DetailsService {
             if (directParticipants == null) directParticipants = false;
             Set<PathwayBrowserNode> leaves = getLocationsInThePathwayBrowserHierarchy(databaseObject, directParticipants);
             contentDetails.setNodes(leaves);
-            contentDetails.setComponentOf(advancedLinkageService.getComponentsOf(databaseObject.getDbId()));
-            contentDetails.setOtherFormsOfThisMolecule(physicalEntityService.getOtherFormsOf(databaseObject.getDbId()));
+            contentDetails.setComponentOf(advancedLinkageService.getComponentsOf(databaseObject.getDB_ID()));
+            contentDetails.setOtherFormsOfThisMolecule(physicalEntityService.getOtherFormsOf(databaseObject.getDB_ID()));
         }
         return contentDetails;
     }
@@ -74,7 +74,7 @@ public class DetailsService {
         if (databaseObject == null) return null;
 
         Object id = databaseObject.getStId();
-        if (databaseObject.getStId() == null) id = databaseObject.getDbId();
+        if (databaseObject.getStId() == null) id = databaseObject.getDB_ID();
 
         PathwayBrowserNode node;
         node = hierarchyService.getLocationsInPathwayBrowser(id, directParticipants, true);
@@ -89,7 +89,7 @@ public class DetailsService {
         }
 
         if (leaf != null) {
-            node.setName(leaf.getDisplayName());
+            node.setName(leaf.get_displayName());
             node.setStId(leaf.getStId());
             node.setType(leaf.getSchemaClass());
         }

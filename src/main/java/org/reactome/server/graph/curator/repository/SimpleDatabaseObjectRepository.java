@@ -126,7 +126,7 @@ public class SimpleDatabaseObjectRepository {
 
         Map<String, Object> map = new HashMap<>(2);
         map.put("identifier", identifier);
-        map.put("dbId", dbId);
+        map.put("DB_ID", dbId);
         return neo4jClient.query(query).in(databaseName).bindAll(map).fetchAs(SimpleDatabaseObject .class).mappedBy( (ts, rec) -> SimpleDatabaseObject.build(rec)).all();
     }
 

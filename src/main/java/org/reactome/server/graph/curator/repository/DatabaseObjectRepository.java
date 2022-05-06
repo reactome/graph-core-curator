@@ -28,7 +28,7 @@ public class DatabaseObjectRepository {
 
     public <T extends DatabaseObject> T findByDbId(Long dbId) {
         String query = "MATCH (a:DatabaseObject{dbId:$dbId})-[r]-(m) RETURN a, COLLECT(r), COLLECT(m)";
-        return (T) neo4jTemplate.findOne(query, Map.of("dbId", dbId), DatabaseObject.class).orElse(null);
+        return (T) neo4jTemplate.findOne(query, Map.of("DB_ID", dbId), DatabaseObject.class).orElse(null);
     }
 
     public <T extends DatabaseObject> T findByStId(String stId) {
@@ -43,7 +43,7 @@ public class DatabaseObjectRepository {
 
     public <T extends DatabaseObject> T findByDbIdNoRelations(Long dbId) {
         String query = "MATCH (n:DatabaseObject{dbId:$dbId}) RETURN n";
-        return (T) neo4jTemplate.findOne(query, Map.of("dbId", dbId), DatabaseObject.class).orElse(null);
+        return (T) neo4jTemplate.findOne(query, Map.of("DB_ID", dbId), DatabaseObject.class).orElse(null);
     }
 
     public <T extends DatabaseObject> T findByStIdNoRelations(String stId) {

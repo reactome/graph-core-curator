@@ -25,9 +25,9 @@ public class SimpleEventProjection {
 
     public static SimpleEventProjection build(Record valueNode) {
         SimpleEventProjection simpleEventProjection = new SimpleEventProjection();
-        simpleEventProjection.setDbId(valueNode.get("dbId").asLong(0));
+        simpleEventProjection.setDbId(valueNode.get("DB_ID").asLong(0));
         simpleEventProjection.setStId(valueNode.get("stId").asString(null));
-        simpleEventProjection.setDisplayName(valueNode.get("displayName").asString(null));
+        simpleEventProjection.setDisplayName(valueNode.get("_displayName").asString(null));
         simpleEventProjection.setSchemaClass(valueNode.get("schemaClass").asString(null));
         simpleEventProjection.setSpeciesName(valueNode.get("speciesName").asString(null));
         simpleEventProjection.setDateTime(valueNode.get("dateTime").asString(null));

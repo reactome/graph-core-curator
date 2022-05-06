@@ -42,7 +42,7 @@ public class ComponentOfLinkageRepository {
                 "       COLLECT(COALESCE(m.displayName, '')) AS names, " +
                 "       COLLECT(COALESCE(m.stId, '')) AS stIds, " +
                 "       COLLECT(COALESCE(m.speciesName, '')) as species";
-        return neo4jClient.query(query).in(databaseName).bindAll(Collections.singletonMap("dbId", dbId)).fetchAs(ComponentOf.class).mappedBy( (t, record) -> ComponentOf.build(record)).all();
+        return neo4jClient.query(query).in(databaseName).bindAll(Collections.singletonMap("DB_ID", dbId)).fetchAs(ComponentOf.class).mappedBy( (t, record) -> ComponentOf.build(record)).all();
 
     }
 

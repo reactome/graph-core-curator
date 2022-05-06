@@ -34,6 +34,6 @@ public class StoichiometryObject implements Comparable<StoichiometryObject> {
 
     @Override
     public int compareTo(@NonNull StoichiometryObject o) {
-        return this.object.getDisplayName().compareToIgnoreCase(o.getObject().getDisplayName());
+        return this.object.get_displayName().compareToIgnoreCase(o.getObject().get_displayName());
     }
 }

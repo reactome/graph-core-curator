@@ -42,7 +42,7 @@ public class ReferralsLinkageRepository {
                 "RETURN DISTINCT TYPE(rel) AS referral, " +
                 "       COLLECT(ref) AS objects " +
                 "LIMIT 1000";
-        return neo4jClient.query(query).in(databaseName).bindAll(Collections.singletonMap("dbId", dbId)).fetchAs(Referrals.class).mappedBy( (t, record) -> Referrals.build(record)).all();
+        return neo4jClient.query(query).in(databaseName).bindAll(Collections.singletonMap("DB_ID", dbId)).fetchAs(Referrals.class).mappedBy( (t, record) -> Referrals.build(record)).all();
 
     }
 }

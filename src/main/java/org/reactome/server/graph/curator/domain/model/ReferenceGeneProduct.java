@@ -17,7 +17,7 @@ public class ReferenceGeneProduct extends ReferenceSequence {
 
     @ReactomeConstraint(constraint = ReactomeConstraint.Constraint.OPTIONAL)
     @ReactomeProperty
-    private String chainChangeLog;
+    private String _chainChangeLog;
 
     @Relationship(type = "referenceGene")
     private List<ReferenceDNASequence> referenceGene;
@@ -27,12 +27,12 @@ public class ReferenceGeneProduct extends ReferenceSequence {
 
     public ReferenceGeneProduct() {}
 
-    public String getChainChangeLog() {
-        return chainChangeLog;
+    public String get_chainChangeLog() {
+        return _chainChangeLog;
     }
 
-    public void setChainChangeLog(String chainChangeLog) {
-        this.chainChangeLog = chainChangeLog;
+    public void set_chainChangeLog(String chainChangeLog) {
+        this._chainChangeLog = chainChangeLog;
     }
 
     public List<String> getChain() {

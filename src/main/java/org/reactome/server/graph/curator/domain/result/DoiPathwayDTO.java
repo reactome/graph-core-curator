@@ -21,7 +21,7 @@ public class DoiPathwayDTO {
     private Collection<? extends Person> editors;
 
     public DoiPathwayDTO(Record record) {
-        displayName = record.get("displayName").asString(null);
+        displayName = record.get("_displayName").asString(null);
         doi = record.get("doi").asString(null);
         stId = record.get("stId").asString(null);
         species = record.get("species").asString(null);

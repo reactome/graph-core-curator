@@ -39,7 +39,7 @@ public class SimpleReferenceObject {
 
     public static SimpleReferenceObject build(Record record) {
         SimpleReferenceObject simpleReferenceObject = new SimpleReferenceObject();
-        simpleReferenceObject.setDbId(record.get("dbId").asLong());
+        simpleReferenceObject.setDbId(record.get("DB_ID").asLong());
         simpleReferenceObject.setIdentifier(record.get("identifier").asString());
         simpleReferenceObject.setDatabaseName(record.get("databaseName").asString());
         return simpleReferenceObject;
