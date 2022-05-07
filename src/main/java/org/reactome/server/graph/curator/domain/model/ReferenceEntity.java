@@ -1,6 +1,7 @@
 package org.reactome.server.graph.curator.domain.model;
 
 import org.reactome.server.graph.curator.domain.annotations.ReactomeConstraint;
+import org.reactome.server.graph.curator.domain.annotations.ReactomeInstanceDefiningValue;
 import org.reactome.server.graph.curator.domain.annotations.ReactomeProperty;
 import org.springframework.data.neo4j.core.schema.Node;
 import org.springframework.data.neo4j.core.schema.Relationship;
@@ -12,6 +13,7 @@ import java.util.List;
 public abstract class ReferenceEntity extends DatabaseObject {
 
     @ReactomeConstraint(constraint = ReactomeConstraint.Constraint.MANDATORY)
+    @ReactomeInstanceDefiningValue(category = ReactomeInstanceDefiningValue.Category.all)
     @ReactomeProperty
     private String identifier;
     @ReactomeConstraint(constraint = ReactomeConstraint.Constraint.OPTIONAL)
@@ -26,6 +28,7 @@ public abstract class ReferenceEntity extends DatabaseObject {
     private List<DatabaseIdentifier> crossReference;
 
     @ReactomeConstraint(constraint = ReactomeConstraint.Constraint.MANDATORY)
+    @ReactomeInstanceDefiningValue(category = ReactomeInstanceDefiningValue.Category.all)
     @Relationship(type = "referenceDatabase")
     private ReferenceDatabase referenceDatabase;
 

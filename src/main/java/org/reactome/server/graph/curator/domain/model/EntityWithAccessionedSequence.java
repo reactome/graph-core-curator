@@ -2,6 +2,7 @@ package org.reactome.server.graph.curator.domain.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.reactome.server.graph.curator.domain.annotations.ReactomeConstraint;
+import org.reactome.server.graph.curator.domain.annotations.ReactomeInstanceDefiningValue;
 import org.reactome.server.graph.curator.domain.annotations.ReactomeProperty;
 import org.reactome.server.graph.curator.domain.annotations.ReactomeSchemaIgnore;
 import org.springframework.data.neo4j.core.schema.Node;
@@ -17,17 +18,21 @@ import java.util.*;
 public class EntityWithAccessionedSequence extends GenomeEncodedEntity {
 
     @ReactomeConstraint(constraint = ReactomeConstraint.Constraint.REQUIRED)
+    @ReactomeInstanceDefiningValue(category = ReactomeInstanceDefiningValue.Category.all)
     @ReactomeProperty
     private Integer endCoordinate;
     @ReactomeConstraint(constraint = ReactomeConstraint.Constraint.REQUIRED)
+    @ReactomeInstanceDefiningValue(category = ReactomeInstanceDefiningValue.Category.all)
     @ReactomeProperty
     private Integer startCoordinate;
 
     @ReactomeConstraint(constraint = ReactomeConstraint.Constraint.REQUIRED)
+    @ReactomeInstanceDefiningValue(category = ReactomeInstanceDefiningValue.Category.all)
     @Relationship(type = "hasModifiedResidue")
     private List<AbstractModifiedResidue> hasModifiedResidue;
 
     @ReactomeConstraint(constraint = ReactomeConstraint.Constraint.MANDATORY)
+    @ReactomeInstanceDefiningValue(category = ReactomeInstanceDefiningValue.Category.all)
     @Relationship(type = "referenceEntity")
     private ReferenceSequence referenceEntity;
 

@@ -1,6 +1,7 @@
 package org.reactome.server.graph.curator.domain.model;
 
 import org.reactome.server.graph.curator.domain.annotations.ReactomeConstraint;
+import org.reactome.server.graph.curator.domain.annotations.ReactomeInstanceDefiningValue;
 import org.reactome.server.graph.curator.domain.annotations.ReactomeProperty;
 import org.springframework.data.neo4j.core.schema.Node;
 import org.springframework.data.neo4j.core.schema.Relationship;
@@ -16,11 +17,13 @@ public abstract class Regulation extends DatabaseObject {
 
     @ReactomeConstraint(constraint = ReactomeConstraint.Constraint.OPTIONAL)
     @ReactomeProperty
+    @ReactomeInstanceDefiningValue(category = ReactomeInstanceDefiningValue.Category.all)
     @Relationship(type = "activeUnit")
     private List<PhysicalEntity> activeUnit;
 
     @ReactomeConstraint(constraint = ReactomeConstraint.Constraint.OPTIONAL)
     @ReactomeProperty
+    @ReactomeInstanceDefiningValue(category = ReactomeInstanceDefiningValue.Category.all)
     @Relationship(type = "activity")
     private GO_MolecularFunction activity;
 
@@ -29,6 +32,7 @@ public abstract class Regulation extends DatabaseObject {
     private GO_BiologicalProcess goBiologicalProcess;
 
     @ReactomeConstraint(constraint = ReactomeConstraint.Constraint.MANDATORY)
+    @ReactomeInstanceDefiningValue(category = ReactomeInstanceDefiningValue.Category.all)
     @Relationship(type = "regulator")
     private PhysicalEntity regulator;
 

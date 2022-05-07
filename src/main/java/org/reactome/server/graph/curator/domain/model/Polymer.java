@@ -2,6 +2,7 @@ package org.reactome.server.graph.curator.domain.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.reactome.server.graph.curator.domain.annotations.ReactomeConstraint;
+import org.reactome.server.graph.curator.domain.annotations.ReactomeInstanceDefiningValue;
 import org.reactome.server.graph.curator.domain.annotations.ReactomeProperty;
 import org.reactome.server.graph.curator.domain.annotations.ReactomeSchemaIgnore;
 import org.springframework.data.neo4j.core.schema.Node;
@@ -27,6 +28,7 @@ public class Polymer extends PhysicalEntity {
     private Integer minUnitCount;
 
     @ReactomeConstraint(constraint = ReactomeConstraint.Constraint.MANDATORY)
+    @ReactomeInstanceDefiningValue(category = ReactomeInstanceDefiningValue.Category.all)
     @Relationship(type = "repeatedUnit")
     private List<PhysicalEntity> repeatedUnit;
 

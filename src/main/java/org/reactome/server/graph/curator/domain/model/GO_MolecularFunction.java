@@ -1,6 +1,7 @@
 package org.reactome.server.graph.curator.domain.model;
 
 import org.reactome.server.graph.curator.domain.annotations.ReactomeConstraint;
+import org.reactome.server.graph.curator.domain.annotations.ReactomeInstanceDefiningValue;
 import org.reactome.server.graph.curator.domain.annotations.ReactomeProperty;
 import org.springframework.data.neo4j.core.schema.Node;
 import org.springframework.data.neo4j.core.schema.Relationship;
@@ -15,6 +16,7 @@ public class GO_MolecularFunction extends DatabaseObject {
     @ReactomeProperty
     private List<String> name;
     @ReactomeConstraint(constraint = ReactomeConstraint.Constraint.MANDATORY)
+    @ReactomeInstanceDefiningValue(category = ReactomeInstanceDefiningValue.Category.any)
     @ReactomeProperty
     private String accession;
     @ReactomeConstraint(constraint = ReactomeConstraint.Constraint.OPTIONAL)

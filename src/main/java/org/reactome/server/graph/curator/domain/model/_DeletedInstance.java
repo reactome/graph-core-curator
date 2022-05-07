@@ -1,6 +1,7 @@
 package org.reactome.server.graph.curator.domain.model;
 
 import org.reactome.server.graph.curator.domain.annotations.ReactomeConstraint;
+import org.reactome.server.graph.curator.domain.annotations.ReactomeInstanceDefiningValue;
 import org.reactome.server.graph.curator.domain.annotations.ReactomeProperty;
 import org.springframework.data.neo4j.core.schema.Relationship;
 
@@ -11,9 +12,11 @@ public class _DeletedInstance extends DatabaseObject{
     public _DeletedInstance() {}
 
     @ReactomeConstraint(constraint = ReactomeConstraint.Constraint.NOMANUALEDIT)
+    @ReactomeInstanceDefiningValue(category = ReactomeInstanceDefiningValue.Category.all)
     @ReactomeProperty
     private Long deletedInstanceDB_ID;
     @ReactomeConstraint(constraint = ReactomeConstraint.Constraint.NOMANUALEDIT)
+    @ReactomeInstanceDefiningValue(category = ReactomeInstanceDefiningValue.Category.all)
     @ReactomeProperty
     private String name;
     @ReactomeConstraint(constraint = ReactomeConstraint.Constraint.NOMANUALEDIT)
@@ -21,9 +24,11 @@ public class _DeletedInstance extends DatabaseObject{
     private String className;
 
     @ReactomeConstraint(constraint = ReactomeConstraint.Constraint.NOMANUALEDIT)
+    @ReactomeInstanceDefiningValue(category = ReactomeInstanceDefiningValue.Category.all)
     @Relationship(type = "deletedStableIdentifier")
     private StableIdentifier deletedStableIdentifier;
     @ReactomeConstraint(constraint = ReactomeConstraint.Constraint.NOMANUALEDIT)
+    @ReactomeInstanceDefiningValue(category = ReactomeInstanceDefiningValue.Category.all)
     @Relationship(type = "species")
     private List<Taxon> species;
 

@@ -1,6 +1,7 @@
 package org.reactome.server.graph.curator.domain.model;
 
 import org.reactome.server.graph.curator.domain.annotations.ReactomeConstraint;
+import org.reactome.server.graph.curator.domain.annotations.ReactomeInstanceDefiningValue;
 import org.reactome.server.graph.curator.domain.annotations.ReactomeProperty;
 import org.springframework.data.neo4j.core.schema.Node;
 import org.springframework.data.neo4j.core.schema.Relationship;
@@ -21,6 +22,7 @@ public abstract class Event extends DatabaseObject {
 
 
     @ReactomeConstraint(constraint = ReactomeConstraint.Constraint.MANDATORY)
+    @ReactomeInstanceDefiningValue(category = ReactomeInstanceDefiningValue.Category.none)
     @ReactomeProperty
     private List<String> name;
     @ReactomeConstraint(constraint = ReactomeConstraint.Constraint.MANDATORY)

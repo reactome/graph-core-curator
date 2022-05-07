@@ -1,5 +1,6 @@
 package org.reactome.server.graph.curator.domain.model;
 
+import org.reactome.server.graph.curator.domain.annotations.ReactomeInstanceDefiningValue;
 import org.reactome.server.graph.curator.domain.annotations.ReactomeProperty;
 import org.springframework.data.neo4j.core.schema.Node;
 
@@ -14,8 +15,10 @@ public class StableIdentifierReleaseStatus extends DatabaseObject {
         ORTHO
     }
 
+    @ReactomeInstanceDefiningValue(category = ReactomeInstanceDefiningValue.Category.all)
     @ReactomeProperty
     private Integer releaseNumber;
+    @ReactomeInstanceDefiningValue(category = ReactomeInstanceDefiningValue.Category.all)
     @ReactomeProperty
     private ReleaseStatus status;
 

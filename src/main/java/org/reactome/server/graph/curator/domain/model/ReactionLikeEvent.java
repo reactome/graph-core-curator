@@ -1,6 +1,7 @@
 package org.reactome.server.graph.curator.domain.model;
 
 import org.reactome.server.graph.curator.domain.annotations.ReactomeConstraint;
+import org.reactome.server.graph.curator.domain.annotations.ReactomeInstanceDefiningValue;
 import org.reactome.server.graph.curator.domain.annotations.ReactomeProperty;
 import org.reactome.server.graph.curator.domain.annotations.ReactomeSchemaIgnore;
 import org.springframework.data.neo4j.core.schema.Node;
@@ -26,6 +27,7 @@ public abstract class ReactionLikeEvent extends Event {
     private String systematicName;
 
     @ReactomeConstraint(constraint = ReactomeConstraint.Constraint.REQUIRED)
+    @ReactomeInstanceDefiningValue(category = ReactomeInstanceDefiningValue.Category.all)
     @Relationship(type = "catalystActivity")
     private List<CatalystActivity> catalystActivity;
 
@@ -34,6 +36,7 @@ public abstract class ReactionLikeEvent extends Event {
     private CatalystActivityReference catalystActivityReference;
 
     @ReactomeConstraint(constraint = ReactomeConstraint.Constraint.OPTIONAL)
+    @ReactomeInstanceDefiningValue(category = ReactomeInstanceDefiningValue.Category.all)
     @Relationship(type = "entityFunctionalStatus")
     private List<EntityFunctionalStatus> entityFunctionalStatus;
 
@@ -42,10 +45,12 @@ public abstract class ReactionLikeEvent extends Event {
     private List<PhysicalEntity> entityOnOtherCell;
 
     @ReactomeConstraint(constraint = ReactomeConstraint.Constraint.MANDATORY)
+    @ReactomeInstanceDefiningValue(category = ReactomeInstanceDefiningValue.Category.all)
     @Relationship(type = "input")
     private List<PhysicalEntity> input;
 
     @ReactomeConstraint(constraint = ReactomeConstraint.Constraint.MANDATORY)
+    @ReactomeInstanceDefiningValue(category = ReactomeInstanceDefiningValue.Category.all)
     @Relationship(type = "output")
     private List<PhysicalEntity> output;
 

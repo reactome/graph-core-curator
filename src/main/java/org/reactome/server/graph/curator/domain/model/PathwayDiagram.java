@@ -1,5 +1,6 @@
 package org.reactome.server.graph.curator.domain.model;
 
+import org.reactome.server.graph.curator.domain.annotations.ReactomeInstanceDefiningValue;
 import org.reactome.server.graph.curator.domain.annotations.ReactomeProperty;
 import org.springframework.data.neo4j.core.schema.Relationship;
 
@@ -16,6 +17,7 @@ public class PathwayDiagram  extends DatabaseObject {
     @ReactomeProperty
     private String storedATXML;
 
+    @ReactomeInstanceDefiningValue(category = ReactomeInstanceDefiningValue.Category.all)
     @Relationship(type = "representedPathway")
     private List<Pathway> representedPathway;
 

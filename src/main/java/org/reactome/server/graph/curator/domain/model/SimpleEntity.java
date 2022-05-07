@@ -2,6 +2,7 @@ package org.reactome.server.graph.curator.domain.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.reactome.server.graph.curator.domain.annotations.ReactomeConstraint;
+import org.reactome.server.graph.curator.domain.annotations.ReactomeInstanceDefiningValue;
 import org.reactome.server.graph.curator.domain.annotations.ReactomeSchemaIgnore;
 import org.springframework.data.neo4j.core.schema.Node;
 import org.springframework.data.neo4j.core.schema.Relationship;
@@ -17,14 +18,17 @@ import java.util.List;
 public class SimpleEntity extends PhysicalEntity {
 
     @ReactomeConstraint(constraint = ReactomeConstraint.Constraint.MANDATORY)
+    @ReactomeInstanceDefiningValue(category = ReactomeInstanceDefiningValue.Category.all)
     @Relationship(type = "referenceEntity")
     private ReferenceMolecule referenceEntity;
 
     @ReactomeConstraint(constraint = ReactomeConstraint.Constraint.OPTIONAL)
+    @ReactomeInstanceDefiningValue(category = ReactomeInstanceDefiningValue.Category.all)
     @Relationship(type = "species")
     private Species species;
 
     @ReactomeConstraint(constraint = ReactomeConstraint.Constraint.MANDATORY)
+    @ReactomeInstanceDefiningValue(category = ReactomeInstanceDefiningValue.Category.all)
     @Relationship(type = "compartment")
     private List<Compartment> compartment;
 

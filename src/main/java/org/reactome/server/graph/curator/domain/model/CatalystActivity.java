@@ -1,6 +1,7 @@
 package org.reactome.server.graph.curator.domain.model;
 
 import org.reactome.server.graph.curator.domain.annotations.ReactomeConstraint;
+import org.reactome.server.graph.curator.domain.annotations.ReactomeInstanceDefiningValue;
 import org.springframework.data.neo4j.core.schema.Node;
 import org.springframework.data.neo4j.core.schema.Relationship;
 
@@ -15,14 +16,17 @@ import java.util.Set;
 public class CatalystActivity extends DatabaseObject  {
 
     @ReactomeConstraint(constraint = ReactomeConstraint.Constraint.OPTIONAL)
+    @ReactomeInstanceDefiningValue(category = ReactomeInstanceDefiningValue.Category.all)
     @Relationship(type = "activeUnit")
     private Set<PhysicalEntity> activeUnit;
 
     @ReactomeConstraint(constraint = ReactomeConstraint.Constraint.REQUIRED)
+    @ReactomeInstanceDefiningValue(category = ReactomeInstanceDefiningValue.Category.all)
     @Relationship(type = "activity")
     private GO_MolecularFunction activity;
 
     @ReactomeConstraint(constraint = ReactomeConstraint.Constraint.MANDATORY)
+    @ReactomeInstanceDefiningValue(category = ReactomeInstanceDefiningValue.Category.all)
     @Relationship(type = "physicalEntity")
     private PhysicalEntity physicalEntity;
 

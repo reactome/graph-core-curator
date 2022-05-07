@@ -1,6 +1,7 @@
 package org.reactome.server.graph.curator.domain.model;
 
 import org.reactome.server.graph.curator.domain.annotations.ReactomeConstraint;
+import org.reactome.server.graph.curator.domain.annotations.ReactomeInstanceDefiningValue;
 import org.reactome.server.graph.curator.domain.annotations.ReactomeProperty;
 import org.springframework.data.neo4j.core.schema.Node;
 import org.springframework.data.neo4j.core.schema.Relationship;
@@ -12,9 +13,11 @@ import java.util.List;
 public class Book extends Publication {
 
     @ReactomeConstraint(constraint = ReactomeConstraint.Constraint.OPTIONAL)
+    @ReactomeInstanceDefiningValue(category = ReactomeInstanceDefiningValue.Category.any)
     @ReactomeProperty
     private String ISBN;
     @ReactomeConstraint(constraint = ReactomeConstraint.Constraint.OPTIONAL)
+    @ReactomeInstanceDefiningValue(category = ReactomeInstanceDefiningValue.Category.any)
     @ReactomeProperty
     private String chapterTitle;
     @ReactomeConstraint(constraint = ReactomeConstraint.Constraint.OPTIONAL)

@@ -1,6 +1,7 @@
 package org.reactome.server.graph.curator.domain.model;
 
 import org.reactome.server.graph.curator.domain.annotations.ReactomeConstraint;
+import org.reactome.server.graph.curator.domain.annotations.ReactomeInstanceDefiningValue;
 import org.reactome.server.graph.curator.domain.annotations.ReactomeProperty;
 import org.reactome.server.graph.curator.domain.annotations.ReactomeTransient;
 import org.springframework.data.neo4j.core.schema.Node;
@@ -16,6 +17,7 @@ public abstract class PhysicalEntity extends DatabaseObject {
     @ReactomeProperty
     private String definition;
     @ReactomeConstraint(constraint = ReactomeConstraint.Constraint.MANDATORY)
+    @ReactomeInstanceDefiningValue(category = ReactomeInstanceDefiningValue.Category.any)
     @ReactomeProperty
     private List<String> name;
     @ReactomeConstraint(constraint = ReactomeConstraint.Constraint.OPTIONAL)
@@ -31,6 +33,7 @@ public abstract class PhysicalEntity extends DatabaseObject {
     private List<DatabaseIdentifier> crossReference;
 
     @ReactomeConstraint(constraint = ReactomeConstraint.Constraint.OPTIONAL)
+    @ReactomeInstanceDefiningValue(category = ReactomeInstanceDefiningValue.Category.all)
     @Relationship(type = "disease")
     private List<Disease> disease;
 
@@ -72,6 +75,7 @@ public abstract class PhysicalEntity extends DatabaseObject {
     private List<Summation> summation;
 
     @ReactomeConstraint(constraint = ReactomeConstraint.Constraint.OPTIONAL)
+    @ReactomeInstanceDefiningValue(category = ReactomeInstanceDefiningValue.Category.all)
     @Relationship(type = "cellType")
     private List<CellType> cellType;
 
