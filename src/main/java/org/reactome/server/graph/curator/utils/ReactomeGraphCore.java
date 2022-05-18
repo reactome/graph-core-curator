@@ -1,6 +1,7 @@
 package org.reactome.server.graph.curator.utils;
 
 //import org.reactome.server.graph.Main;
+import org.reactome.server.graph.aop.LazyFetchAspect;
 import org.reactome.server.graph.curator.config.GraphCoreNeo4jConfig;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
@@ -49,5 +50,10 @@ public class ReactomeGraphCore {
         if (context == null) throw new RuntimeException("ReactomeGraphCore has to be initialised!");
         if(clazz.getAnnotation(Service.class) != null) return context.getBean(clazz);
         throw new RuntimeException(clazz.getSimpleName() + " is not a Service");
+    }
+
+    public static void setLazyLoading(Boolean enabled){
+        if (context == null) throw new RuntimeException("ReactomeGraphCore has to be initialised!");
+        context.getBean(LazyFetchAspect.class).setEnableAOP(enabled);
     }
 }

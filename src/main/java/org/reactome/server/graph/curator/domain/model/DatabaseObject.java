@@ -36,6 +36,12 @@ import java.util.Objects;
 @Node
 public abstract class DatabaseObject implements Serializable, Comparable<DatabaseObject>, DatabaseObjectLike {
 
+    @ReactomeTransient
+    public transient Boolean isLoaded = false;
+
+    @ReactomeTransient
+    public transient Boolean preventLazyLoading = false;
+
     @Id
     protected Long DB_ID;
 
@@ -176,5 +182,68 @@ public abstract class DatabaseObject implements Serializable, Comparable<Databas
         } catch (NoSuchMethodException | IllegalAccessException | InvocationTargetException e) {
             return new ArrayList<>();
         }
+    }
+
+    @ReactomeSchemaIgnore
+    @JsonIgnore
+    public <T extends DatabaseObject> T preventLazyLoading() {
+        return preventLazyLoading(true);
+    }
+
+    @SuppressWarnings({"unchecked", "WeakerAccess", "UnusedReturnValue"})
+    @ReactomeSchemaIgnore
+    @JsonIgnore
+    public <T extends DatabaseObject> T preventLazyLoading(boolean preventLazyLoading) {
+        if (this.preventLazyLoading == null) this.preventLazyLoading = false;
+        if (this.preventLazyLoading == preventLazyLoading) return (T) this;
+
+        this.preventLazyLoading = preventLazyLoading;
+
+        //Here we go through all the getters and prevent LazyLoading for all the objects
+        Method[] methods = getClass().getMethods();
+        for (Method method : methods) {
+            if (!method.getName().startsWith("get")) continue;
+            try {
+                Class<?> methodReturnClazz = method.getReturnType();
+
+                if (DatabaseObject.class.isAssignableFrom(methodReturnClazz)) {
+                    DatabaseObject object = (DatabaseObject) method.invoke(this);
+                    if (object != null) {
+                        if (object.preventLazyLoading == null) {
+                            object.preventLazyLoading = false;
+                        }
+                        if (object.preventLazyLoading != preventLazyLoading) {
+                            object.preventLazyLoading(preventLazyLoading);
+                        }
+                    }
+                }
+
+                if (Collection.class.isAssignableFrom(methodReturnClazz)) {
+                    ParameterizedType stringListType = (ParameterizedType) method.getGenericReturnType();
+                    Class<?> type = (Class<?>) stringListType.getActualTypeArguments()[0];
+                    String clazz = type.getSimpleName();
+                    if (DatabaseObject.class.isAssignableFrom(type)) {
+                        Collection<T> collection = (Collection<T>) method.invoke(this);
+                        if (collection != null) {
+                            for (DatabaseObject obj : collection) {
+                                DatabaseObject object = obj;
+                                if (object != null) {
+                                    if (object.preventLazyLoading == null) {
+                                        object.preventLazyLoading = false;
+                                    }
+                                    if (object.preventLazyLoading != preventLazyLoading) {
+                                        object.preventLazyLoading(preventLazyLoading);
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+
+            } catch (IllegalAccessException | InvocationTargetException e) {
+                e.printStackTrace();
+            }
+        }
+        return (T) this;
     }
 }

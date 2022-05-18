@@ -46,6 +46,14 @@ public class SchemaService {
         return schemaRepository.getByClass(clazz, page, offset);
     }
 
+    public <T> Collection<T> getByClassName(String className, Object species, Integer page, Integer offset) throws ClassNotFoundException {
+        Class clazz = DatabaseObjectUtils.getClassForName(className);
+        if (isValidSpeciesClass(clazz)) {
+            return getByClassAndSpecies(clazz,species, page, offset);
+        }
+        return null;
+    }
+
     // ---------------------------------------- Query by Class for SimpleObject ------------------------------------------------
 
     public Collection<SimpleDatabaseObject> getSimpleDatabaseObjectByClass(Class clazz) {
@@ -66,6 +74,19 @@ public class SchemaService {
     public Collection<SimpleDatabaseObject> getSimpleDatabaseObjectByClassName(String className, Integer page, Integer offset) throws ClassNotFoundException {
         Class clazz = DatabaseObjectUtils.getClassForName(className);
         return schemaRepository.getSimpleDatabaseObjectByClass(clazz, page, offset);
+    }
+
+    public Collection<SimpleDatabaseObject> getSimpleDatabaseObjectByClassName(String className, Object species, Integer page, Integer offset) throws ClassNotFoundException {
+        Class clazz = DatabaseObjectUtils.getClassForName(className);
+        if (isValidSpeciesClass(clazz)) {
+            return getSimpleDatabaseObjectByClassAndSpecies(clazz,species, page, offset);
+        }
+        return null;
+    }
+
+    private Collection<SimpleDatabaseObject> getSimpleDatabaseObjectByClassAndSpecies(Class clazz, Object species, Integer page, Integer offset) {
+        String speciesString = species instanceof Species ? ((Species) species).get_displayName() : species.toString();
+        return schemaRepository.getSimpleDatabaseObjectByClassAndSpeciesName(clazz,speciesString, page, offset);
     }
 
     // ---------------------------------------- Query by Class for SimpleReferenceObject ------------------------------------------------
@@ -126,12 +147,37 @@ public class SchemaService {
         return schemaRepository.countEntries(clazz);
     }
 
+    public Long countEntries(Class<?> clazz, Object species){
+        if (isValidSpeciesClass(clazz)) {
+            return countEntriesWithSpecies(clazz, species);
+        }
+        return null;
+    }
+
     public Long countEntries(String className) throws ClassNotFoundException {
         Class clazz = DatabaseObjectUtils.getClassForName(className);
         return schemaRepository.countEntries(clazz);
     }
 
+    public Long countEntries(String className, Object species) throws ClassNotFoundException {
+        Class clazz = DatabaseObjectUtils.getClassForName(className);
+        if (isValidSpeciesClass(clazz)) {
+            return countEntriesWithSpecies(clazz, species);
+        }
+        return null;
+    }
+
     // ---------------------------------------- private methods ------------------------------------------------
+
+    private Long countEntriesWithSpecies(Class clazz, Object species) {
+        String speciesString = species instanceof Species ? ((Species) species).get_displayName() : species.toString();
+        return schemaRepository.countEntriesWithSpeciesName(clazz, speciesString);
+    }
+
+    private <T> Collection<T> getByClassAndSpecies(Class clazz, Object species, Integer page, Integer offset) {
+        String speciesString = species instanceof Species ? ((Species) species).get_displayName(): species.toString();
+        return schemaRepository.getByClassAndSpeciesName(clazz, speciesString, page, offset);
+    }
 
     private Boolean isValidSpeciesClass(Class clazz) {
         try {
