@@ -80,7 +80,7 @@ public class AdvancedDatabaseObjectRepository {
 
     public <T extends DatabaseObject> T findById(Long dbId, Integer limit) {
         String query = "" +
-                "MATCH (n:DatabaseObject{dbId:$dbId}) " +
+                "MATCH (n:DatabaseObject{DB_ID:$dbId}) " +
                 "OPTIONAL MATCH (n)-[r]-(m) " +
                 CYPHER_RETURN_LIMIT;
 
@@ -89,7 +89,7 @@ public class AdvancedDatabaseObjectRepository {
 
     public <T extends DatabaseObject> T findById(String stId, Integer limit) {
         String query = "" +
-                "MATCH (n:DatabaseObject{stId:$stId}) " +
+                "MATCH (n:DatabaseObject)-[:stableIdentifier]->(s:StableIdentifier) WHERE s.identifier = $stId " +
                 "OPTIONAL MATCH (n)-[r]-(m) " +
                 CYPHER_RETURN_LIMIT;
 
@@ -100,7 +100,7 @@ public class AdvancedDatabaseObjectRepository {
 
     public <T extends DatabaseObject> T findEnhancedObjectById(Long dbId) {
         String query = "" +
-                "MATCH (n:DatabaseObject{dbId:$dbId}) " +
+                "MATCH (n:DatabaseObject{DB_ID:$dbId}) " +
                 "OPTIONAL MATCH (n)-[r1]-(m) " +
                 "OPTIONAL MATCH (m)-[r2:species]->(s) " +
                 "OPTIONAL MATCH (m)-[r3:regulator|regulatedBy|physicalEntity|crossReference|referenceGene|literatureReference]-(o) " +
@@ -111,7 +111,7 @@ public class AdvancedDatabaseObjectRepository {
 
     public <T extends DatabaseObject> T findEnhancedObjectById(String stId) {
         String query = "" +
-                "MATCH (n:DatabaseObject{stId:$stId}) " +
+                "MATCH (n:DatabaseObject)-[:stableIdentifier]->(s:StableIdentifier) WHERE s.identifier = $stId " +
                 "OPTIONAL MATCH (n)-[r1]-(m) " +
                 "OPTIONAL MATCH (m)-[r2:species]->(s) " +
                 "OPTIONAL MATCH (m)-[r3:regulator|regulatedBy|physicalEntity|crossReference|referenceGene|literatureReference]-(o) " +
@@ -127,13 +127,13 @@ public class AdvancedDatabaseObjectRepository {
         String query;
         switch (direction) {
             case OUTGOING:
-                query = "MATCH (n:DatabaseObject{dbId:$dbId}) OPTIONAL MATCH (n)-[r]->(m) " + CYPHER_RETURN;
+                query = "MATCH (n:DatabaseObject{DB_ID:$dbId}) OPTIONAL MATCH (n)-[r]->(m) " + CYPHER_RETURN;
                 break;
             case INCOMING:
-                query = "MATCH (n:DatabaseObject{dbId:$dbId}) OPTIONAL MATCH (n)<-[r]-(m) " + CYPHER_RETURN;
+                query = "MATCH (n:DatabaseObject{DB_ID:$dbId}) OPTIONAL MATCH (n)<-[r]-(m) " + CYPHER_RETURN;
                 break;
             default: // UNDIRECTED
-                query = "MATCH (n:DatabaseObject{dbId:$dbId}) OPTIONAL MATCH (n)-[r]-(m) " + CYPHER_RETURN;
+                query = "MATCH (n:DatabaseObject{DB_ID:$dbId}) OPTIONAL MATCH (n)-[r]-(m) " + CYPHER_RETURN;
         }
 
         return (T) neo4jTemplate.findOne(query, Map.of("DB_ID", dbId), DatabaseObject.class).orElse(null);
@@ -143,13 +143,13 @@ public class AdvancedDatabaseObjectRepository {
         String query;
         switch (direction) {
             case OUTGOING:
-                query = "MATCH (n:DatabaseObject{stId:$stId}) OPTIONAL MATCH (n)-[r]->(m) " + CYPHER_RETURN;
+                query = "MATCH (n:DatabaseObject)-[:stableIdentifier]->(s:StableIdentifier) WHERE s.identifier = $stId OPTIONAL MATCH (n)-[r]->(m) " + CYPHER_RETURN;
                 break;
             case INCOMING:
-                query = "MATCH (n:DatabaseObject{stId:$stId}) OPTIONAL MATCH (n)<-[r]-(m) " + CYPHER_RETURN;
+                query = "MATCH (n:DatabaseObject)-[:stableIdentifier]->(s:StableIdentifier) WHERE s.identifier = $stId OPTIONAL MATCH (n)<-[r]-(m) " + CYPHER_RETURN;
                 break;
             default: // UNDIRECTED
-                query = "MATCH (n:DatabaseObject{stId:$stId}) OPTIONAL MATCH (n)-[r]-(m) " + CYPHER_RETURN;
+                query = "MATCH (n:DatabaseObject)-[:stableIdentifier]->(s:StableIdentifier) WHERE s.identifier = $stId OPTIONAL MATCH (n)-[r]-(m) " + CYPHER_RETURN;
         }
 
         return (T) neo4jTemplate.findOne(query, Map.of("stId", stId), DatabaseObject.class).orElse(null);
@@ -159,13 +159,13 @@ public class AdvancedDatabaseObjectRepository {
         String query;
         switch (direction) {
             case OUTGOING:
-                query = "MATCH (n:DatabaseObject{dbId:$dbId})-[r" + RepositoryUtils.getRelationshipAsString(relationships) + "]->(m) " + CYPHER_RETURN;
+                query = "MATCH (n:DatabaseObject{DB_ID:$dbId})-[r" + RepositoryUtils.getRelationshipAsString(relationships) + "]->(m) " + CYPHER_RETURN;
                 break;
             case INCOMING:
-                query = "MATCH (n:DatabaseObject{dbId:$dbId})<-[r" + RepositoryUtils.getRelationshipAsString(relationships) + "]-(m) " + CYPHER_RETURN;
+                query = "MATCH (n:DatabaseObject{DB_ID:$dbId})<-[r" + RepositoryUtils.getRelationshipAsString(relationships) + "]-(m) " + CYPHER_RETURN;
                 break;
             default: //UNDIRECTED
-                query = "MATCH (n:DatabaseObject{dbId:$dbId})-[r" + RepositoryUtils.getRelationshipAsString(relationships) + "]-(m) " + CYPHER_RETURN;
+                query = "MATCH (n:DatabaseObject{DB_ID:$dbId})-[r" + RepositoryUtils.getRelationshipAsString(relationships) + "]-(m) " + CYPHER_RETURN;
                 break;
         }
 
@@ -176,13 +176,19 @@ public class AdvancedDatabaseObjectRepository {
         String query;
         switch (direction) {
             case OUTGOING:
-                query = "MATCH (n:DatabaseObject{stId:$stId})-[r" + RepositoryUtils.getRelationshipAsString(relationships) + "]->(m) " + CYPHER_RETURN;
+                query = "MATCH (n:DatabaseObject)-[:stableIdentifier]->(s:StableIdentifier) WHERE s.identifier = $stId " +
+                        "MATCH (n)-[r" + RepositoryUtils.getRelationshipAsString(relationships) + "]->(m) " +
+                        CYPHER_RETURN;
                 break;
             case INCOMING:
-                query = "MATCH (n:DatabaseObject{stId:$stId})<-[r" + RepositoryUtils.getRelationshipAsString(relationships) + "]-(m) " + CYPHER_RETURN;
+                query = "MATCH (n:DatabaseObject)-[:stableIdentifier]->(s:StableIdentifier) WHERE s.identifier = $stId " +
+                        "MATCH (n)<-[r" + RepositoryUtils.getRelationshipAsString(relationships) + "]-(m) " +
+                        CYPHER_RETURN;
                 break;
             default: //UNDIRECTED
-                query = "MATCH (n:DatabaseObject{stId:$stId})-[r" + RepositoryUtils.getRelationshipAsString(relationships) + "]-(m) " + CYPHER_RETURN;
+                query = "MATCH (n:DatabaseObject)-[:stableIdentifier]->(s:StableIdentifier) WHERE s.identifier = $stId " +
+                        "MATCH (n)-[r" + RepositoryUtils.getRelationshipAsString(relationships) + "]-(m) " +
+                        CYPHER_RETURN;
                 break;
         }
 
@@ -194,15 +200,15 @@ public class AdvancedDatabaseObjectRepository {
         switch (direction) {
             case OUTGOING:
                 query = "MATCH (n:DatabaseObject)-[r" + RepositoryUtils.getRelationshipAsString(relationships) + "]->(m) " +
-                        "WHERE n.dbId IN $dbIds " + CYPHER_RETURN;
+                        "WHERE n.DB_ID IN $dbIds " + CYPHER_RETURN;
                 break;
             case INCOMING:
                 query = "MATCH (n:DatabaseObject)<-[r" + RepositoryUtils.getRelationshipAsString(relationships) + "]-(m) " +
-                        "WHERE n.dbId IN $dbIds " + CYPHER_RETURN;
+                        "WHERE n.DB_ID IN $dbIds " + CYPHER_RETURN;
                 break;
             default: //UNDIRECTED
                 query = "MATCH (n:DatabaseObject)-[r" + RepositoryUtils.getRelationshipAsString(relationships) + "]-(m) " +
-                        "WHERE n.dbId IN $dbIds " + CYPHER_RETURN;
+                        "WHERE n.DB_ID IN $dbIds " + CYPHER_RETURN;
                 break;
         }
 
@@ -213,16 +219,19 @@ public class AdvancedDatabaseObjectRepository {
         String query;
         switch (direction) {
             case OUTGOING:
-                query = "MATCH (n:DatabaseObject)-[r" + RepositoryUtils.getRelationshipAsString(relationships) + "]->(m) " +
-                        "WHERE n.stId IN $stIds " + CYPHER_RETURN;
+                query = "MATCH (n:DatabaseObject)-[:stableIdentifier]->(s:StableIdentifier) WHERE s.identifier IN $stIds " +
+                        "MATCH (n)-[r" + RepositoryUtils.getRelationshipAsString(relationships) + "]->(m) " +
+                        CYPHER_RETURN;
                 break;
             case INCOMING:
-                query = "MATCH (n:DatabaseObject)<-[r" + RepositoryUtils.getRelationshipAsString(relationships) + "]-(m) " +
-                        "WHERE n.stId IN $stIds " + CYPHER_RETURN;
+                query = "MATCH (n:DatabaseObject)-[:stableIdentifier]->(s:StableIdentifier) WHERE s.identifier IN $stIds " +
+                        "MATCH (n)<-[r" + RepositoryUtils.getRelationshipAsString(relationships) + "]-(m) " +
+                        CYPHER_RETURN;
                 break;
             default: //UNDIRECTED
-                query = "MATCH (n:DatabaseObject)-[r" + RepositoryUtils.getRelationshipAsString(relationships) + "]-(m) " +
-                        "WHERE n.stId IN $stIds " + CYPHER_RETURN;
+                query = "MATCH (n:DatabaseObject)-[:stableIdentifier]->(s:StableIdentifier) WHERE s.identifier IN $stIds " +
+                        "MATCH (n)-[r" + RepositoryUtils.getRelationshipAsString(relationships) + "]-(m) " +
+                        CYPHER_RETURN;
                 break;
         }
         Map<String, Object> map = new HashMap<>();
@@ -265,13 +274,13 @@ public class AdvancedDatabaseObjectRepository {
         String query;
         switch (direction) {
             case OUTGOING:
-                query = "MATCH (a:DatabaseObject{dbId:$dbId})-[r" + RepositoryUtils.getRelationshipAsString(relationships) + "]->(m:" + clazz + ") RETURN m, r.stoichiometry as n";
+                query = "MATCH (a:DatabaseObject{DB_ID:$dbId})-[r" + RepositoryUtils.getRelationshipAsString(relationships) + "]->(m:" + clazz + ") RETURN m, r.stoichiometry as n";
                 break;
             case INCOMING:
-                query = "MATCH (a:DatabaseObject{dbId:$dbId})<-[r" + RepositoryUtils.getRelationshipAsString(relationships) + "]-(m:" + clazz + ") RETURN m, r.stoichiometry as n";
+                query = "MATCH (a:DatabaseObject{DB_ID:$dbId})<-[r" + RepositoryUtils.getRelationshipAsString(relationships) + "]-(m:" + clazz + ") RETURN m, r.stoichiometry as n";
                 break;
             default: //UNDIRECTED
-                query = "MATCH (a:DatabaseObject{dbId:$dbId})-[r" + RepositoryUtils.getRelationshipAsString(relationships) + "]-(m:" + clazz + ") RETURN m, r.stoichiometry as n";
+                query = "MATCH (a:DatabaseObject{DB_ID:$dbId})-[r" + RepositoryUtils.getRelationshipAsString(relationships) + "]-(m:" + clazz + ") RETURN m, r.stoichiometry as n";
                 break;
         }
 

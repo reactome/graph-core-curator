@@ -2,12 +2,14 @@ package org.reactome.server.graph.curator.domain.model;
 
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import org.reactome.server.graph.curator.domain.annotations.ReactomeConstraint;
 import org.reactome.server.graph.curator.domain.annotations.ReactomeProperty;
 import org.reactome.server.graph.curator.domain.annotations.ReactomeSchemaIgnore;
 import org.reactome.server.graph.curator.domain.annotations.ReactomeTransient;
 import org.reactome.server.graph.curator.domain.result.DatabaseObjectLike;
+import org.springframework.data.neo4j.core.schema.GeneratedValue;
 import org.springframework.data.neo4j.core.schema.Id;
 import org.springframework.data.neo4j.core.schema.Node;
 import org.springframework.data.neo4j.core.schema.Relationship;
@@ -68,6 +70,7 @@ public abstract class DatabaseObject implements Serializable, Comparable<Databas
         this.DB_ID = DB_ID;
     }
 
+    @JsonProperty("DB_ID")
     public Long getDB_ID() {
         return DB_ID;
     }
@@ -83,11 +86,7 @@ public abstract class DatabaseObject implements Serializable, Comparable<Databas
     public void set_displayName(String displayName) {
         this._displayName = displayName;
     }
-
-    public String getStId() {
-        return getStableIdentifier().getStId();
-    }
-
+    
     public InstanceEdit getCreated() {
         return created;
     }
@@ -112,10 +111,13 @@ public abstract class DatabaseObject implements Serializable, Comparable<Databas
         this.stableIdentifier = stableIdentifier;
     }
 
+    public String getStId() {
+        return getStableIdentifier() != null ? getStableIdentifier().getIdentifier() : null;
+    }
     @Override
     public String toString() {
         return getClass().getSimpleName() + " {" +
-                (stableIdentifier.getIdentifier() == null ? "DB_ID=" + DB_ID : "DB_ID=" + DB_ID + ", stId='" + stableIdentifier.getIdentifier() + '\'') +
+                (getStId() == null ? "DB_ID=" + DB_ID : "DB_ID=" + DB_ID + ", stId='" + getStId() + '\'') +
                 ", displayName='" + _displayName + '\'' +
                 "}";
     }
@@ -127,15 +129,15 @@ public abstract class DatabaseObject implements Serializable, Comparable<Databas
 
         DatabaseObject that = (DatabaseObject) o;
         return DB_ID != null ? DB_ID.equals(that.DB_ID) : that.DB_ID == null &&
-                (stableIdentifier.getIdentifier() != null ?
-                        stableIdentifier.getIdentifier().equals(that.stableIdentifier.getIdentifier()) :
-                        that.stableIdentifier.getIdentifier() == null && Objects.equals(_displayName, that._displayName));
+                (getStId() != null ?
+                        getStId().equals(that.getStId()) :
+                        that.getStId() == null && Objects.equals(_displayName, that._displayName));
     }
 
     @Override
     public int hashCode() {
         int result = DB_ID != null ? DB_ID.hashCode() : 0;
-        result = 31 * result + (stableIdentifier.getIdentifier() != null ? stableIdentifier.getIdentifier().hashCode() : 0);
+        result = 31 * result + (getStId() != null ? getStId().hashCode() : 0);
         result = 31 * result + (_displayName != null ? _displayName.hashCode() : 0);
         return result;
     }

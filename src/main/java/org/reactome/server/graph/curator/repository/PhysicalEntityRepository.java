@@ -15,10 +15,11 @@ import java.util.Collection;
 @Repository
 public interface PhysicalEntityRepository extends Neo4jRepository<PhysicalEntity, Long> {
 
-    @Query("MATCH (n:PhysicalEntity{dbId:$dbId})-[:referenceEntity]->(m:ReferenceEntity)<-[:referenceEntity]-(k) WHERE NOT n=k RETURN k")
+    @Query("MATCH (n:PhysicalEntity{DB_ID:$dbId})-[:referenceEntity]->(m:ReferenceEntity)<-[:referenceEntity]-(k) WHERE NOT n=k RETURN k")
     Collection<PhysicalEntity> getOtherFormsOf(@Param("DB_ID") Long dbId);
 
-    @Query("MATCH (n:PhysicalEntity{stId:$stId})-[:referenceEntity]->(m:ReferenceEntity)<-[:referenceEntity]-(k) WHERE NOT n=k RETURN k")
+    @Query(" MATCH (n:PhysicalEntity)-[:referenceEntity]->(m:ReferenceEntity)<-[:referenceEntity]-(k) " +
+            "MATCH (n)-[:stableIdentifier]->(s:StableIdentifier) WHERE s.identifier = $stId AND NOT n=k RETURN k")
     Collection<PhysicalEntity> getOtherFormsOf(@Param("stId") String stId);
 
     @Query(" MATCH (rd:ReferenceDatabase)<-[:referenceDatabase]-(n{identifier:$identifier}) " +
@@ -30,23 +31,28 @@ public interface PhysicalEntityRepository extends Neo4jRepository<PhysicalEntity
             "RETURN DISTINCT c")
     Collection<Complex> getComplexesFor(@Param("identifier") String identifier, @Param("resource") String resource);
 
-    @Query("MATCH (:PhysicalEntity{dbId:$dbId})-[:hasComponent|hasMember|hasCandidate|repeatedUnit*]->(pe:PhysicalEntity) RETURN DISTINCT pe")
+    @Query("MATCH (:PhysicalEntity{DB_ID:$dbId})-[:hasComponent|hasMember|hasCandidate|repeatedUnit*]->(pe:PhysicalEntity) RETURN DISTINCT pe")
     Collection<PhysicalEntity> getPhysicalEntitySubunits(@Param("DB_ID") Long dbId);
 
-    @Query("MATCH (:PhysicalEntity{stId:$stId})-[:hasComponent|hasMember|hasCandidate|repeatedUnit*]->(pe:PhysicalEntity) RETURN DISTINCT pe")
+    @Query(" MATCH (n:PhysicalEntity)-[:hasComponent|hasMember|hasCandidate|repeatedUnit*]->(pe:PhysicalEntity) " +
+            "MATCH (n)-[:stableIdentifier]->(s:StableIdentifier) WHERE s.identifier = $stId " +
+            "RETURN DISTINCT pe")
     Collection<PhysicalEntity> getPhysicalEntitySubunits(@Param("stId") String stId);
 
-    @Query("MATCH (:PhysicalEntity{dbId:$dbId})-[:hasComponent|hasMember|hasCandidate|repeatedUnit*]->(pe:PhysicalEntity) WHERE NOT (pe:Complex) AND NOT(pe:EntitySet) RETURN DISTINCT pe")
+    @Query("MATCH (:PhysicalEntity{DB_ID:$dbId})-[:hasComponent|hasMember|hasCandidate|repeatedUnit*]->(pe:PhysicalEntity) WHERE NOT (pe:Complex) AND NOT(pe:EntitySet) RETURN DISTINCT pe")
     Collection<PhysicalEntity> getPhysicalEntitySubunitsNoStructures(@Param("DB_ID") Long dbId);
 
-    @Query("MATCH (:PhysicalEntity{stId:$stId})-[:hasComponent|hasMember|hasCandidate|repeatedUnit*]->(pe:PhysicalEntity) WHERE NOT (pe:Complex) AND NOT(pe:EntitySet) RETURN DISTINCT pe")
+    @Query( "MATCH (n:PhysicalEntity)-[:hasComponent|hasMember|hasCandidate|repeatedUnit*]->(pe:PhysicalEntity) " +
+            "MATCH (n)-[:stableIdentifier]->(s:StableIdentifier) WHERE s.identifier = $stId " +
+            "AND NOT (pe:Complex) AND NOT(pe:EntitySet) RETURN DISTINCT pe")
     Collection<PhysicalEntity> getPhysicalEntitySubunitsNoStructures(@Param("$stId") String stId);
 
-    @Query(" MATCH (n:DatabaseObject{dbId:$dbId})-[:hasEvent|input|output|catalystActivity|physicalEntity|entityFunctionalStatus|diseaseEntity|regulatedBy|regulator*]->(m:PhysicalEntity) " +
+    @Query(" MATCH (n:DatabaseObject{DB_ID:$dbId})-[:hasEvent|input|output|catalystActivity|physicalEntity|entityFunctionalStatus|diseaseEntity|regulatedBy|regulator*]->(m:PhysicalEntity) " +
             "RETURN Distinct(m)")
     Collection<PhysicalEntity> getParticipatingPhysicalEntities(@Param("DB_ID") Long dbId);
 
-    @Query(" MATCH (n:DatabaseObject{stId:$stId})-[:hasEvent|input|output|catalystActivity|physicalEntity|entityFunctionalStatus|diseaseEntity|regulatedBy|regulator*]->(m:PhysicalEntity) " +
+    @Query(" MATCH (n:DatabaseObject)-[:hasEvent|input|output|catalystActivity|physicalEntity|entityFunctionalStatus|diseaseEntity|regulatedBy|regulator*]->(m:PhysicalEntity) " +
+            "MATCH (n)-[:stableIdentifier]->(s:StableIdentifier) WHERE s.identifier = $stId " +
             "RETURN Distinct(m)")
     Collection<PhysicalEntity> getParticipatingPhysicalEntities(@Param("stId") String stId);
 }

@@ -12,14 +12,16 @@ import java.util.Collection;
 public interface OrthologyRepository extends Neo4jRepository<DatabaseObject, Long> {
 
     //The relationship do not have direction because that's what is needed in this case
-    @Query(" MATCH (:DatabaseObject{dbId:$dbId})<-[:inferredTo]-()-[:inferredTo]->(o:DatabaseObject)-[:species]->(:Species{dbId:$speciesId}) RETURN DISTINCT o " +
+    @Query(" MATCH (:DatabaseObject{DB_ID:$dbId})<-[:inferredTo]-()-[:inferredTo]->(o:DatabaseObject)-[:species]->(:Species{DB_ID:$speciesId}) RETURN DISTINCT o " +
             "UNION " +
-            "MATCH (:DatabaseObject{dbId:$dbId})-[:inferredTo]-(o:DatabaseObject)-[:species]->(:Species{dbId:$speciesId}) RETURN DISTINCT o")
+            "MATCH (:DatabaseObject{DB_ID:$dbId})-[:inferredTo]-(o:DatabaseObject)-[:species]->(:Species{DB_ID:$speciesId}) RETURN DISTINCT o")
     Collection<DatabaseObject> getOrthology(@Param("DB_ID") Long dbId, @Param("speciesId") Long speciesId);
 
     //The relationship do not have direction because that's what is needed in this case
-    @Query(" MATCH (:DatabaseObject{stId:$stId})<-[:inferredTo]-()-[:inferredTo]->(o:DatabaseObject)-[:species]->(:Species{dbId:$speciesId}) RETURN DISTINCT o " +
-            "UNION " +
-            "MATCH (:DatabaseObject{stId:$stId})-[:inferredTo]-(o:DatabaseObject)-[:species]->(:Species{dbId:$speciesId}) RETURN DISTINCT o")
+    @Query(" MATCH (n:DatabaseObject)<-[:inferredTo]-()-[:inferredTo]->(o:DatabaseObject)-[:species]->(:Species{DB_ID:$speciesId}) " +
+            "WITH n,o MATCH (n)-[:stableIdentifier]->(s:StableIdentifier) WHERE s.identifier = $stId RETURN DISTINCT o " +
+            "UNION " + "" +
+            "MATCH (n:DatabaseObject)-[:inferredTo]-(o:DatabaseObject)-[:species]->(:Species{DB_ID:$speciesId}) " +
+            "WITH n,o MATCH (n)-[:stableIdentifier]->(s:StableIdentifier) WHERE s.identifier = $stId RETURN DISTINCT o")
     Collection<DatabaseObject> getOrthology(@Param("stId") String stId, @Param("speciesId") Long speciesId);
 }

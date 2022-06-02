@@ -25,6 +25,7 @@ public class DoiRepository {
         String query =
                 "MATCH (p:Pathway) " +
                         "WHERE p.doi IS NOT NULL " +
+                        "OPTIONAL MATCH (p)-[:stableIdentifier]->(s:StableIdentifier) " +
                         "OPTIONAL MATCH (p)<-[:revised]-(re:InstanceEdit) " +
                         "OPTIONAL MATCH (p)<-[:authored | revised]-(:InstanceEdit)<-[:author]-(patrs:Person) " +
                         "OPTIONAL MATCH (p)<-[:reviewed]-(:InstanceEdit)<-[:author]-(prvwd:Person) " +
@@ -41,7 +42,7 @@ public class DoiRepository {
                         "UNWIND (CASE allEditors WHEN [] THEN [null] ELSE allEditors END) AS totalEdtd " +
                         "RETURN p.displayName AS displayName, " +
                         "       p.doi AS doi, " +
-                        "       p.stId AS stId, " +
+                        "       s.identifier AS stId, " +
                         "       p.speciesName AS species, " +
                         "       p.releaseDate AS releaseDate, " +
                         "       p.releaseStatus AS releaseStatus, " +

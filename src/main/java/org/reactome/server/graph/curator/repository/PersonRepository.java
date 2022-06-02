@@ -23,12 +23,7 @@ public interface PersonRepository extends Neo4jRepository<Person, Long>{
             "RETURN n, COLLECT(r), COLLECT(m)")
     Collection<Person> queryPersonByName(@Param("name") String[] name);
 
-    @Query(" MATCH (n:Person{orcidId:$orcidId}) " +
-            "OPTIONAL MATCH (n)-[r]->(m) WHERE NOT (m:InstanceEdit) " +
-            "RETURN n, COLLECT(r), COLLECT(m)")
-    Person findPersonByOrcidId(@Param("orcidId") String orcidId);
-
-    @Query(" MATCH (n:Person{dbId:$dbId}) " +
+    @Query(" MATCH (n:Person{DB_ID:$dbId}) " +
             "OPTIONAL MATCH (n)-[r]->(m) WHERE NOT (m:InstanceEdit) " +
             "RETURN n, COLLECT(r), COLLECT(m)")
     Person findPersonByDbId(@Param("DB_ID") Long dbId);

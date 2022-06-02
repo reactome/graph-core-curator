@@ -24,7 +24,8 @@ public class ReferralsLinkageRepository {
 
     public Collection<Referrals> getReferralsTo(String stId) {
         String query = " " +
-                "MATCH (d:DatabaseObject{stId:$stId})<-[rel]-(ref) " +
+                "MATCH (d:DatabaseObject)<-[rel]-(ref) " +
+                "MATCH (d)-[:stableIdentifier]->(s:StableIdentifier) WHERE s.identifier = $stId " +
                 "WHERE NOT ref:InstanceEdit " +
                 "      AND NOT (d)<-[:species|compartment|includedLocation|referenceDatabase|evidenceType]-(ref) " +
                 "RETURN DISTINCT TYPE(rel) AS referral, " +
@@ -36,7 +37,7 @@ public class ReferralsLinkageRepository {
 
     public Collection<Referrals> getReferralsTo(Long dbId) {
         String query = " " +
-                " MATCH (d:DatabaseObject{dbId:$dbId})<-[rel]-(ref) " +
+                " MATCH (d:DatabaseObject{DB_ID:$dbId})<-[rel]-(ref) " +
                 "WHERE NOT ref:InstanceEdit " +
                 "      AND NOT (d)<-[:species|compartment|includedLocation|referenceDatabase|evidenceType]-(ref) " +
                 "RETURN DISTINCT TYPE(rel) AS referral, " +

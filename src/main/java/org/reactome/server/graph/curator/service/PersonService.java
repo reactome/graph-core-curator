@@ -52,8 +52,6 @@ public class PersonService {
         String id = identifier.toString();
         if (DatabaseObjectUtils.isDbId(id)) {
             return personRepository.findPersonByDbId(Long.valueOf(id));
-        } else if (DatabaseObjectUtils.isOrcidId(id)){
-            return personRepository.findPersonByOrcidId(id);
         } else {
             return null;
         }
@@ -66,8 +64,6 @@ public class PersonService {
             return publicationRepository.getPublicationsOfPersonByEmail(id);
         } else if (DatabaseObjectUtils.isDbId(id)) {
             return publicationRepository.getPublicationsOfPersonByDbId(Long.valueOf(id));
-        } else if (DatabaseObjectUtils.isOrcidId(id)){
-            return publicationRepository.getPublicationsOfPersonByOrcidId(id);
         } else {
             return null;
         }
@@ -77,8 +73,6 @@ public class PersonService {
         String id = identifier.toString();
         if (DatabaseObjectUtils.isDbId(id)) {
             return (Collection<SimpleEventProjection>) eventRepository.getAuthoredPathwaysByDbId(Long.valueOf(id));
-        } else if (DatabaseObjectUtils.isOrcidId(id)){
-            return (Collection<SimpleEventProjection>) eventRepository.getAuthoredPathwaysByOrcidId(id);
         } else {
             return null;
         }
@@ -88,8 +82,6 @@ public class PersonService {
         String id = identifier.toString();
         if (DatabaseObjectUtils.isDbId(id)) {
             return (Collection<SimpleEventProjection>) eventRepository.getAuthoredReactionsByDbId(Long.valueOf(id));
-        } else if (DatabaseObjectUtils.isOrcidId(id)){
-            return (Collection<SimpleEventProjection>) eventRepository.getAuthoredReactionsByOrcidId(id);
         } else {
             return null;
         }
@@ -99,8 +91,6 @@ public class PersonService {
         String id = identifier.toString();
         if (DatabaseObjectUtils.isDbId(id)) {
             return (Collection<SimpleEventProjection>) eventRepository.getReviewedPathwaysByDbId(Long.valueOf(id));
-        } else if (DatabaseObjectUtils.isOrcidId(id)){
-            return (Collection<SimpleEventProjection>) eventRepository.getReviewedPathwaysByOrcidId(id);
         } else {
             return null;
         }
@@ -110,8 +100,6 @@ public class PersonService {
         String id = identifier.toString();
         if (DatabaseObjectUtils.isDbId(id)) {
             return (Collection<SimpleEventProjection>) eventRepository.getReviewedReactionsByDbId(Long.valueOf(id));
-        } else if (DatabaseObjectUtils.isOrcidId(id)){
-            return (Collection<SimpleEventProjection>) eventRepository.getReviewedReactionsByOrcidId(id);
         } else {
             return null;
         }

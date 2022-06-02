@@ -11,10 +11,7 @@ import java.util.Collection;
 @Repository
 public interface PublicationRepository extends Neo4jRepository<Publication, Long> {
 
-    @Query("MATCH (:Person{orcidId:$orcidId})-[:author]-(pub:Publication) RETURN pub")
-    Collection<Publication> getPublicationsOfPersonByOrcidId(@Param("orcidId") String orcidId);
-
-    @Query("MATCH (:Person{dbId:$dbId})-[:author]-(pub:Publication) RETURN pub")
+    @Query("MATCH (:Person{DB_ID:$dbId})-[:author]-(pub:Publication) RETURN pub")
     Collection<Publication> getPublicationsOfPersonByDbId(@Param("DB_ID") Long dbId);
 
     @Query("MATCH (:Person{eMailAddress:$email})-[:author]-(pub:Publication) RETURN pub")

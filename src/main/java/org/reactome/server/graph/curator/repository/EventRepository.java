@@ -25,77 +25,50 @@ public class EventRepository {
     }
 
     public Collection<Event> getContainedEventsByStId(String stId){
-        String query = "MATCH (p:Pathway)-[r:hasEvent*]->(e:Event) WHERE p.stId = $stId RETURN e, COLLECT(r), COLLECT(p)";
+        String query = "MATCH (p:Pathway)-[:stableIdentifier]->(s:StableIdentifier) WHERE s.identifier = $stId " +
+                "MATCH (p:Pathway)-[r:hasEvent*]->(e:Event) RETURN e, COLLECT(r), COLLECT(p)";
         return neo4jTemplate.findAll(query, Map.of("stId", stId), Event.class);
     }
 
 
     public Collection<Event> getContainedEventsByDbId(Long dbId) {
-        String query  = "MATCH (p:Pathway)-[r:hasEvent*]->(e:Event) WHERE p.dbId = $dbId RETURN e, COLLECT(r), COLLECT(p)";
+        String query  = "MATCH (p:Pathway)-[r:hasEvent*]->(e:Event) WHERE p.DB_ID = $dbId RETURN e, COLLECT(r), COLLECT(p)";
         return neo4jTemplate.findAll(query, Map.of("DB_ID", dbId), Event.class);
-    }
-
-    public Collection<SimpleEventProjection> getAuthoredReactionsByOrcidId(String orcidId) {
-        String query  = " " +
-            "MATCH (pe:Person{orcidId:$orcidId})-[:author]->(ie:InstanceEdit)-[:authored]->(obj:ReactionLikeEvent) " +
-            "WITH DISTINCT ie, pe, obj ORDER BY ie.dateTime DESC " +
-            "RETURN obj.dbId as dbId, obj.stId as stId, obj.displayName as displayName, obj.schemaClass as schemaClass, obj.speciesName as speciesName, pe.dbId as authorDbId, ie.dateTime as dateTime, obj.doi as doi, labels(obj) as labels";
-        return neo4jClient.query(query).bindAll(Map.of("orcidId", orcidId)).fetchAs(SimpleEventProjection.class).mappedBy( (type, record) -> SimpleEventProjection.build(record)).all();
     }
 
     public Collection<SimpleEventProjection> getAuthoredReactionsByDbId(Long dbId){
         String query  = " " +
-                "MATCH (pe:Person{dbId:$dbId})-[:author]->(ie:InstanceEdit)-[:authored]->(obj:ReactionLikeEvent) " +
+                "MATCH (pe:Person{DB_ID:$dbId})-[:author]->(ie:InstanceEdit)-[:authored]->(obj:ReactionLikeEvent) " +
+                "OPTIONAL MATCH (obj)-[:stableIdentifier]->(s:StableIdentifier) " +
                 "WITH DISTINCT ie, pe, obj ORDER BY ie.dateTime DESC " +
-                "RETURN obj.dbId as dbId, obj.stId as stId, obj.displayName as displayName, obj.schemaClass as schemaClass, obj.speciesName as speciesName, pe.dbId as authorDbId, ie.dateTime as dateTime, obj.doi as doi, labels(obj) as labels";
+                "RETURN obj.DB_ID as dbId, s.identifier as stId, obj.displayName as displayName, obj.schemaClass as schemaClass, obj.speciesName as speciesName, pe.DB_ID as authorDbId, ie.dateTime as dateTime, obj.doi as doi, labels(obj) as labels";
         return neo4jClient.query(query).bindAll(Map.of("DB_ID", dbId)).fetchAs(SimpleEventProjection.class).mappedBy( (type, record) -> SimpleEventProjection.build(record)).all();
-    }
-
-    public Collection<SimpleEventProjection> getReviewedReactionsByOrcidId(String orcidId){
-        String query  = " " +
-                "MATCH (pe:Person{orcidId:$orcidId})-[:author]->(ie:InstanceEdit)-[:reviewed]->(obj:ReactionLikeEvent) " +
-                "WITH DISTINCT ie, pe, obj ORDER BY ie.dateTime DESC " +
-                "RETURN obj.dbId as dbId, obj.stId as stId, obj.displayName as displayName, obj.schemaClass as schemaClass, obj.speciesName as speciesName, pe.dbId as authorDbId, ie.dateTime as dateTime, obj.doi as doi, labels(obj) as labels";
-        return neo4jClient.query(query).bindAll(Map.of("orcidId", orcidId)).fetchAs(SimpleEventProjection.class).mappedBy( (type, record) -> SimpleEventProjection.build(record)).all();
     }
 
     public Collection<SimpleEventProjection> getReviewedReactionsByDbId(Long dbId){
         String query  = " " +
-                "MATCH (pe:Person{dbId:$dbId})-[:author]->(ie:InstanceEdit)-[:reviewed]->(obj:ReactionLikeEvent) " +
+                "MATCH (pe:Person{DB_ID:$dbId})-[:author]->(ie:InstanceEdit)-[:reviewed]->(obj:ReactionLikeEvent) " +
+                "OPTIONAL MATCH (obj)-[:stableIdentifier]->(s:StableIdentifier) " +
                 "WITH DISTINCT ie, pe, obj ORDER BY ie.dateTime DESC " +
-                "RETURN obj.dbId as dbId, obj.stId as stId, obj.displayName as displayName, obj.schemaClass as schemaClass, obj.speciesName as speciesName, pe.dbId as authorDbId, ie.dateTime as dateTime, obj.doi as doi, labels(obj) as labels";
+                "RETURN obj.DB_ID as dbId, s.identifier as stId, obj.displayName as displayName, obj.schemaClass as schemaClass, obj.speciesName as speciesName, pe.DB_ID as authorDbId, ie.dateTime as dateTime, obj.doi as doi, labels(obj) as labels";
         return neo4jClient.query(query).bindAll(Map.of("DB_ID", dbId)).fetchAs(SimpleEventProjection.class).mappedBy( (type, record) -> SimpleEventProjection.build(record)).all();
-    }
-
-    public Collection<SimpleEventProjection> getAuthoredPathwaysByOrcidId(String orcidId){
-        String query  = " " +
-                "MATCH (pe:Person{orcidId:$orcidId})-[:author]->(ie:InstanceEdit)-[:authored]->(obj:Pathway) " +
-                "WITH DISTINCT ie, pe, obj ORDER BY ie.dateTime DESC " +
-                "RETURN obj.dbId as dbId, obj.stId as stId, obj.displayName as displayName, obj.schemaClass as schemaClass, obj.speciesName as speciesName, pe.dbId as authorDbId, ie.dateTime as dateTime, obj.doi as doi, labels(obj) as labels";
-        return neo4jClient.query(query).bindAll(Map.of("orcidId", orcidId)).fetchAs(SimpleEventProjection.class).mappedBy( (type, record) -> SimpleEventProjection.build(record)).all();
     }
 
     public Collection<SimpleEventProjection> getAuthoredPathwaysByDbId(Long dbId){
         String query  = " " +
-                "MATCH (pe:Person{dbId:$dbId})-[:author]->(ie:InstanceEdit)-[:authored]->(obj:Pathway) " +
+                "MATCH (pe:Person{DB_ID:$dbId})-[:author]->(ie:InstanceEdit)-[:authored]->(obj:Pathway) " +
+                "OPTIONAL MATCH (obj)-[:stableIdentifier]->(s:StableIdentifier) " +
                 "WITH DISTINCT ie, pe, obj ORDER BY ie.dateTime DESC " +
-                "RETURN obj.dbId as dbId, obj.stId as stId, obj.displayName as displayName, obj.schemaClass as schemaClass, obj.speciesName as speciesName, pe.dbId as authorDbId, ie.dateTime as dateTime, obj.doi as doi, labels(obj) as labels";
+                "RETURN obj.DB_ID as dbId, s.identifier as stId, obj.displayName as displayName, obj.schemaClass as schemaClass, obj.speciesName as speciesName, pe.DB_ID as authorDbId, ie.dateTime as dateTime, obj.doi as doi, labels(obj) as labels";
         return neo4jClient.query(query).bindAll(Map.of("DB_ID", dbId)).fetchAs(SimpleEventProjection.class).mappedBy( (type, record) -> SimpleEventProjection.build(record)).all();
-    }
-
-    public Collection<SimpleEventProjection> getReviewedPathwaysByOrcidId(String orcidId){
-        String query  = " " +
-                "MATCH (pe:Person{orcidId:$orcidId})-[:author]->(ie:InstanceEdit)-[:reviewed]->(obj:Pathway) " +
-                "WITH DISTINCT ie, pe, obj ORDER BY ie.dateTime DESC " +
-                "RETURN obj.dbId as dbId, obj.stId as stId, obj.displayName as displayName, obj.schemaClass as schemaClass, obj.speciesName as speciesName, pe.dbId as authorDbId, ie.dateTime as dateTime, obj.doi as doi, labels(obj) as labels";
-        return neo4jClient.query(query).bindAll(Map.of("orcidId", orcidId)).fetchAs(SimpleEventProjection.class).mappedBy( (type, record) -> SimpleEventProjection.build(record)).all();
     }
 
     public Collection<SimpleEventProjection> getReviewedPathwaysByDbId(Long dbId){
         String query  = " " +
-                "MATCH (pe:Person{dbId:$dbId})-[:author]->(ie:InstanceEdit)-[:reviewed]->(obj:Pathway) " +
+                "MATCH (pe:Person{DB_ID:$dbId})-[:author]->(ie:InstanceEdit)-[:reviewed]->(obj:Pathway) " +
+                "OPTIONAL MATCH (obj)-[:stableIdentifier]->(s:StableIdentifier) " +
                 "WITH DISTINCT ie, pe, obj ORDER BY ie.dateTime DESC " +
-                "RETURN obj.dbId as dbId, obj.stId as stId, obj.displayName as displayName, obj.schemaClass as schemaClass, obj.speciesName as speciesName, pe.dbId as authorDbId, ie.dateTime as dateTime, obj.doi as doi, labels(obj) as labels";
+                "RETURN obj.DB_ID as dbId, s.identifier as stId, obj.displayName as displayName, obj.schemaClass as schemaClass, obj.speciesName as speciesName, pe.DB_ID as authorDbId, ie.dateTime as dateTime, obj.doi as doi, labels(obj) as labels";
         return neo4jClient.query(query).bindAll(Map.of("DB_ID", dbId)).fetchAs(SimpleEventProjection.class).mappedBy( (type, record) -> SimpleEventProjection.build(record)).all();
     }
 

@@ -24,18 +24,18 @@ public class ParticipantRepository {
 
     public Collection<Participant> getParticipants(Long dbId) {
         String query = " " +
-                "MATCH (n:DatabaseObject{dbId:$dbId})-[:hasEvent|input|output|catalystActivity|physicalEntity|entityFunctionalStatus|diseaseEntity|regulatedBy|regulator*]->(m:PhysicalEntity) " +
+                "MATCH (n:DatabaseObject{DB_ID:$dbId})-[:hasEvent|input|output|catalystActivity|physicalEntity|entityFunctionalStatus|diseaseEntity|regulatedBy|regulator*]->(m:PhysicalEntity) " +
                 "OPTIONAL MATCH (m)-[:referenceEntity]->(re1:ReferenceEntity) " +
                 "OPTIONAL MATCH (m)-[:hasMember|hasComponent|hasCandidate|repeatedUnit*]->(pe:PhysicalEntity)-[:referenceEntity]->(re2:ReferenceEntity) " +
                 "WITH DISTINCT m,  " +
                 "              CASE WHEN re1 IS NULL THEN re2 ELSE re1 END AS re, " +
                 "              CASE WHEN pe IS NULL THEN m.schemaClass ELSE pe.schemaClass END AS icon " +
                 "WHERE NOT re IS NULL " +
-                "RETURN m.dbId AS peDbId, " +
+                "RETURN m.DB_ID AS peDbId, " +
                 "       m.displayName AS displayName, " +
                 "       m.schemaClass AS schemaClass, " +
                 "       COLLECT(DISTINCT({ " +
-                "              dbId: re.dbId, " +
+                "              dbId: re.DB_ID, " +
                 "              displayName: re.displayName, " +
                 "              identifier: CASE WHEN re.variantIdentifier IS NOT NULL THEN re.variantIdentifier ELSE re.identifier END, " +
                 "              url: re.url, " +
@@ -56,11 +56,11 @@ public class ParticipantRepository {
                 "              CASE WHEN re1 IS NULL THEN re2 ELSE re1 END AS re, " +
                 "              CASE WHEN pe IS NULL THEN m.schemaClass ELSE pe.schemaClass END AS icon " +
                 "WHERE NOT re IS NULL " +
-                "RETURN m.dbId AS peDbId, " +
+                "RETURN m.DB_ID AS peDbId, " +
                 "       m.displayName AS displayName, " +
                 "       m.schemaClass AS schemaClass, " +
                 "       COLLECT(DISTINCT({ " +
-                "              dbId: re.dbId, " +
+                "              dbId: re.DB_ID, " +
                 "              displayName: re.displayName, " +
                 "              identifier: CASE WHEN re.variantIdentifier IS NOT NULL THEN re.variantIdentifier ELSE re.identifier END, " +
                 "              url: re.url, " +

@@ -27,15 +27,16 @@ public class SimpleDatabaseObjectRepository {
     public Collection<SimpleDatabaseObject> getPathwaysForIdentifierByStId(String identifier, Collection<String> pathways){
         String query = " " +
                 "MATCH (p:Pathway)-[:regulatedBy|regulator|catalystActivity|physicalEntity|entityFunctionalStatus|diseaseEntity|hasMember|hasCandidate|hasComponent|repeatedUnit|input|output|hasEvent*]->(pe:PhysicalEntity) " +
-                "WHERE p.stId IN $stIds " +
+                "MATCH (p)-[:stableIdentifier]->(s:StableIdentifier) WHERE s.identifier IN $stIds " +
                 "WITH DISTINCT p, pe " +
                 "MATCH (pe)-[:referenceEntity|referenceSequence|crossReference|referenceGene*]->(n)-->(rd:ReferenceDatabase) " +
                 "WHERE n.identifier = $identifier OR $identifier IN n.name OR $identifier IN n.geneName " +
-                "RETURN DISTINCT p.dbId AS dbId, p.stId AS stId, p.displayName AS displayName, labels(p) AS labels " +
+                "RETURN DISTINCT p.DB_ID AS dbId, s.identifier AS stId, p.displayName AS displayName, labels(p) AS labels " +
                 "UNION " + //The second part is for the cases when identifier is STABLE_IDENTIFIER
-                "MATCH (p:Pathway)-[:regulatedBy|regulator|catalystActivity|physicalEntity|entityFunctionalStatus|diseaseEntity|hasMember|hasCandidate|hasComponent|repeatedUnit|input|output|hasEvent*]->(pe:PhysicalEntity{stId:$identifier}) " +
-                "WHERE p.stId IN $stIds " +
-                "RETURN DISTINCT p.dbId AS dbId, p.stId AS stId, p.displayName AS displayName, labels(p) AS labels";
+                "MATCH (p:Pathway)-[:regulatedBy|regulator|catalystActivity|physicalEntity|entityFunctionalStatus|diseaseEntity|hasMember|hasCandidate|hasComponent|repeatedUnit|input|output|hasEvent*]->(pe:PhysicalEntity) " +
+                "MATCH (p)-[:stableIdentifier]->(s:StableIdentifier) WHERE s.identifier IN $stIds " +
+                "MATCH (pe)-[:stableIdentifier]->(s1:StableIdentifier) WHERE s1.identifier = $identifier " +
+                "RETURN DISTINCT p.DB_ID AS dbId, s.identifier AS stId, p.displayName AS displayName, labels(p) AS labels";
 
         Map<String, Object> map = new HashMap<>(2);
         map.put("identifier", identifier);
@@ -46,37 +47,43 @@ public class SimpleDatabaseObjectRepository {
     public Collection<SimpleDatabaseObject> getPathwaysForIdentifierByDbId(String identifier, Collection<Long> pathways){
         String query = " " +
                 "MATCH (p:Pathway)-[:regulatedBy|regulator|catalystActivity|physicalEntity|entityFunctionalStatus|diseaseEntity|hasMember|hasCandidate|hasComponent|repeatedUnit|input|output|hasEvent*]->(pe:PhysicalEntity) " +
-                "WHERE p.dbId IN $stIds " +
+                "OPTIONAL MATCH (p)-[:stableIdentifier]->(s:StableIdentifier) " +
+                "WHERE p.DB_ID IN $dbIds " +
                 "WITH DISTINCT p, pe " +
                 "MATCH (pe)-[:referenceEntity|referenceSequence|crossReference|referenceGene*]->(n)-->(rd:ReferenceDatabase) " +
                 "WHERE n.identifier = $identifier OR $identifier IN n.name OR $identifier IN n.geneName " +
-                "RETURN DISTINCT p.dbId AS dbId, p.stId AS stId, p.displayName AS displayName, labels(p) AS labels " +
+                "RETURN DISTINCT p.DB_ID AS dbId, s.identifier AS stId, p.displayName AS displayName, labels(p) AS labels " +
                 "UNION " + //The second part is for the cases when identifier is STABLE_IDENTIFIER
-                "MATCH (p:Pathway)-[:regulatedBy|regulator|catalystActivity|physicalEntity|entityFunctionalStatus|diseaseEntity|hasMember|hasCandidate|hasComponent|repeatedUnit|input|output|hasEvent*]->(pe:PhysicalEntity{stId:$identifier}) " +
-                "WHERE p.dbId IN $stIds " +
-                "RETURN DISTINCT p.dbId AS dbId, p.stId AS stId, p.displayName AS displayName, labels(p) AS labels";
+                "MATCH (p:Pathway)-[:regulatedBy|regulator|catalystActivity|physicalEntity|entityFunctionalStatus|diseaseEntity|hasMember|hasCandidate|hasComponent|repeatedUnit|input|output|hasEvent*]->(pe:PhysicalEntity) " +
+                "MATCH (pe)-[:stableIdentifier]->(s1:StableIdentifier) WHERE s1.identifier = $identifier " +
+                "OPTIONAL MATCH (p)-[:stableIdentifier]->(s:StableIdentifier) " +
+                "WHERE p.DB_ID IN $dbIds " +
+                "RETURN DISTINCT p.DB_ID AS dbId, s.identifier AS stId, p.displayName AS displayName, labels(p) AS labels";
 
         Map<String, Object> map = new HashMap<>(2);
         map.put("identifier", identifier);
-        map.put("stIds", pathways);
+        map.put("dbIds", pathways);
 
         return neo4jClient.query(query).in(databaseName).bindAll(map).fetchAs(SimpleDatabaseObject .class).mappedBy( (ts, rec) -> SimpleDatabaseObject.build(rec)).all();
     }
 
     public Collection<SimpleDatabaseObject> getDiagramEntitiesForIdentifierByStId(String stId, String identifier) {
         String query = " " +
-                "MATCH (t:Pathway{stId:$stId}) " +
+                "MATCH (t:Pathway) " +
+                "MATCH (t)-[:stableIdentifier]->(s:StableIdentifier) WHERE s.identifier = $stId " +
                 "OPTIONAL MATCH path=(t)-[:hasEvent*]->(p:Pathway{hasDiagram:False}) " +
                 "WHERE ALL(n IN TAIL(NODES(path)) WHERE n.hasDiagram = False) " +
                 "WITH CASE WHEN path IS NULL THEN t ELSE NODES(path) END AS ps " +
                 "UNWIND ps AS p " +
                 "MATCH (p)-[:hasEvent]->(rle:ReactionLikeEvent) " +
+                "OPTIONAL MATCH (rle)-[:stableIdentifier]->(s1:StableIdentifier) " +
                 "WITH DISTINCT rle " +
                 "MATCH (rd:ReferenceDatabase)<--(n)<-[:referenceEntity|referenceSequence|crossReference|referenceGene|hasComponent|hasMember|hasCandidate|repeatedUnit*]-(pe)<-[:input|output|catalystActivity|physicalEntity|entityFunctionalStatus|diseaseEntity|regulatedBy|regulator*]-(rle) " +
                 "WHERE n.identifier = $identifier OR $identifier IN n.name OR $identifier IN n.geneName " +
-                "RETURN DISTINCT pe.dbId AS dbId, pe.stId AS stId, pe.displayName AS displayName, labels(pe) AS labels " +
+                "RETURN DISTINCT rle.DB_ID AS dbId, s1.identifier AS stId, rle.displayName AS displayName, labels(rle) AS labels " +
                 "UNION " + //The second part is for the cases when identifier is STABLE_IDENTIFIER
-                "MATCH (t:Pathway{stId:$stId}) " +
+                "MATCH (t:Pathway) " +
+                "MATCH (t)-[:stableIdentifier]->(s:StableIdentifier) WHERE s.identifier = $stId " +
                 "OPTIONAL MATCH path=(t)-[:hasEvent*]->(p:Pathway{hasDiagram:False}) " +
                 "WHERE ALL(n IN TAIL(NODES(path)) WHERE n.hasDiagram = False) " +
                 "WITH CASE WHEN path IS NULL THEN t ELSE NODES(path) END AS ps " +
@@ -85,10 +92,12 @@ public class SimpleDatabaseObjectRepository {
                 "WITH DISTINCT rle " +
                 "MATCH (rle)-[:input|output|catalystActivity|physicalEntity|entityFunctionalStatus|diseaseEntity|regulatedBy|regulator*]->(pe:PhysicalEntity) " +
                 "WITH DISTINCT pe " +
+                "OPTIONAL MATCH (pe)-[:stableIdentifier]->(s1:StableIdentifier) " +
                 "OPTIONAL MATCH (pe)-[:hasComponent|hasMember|hasCandidate|repeatedUnit*]->(a:PhysicalEntity) " +
-                "WITH DISTINCT pe, COLLECT(DISTINCT a.stId) AS participants " +
-                "WHERE pe.stId = $identifier OR $identifier IN participants " +
-                "RETURN DISTINCT pe.dbId AS dbId, pe.stId AS stId, pe.displayName AS displayName, labels(pe) AS labels";
+                "OPTIONAL MATCH (a)-[:stableIdentifier]->(s2:StableIdentifier) " +
+                "WITH DISTINCT pe, COLLECT(DISTINCT s2.identifier) AS participants " +
+                "WHERE s1.identifier = $identifier OR $identifier IN participants " +
+                "RETURN DISTINCT pe.DB_ID AS dbId, s1.identifier AS stId, pe.displayName AS displayName, labels(pe) AS labels";
 
         Map<String, Object> map = new HashMap<>(2);
         map.put("identifier", identifier);
@@ -99,18 +108,19 @@ public class SimpleDatabaseObjectRepository {
 
     public Collection<SimpleDatabaseObject> getDiagramEntitiesForIdentifierByDbId(Long dbId, String identifier) {
         String query = " " +
-                "MATCH (t:Pathway{dbId:$dbId}) " +
+                "MATCH (t:Pathway{DB_ID:$dbId}) " +
                 "OPTIONAL MATCH path=(t)-[:hasEvent*]->(p:Pathway{hasDiagram:False}) " +
                 "WHERE ALL(n IN TAIL(NODES(path)) WHERE n.hasDiagram = False) " +
                 "WITH CASE WHEN path IS NULL THEN t ELSE NODES(path) END AS ps " +
                 "UNWIND ps AS p " +
                 "MATCH (p)-[:hasEvent]->(rle:ReactionLikeEvent) " +
+                "OPTIONAL MATCH (rle)-[:stableIdentifier]->(s:StableIdentifier) " +
                 "WITH DISTINCT rle " +
                 "MATCH (rd:ReferenceDatabase)<--(n)<-[:referenceEntity|referenceSequence|crossReference|referenceGene|hasComponent|hasMember|hasCandidate|repeatedUnit*]-(pe)<-[:input|output|catalystActivity|physicalEntity|entityFunctionalStatus|diseaseEntity|regulatedBy|regulator*]-(rle) " +
                 "WHERE n.identifier = $identifier OR $identifier IN n.name OR $identifier IN n.geneName " +
-                "RETURN DISTINCT pe.dbId AS dbId, pe.stId AS stId, pe.displayName AS displayName, labels(pe) AS labels " +
+                "RETURN DISTINCT rle.DB_ID AS dbId, s.identifier AS stId, rle.displayName AS displayName, labels(pe) AS labels " +
                 "UNION " + //The second part is for the cases when identifier is STABLE_IDENTIFIER
-                "MATCH (t:Pathway{dbId:$dbId}) " +
+                "MATCH (t:Pathway{DB_ID:$dbId}) " +
                 "OPTIONAL MATCH path=(t)-[:hasEvent*]->(p:Pathway{hasDiagram:False}) " +
                 "WHERE ALL(n IN TAIL(NODES(path)) WHERE n.hasDiagram = False) " +
                 "WITH CASE WHEN path IS NULL THEN t ELSE NODES(path) END AS ps " +
@@ -119,10 +129,12 @@ public class SimpleDatabaseObjectRepository {
                 "WITH DISTINCT rle " +
                 "MATCH (rle)-[:input|output|catalystActivity|physicalEntity|entityFunctionalStatus|diseaseEntity|regulatedBy|regulator*]->(pe:PhysicalEntity) " +
                 "WITH DISTINCT pe " +
+                "OPTIONAL MATCH (pe)-[:stableIdentifier]->(s:StableIdentifier) " +
                 "OPTIONAL MATCH (pe)-[:hasComponent|hasMember|hasCandidate|repeatedUnit*]->(a:PhysicalEntity) " +
-                "WITH DISTINCT pe, COLLECT(DISTINCT a.stId) AS participants " +
-                "WHERE pe.stId = $identifier OR $identifier IN participants " +
-                "RETURN DISTINCT pe.dbId AS dbId, pe.stId AS stId, pe.displayName AS displayName, labels(pe) AS labels";
+                "OPTIONAL MATCH (a)-[:stableIdentifier]->(s1:StableIdentifier) " +
+                "WITH DISTINCT pe, COLLECT(DISTINCT s1.identifier) AS participants " +
+                "WHERE s.identifier = $identifier OR $identifier IN participants " +
+                "RETURN DISTINCT pe.DB_ID AS dbId, s.identifier AS stId, pe.displayName AS displayName, labels(pe) AS labels";
 
         Map<String, Object> map = new HashMap<>(2);
         map.put("identifier", identifier);
