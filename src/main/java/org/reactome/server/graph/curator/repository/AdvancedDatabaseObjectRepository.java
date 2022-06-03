@@ -84,7 +84,7 @@ public class AdvancedDatabaseObjectRepository {
                 "OPTIONAL MATCH (n)-[r]-(m) " +
                 CYPHER_RETURN_LIMIT;
 
-        return (T) neo4jTemplate.findOne(query, Map.of("DB_ID", dbId, "limit", limit), DatabaseObject.class).orElse(null);
+        return (T) neo4jTemplate.findOne(query, Map.of("dbId", dbId, "limit", limit), DatabaseObject.class).orElse(null);
     }
 
     public <T extends DatabaseObject> T findById(String stId, Integer limit) {
@@ -106,7 +106,7 @@ public class AdvancedDatabaseObjectRepository {
                 "OPTIONAL MATCH (m)-[r3:regulator|regulatedBy|physicalEntity|crossReference|referenceGene|literatureReference]-(o) " +
                 "RETURN n, COLLECT(r1), COLLECT(m), COLLECT(r2), COLLECT(s), COLLECT(r3), COLLECT(o) ";
 
-        return (T) neo4jTemplate.findOne(query, Map.of("DB_ID", dbId), DatabaseObject.class).orElse(null);
+        return (T) neo4jTemplate.findOne(query, Map.of("dbId", dbId), DatabaseObject.class).orElse(null);
     }
 
     public <T extends DatabaseObject> T findEnhancedObjectById(String stId) {
@@ -136,7 +136,7 @@ public class AdvancedDatabaseObjectRepository {
                 query = "MATCH (n:DatabaseObject{DB_ID:$dbId}) OPTIONAL MATCH (n)-[r]-(m) " + CYPHER_RETURN;
         }
 
-        return (T) neo4jTemplate.findOne(query, Map.of("DB_ID", dbId), DatabaseObject.class).orElse(null);
+        return (T) neo4jTemplate.findOne(query, Map.of("dbId", dbId), DatabaseObject.class).orElse(null);
     }
 
     public <T extends DatabaseObject> T findById(String stId, RelationshipDirection direction) {
@@ -169,7 +169,7 @@ public class AdvancedDatabaseObjectRepository {
                 break;
         }
 
-        return (T) neo4jTemplate.findOne(query, Map.of("DB_ID", dbId), DatabaseObject.class).orElse(null);
+        return (T) neo4jTemplate.findOne(query, Map.of("dbId", dbId), DatabaseObject.class).orElse(null);
     }
 
     public <T extends DatabaseObject> T findById(String stId, RelationshipDirection direction, String... relationships) {
@@ -286,7 +286,7 @@ public class AdvancedDatabaseObjectRepository {
 
         BiFunction<TypeSystem, MapAccessor, DatabaseObject> mappingFunction = neo4jMappingContext.getRequiredMappingFunctionFor(DatabaseObject.class);
         return neo4jClient.query(query)
-                        .bindAll(Map.of("DB_ID", dbId))
+                        .bindAll(Map.of("dbId", dbId))
                         .fetchAs(QueryResultWrapper.class)
                         .mappedBy((typeSystem, record) -> {
                             DatabaseObject databaseObject = mappingFunction.apply(typeSystem, record.get("m"));

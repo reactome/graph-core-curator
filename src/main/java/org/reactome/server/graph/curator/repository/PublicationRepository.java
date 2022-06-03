@@ -12,7 +12,7 @@ import java.util.Collection;
 public interface PublicationRepository extends Neo4jRepository<Publication, Long> {
 
     @Query("MATCH (:Person{DB_ID:$dbId})-[:author]-(pub:Publication) RETURN pub")
-    Collection<Publication> getPublicationsOfPersonByDbId(@Param("DB_ID") Long dbId);
+    Collection<Publication> getPublicationsOfPersonByDbId(@Param("dbId") Long dbId);
 
     @Query("MATCH (:Person{eMailAddress:$email})-[:author]-(pub:Publication) RETURN pub")
     Collection<Publication> getPublicationsOfPersonByEmail(@Param("email") String email);

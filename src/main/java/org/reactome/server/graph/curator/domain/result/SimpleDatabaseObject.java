@@ -51,18 +51,18 @@ public class SimpleDatabaseObject implements DatabaseObjectLike {
 
     public static SimpleDatabaseObject build(Record record) {
         SimpleDatabaseObject simpleDatabaseObject = new SimpleDatabaseObject();
-        simpleDatabaseObject.setDB_ID(record.get("DB_ID").asLong());
+        simpleDatabaseObject.setDB_ID(record.get("dbId").asLong());
         simpleDatabaseObject.setStId(record.get("stId").asString(null));
-        simpleDatabaseObject.set_displayName(record.get("_displayName").asString());
+        simpleDatabaseObject.set_displayName(record.get("displayName").asString());
         simpleDatabaseObject.setLabels(record.get("labels").asList(Value::asString));
         return simpleDatabaseObject;
     }
 
     public static SimpleDatabaseObject build(Value value) {
         SimpleDatabaseObject simpleDatabaseObject = new SimpleDatabaseObject();
-        simpleDatabaseObject.setDB_ID(value.get("DB_ID").asLong());
+        simpleDatabaseObject.setDB_ID(value.get("dbId").asLong());
         simpleDatabaseObject.setStId(value.get("stId").asString(null));
-        simpleDatabaseObject.set_displayName(value.get("_displayName").asString());
+        simpleDatabaseObject.set_displayName(value.get("displayName").asString());
         if(!value.get("labels").isNull()) {
             simpleDatabaseObject.setLabels(value.get("labels").asList(Value::asString));
         } else {

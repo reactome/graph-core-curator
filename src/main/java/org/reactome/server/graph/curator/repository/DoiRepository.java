@@ -40,7 +40,7 @@ public class DoiRepository {
                         "UNWIND (CASE allAuthors WHEN [] THEN [null] ELSE allAuthors END) AS totalAtrs " +
                         "UNWIND (CASE allReviewers WHEN [] THEN [null] ELSE allReviewers END) AS totalRvwd " +
                         "UNWIND (CASE allEditors WHEN [] THEN [null] ELSE allEditors END) AS totalEdtd " +
-                        "RETURN p.displayName AS displayName, " +
+                        "RETURN p._displayName AS displayName, " +
                         "       p.doi AS doi, " +
                         "       s.identifier AS stId, " +
                         "       p.speciesName AS species, " +
@@ -50,7 +50,7 @@ public class DoiRepository {
                         "       COLLECT(DISTINCT totalAtrs) AS authors, " +
                         "       COLLECT(DISTINCT totalRvwd) AS reviewers, " +
                         "       COLLECT(DISTINCT totalEdtd) AS editors " +
-                        "ORDER BY toLower(p.displayName) ";
+                        "ORDER BY toLower(p._displayName) ";
 
         return neo4jClient.query(query).in(databaseName).fetchAs(DoiPathwayDTO.class).mappedBy((typeSystem, record) -> new DoiPathwayDTO(record)).all();
     }

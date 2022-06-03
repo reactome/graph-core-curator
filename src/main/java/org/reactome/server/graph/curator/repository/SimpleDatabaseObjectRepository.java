@@ -31,12 +31,12 @@ public class SimpleDatabaseObjectRepository {
                 "WITH DISTINCT p, pe " +
                 "MATCH (pe)-[:referenceEntity|referenceSequence|crossReference|referenceGene*]->(n)-->(rd:ReferenceDatabase) " +
                 "WHERE n.identifier = $identifier OR $identifier IN n.name OR $identifier IN n.geneName " +
-                "RETURN DISTINCT p.DB_ID AS dbId, s.identifier AS stId, p.displayName AS displayName, labels(p) AS labels " +
+                "RETURN DISTINCT p.DB_ID AS dbId, s.identifier AS stId, p._displayName AS displayName, labels(p) AS labels " +
                 "UNION " + //The second part is for the cases when identifier is STABLE_IDENTIFIER
                 "MATCH (p:Pathway)-[:regulatedBy|regulator|catalystActivity|physicalEntity|entityFunctionalStatus|diseaseEntity|hasMember|hasCandidate|hasComponent|repeatedUnit|input|output|hasEvent*]->(pe:PhysicalEntity) " +
                 "MATCH (p)-[:stableIdentifier]->(s:StableIdentifier) WHERE s.identifier IN $stIds " +
                 "MATCH (pe)-[:stableIdentifier]->(s1:StableIdentifier) WHERE s1.identifier = $identifier " +
-                "RETURN DISTINCT p.DB_ID AS dbId, s.identifier AS stId, p.displayName AS displayName, labels(p) AS labels";
+                "RETURN DISTINCT p.DB_ID AS dbId, s.identifier AS stId, p._displayName AS displayName, labels(p) AS labels";
 
         Map<String, Object> map = new HashMap<>(2);
         map.put("identifier", identifier);
@@ -52,13 +52,13 @@ public class SimpleDatabaseObjectRepository {
                 "WITH DISTINCT p, pe " +
                 "MATCH (pe)-[:referenceEntity|referenceSequence|crossReference|referenceGene*]->(n)-->(rd:ReferenceDatabase) " +
                 "WHERE n.identifier = $identifier OR $identifier IN n.name OR $identifier IN n.geneName " +
-                "RETURN DISTINCT p.DB_ID AS dbId, s.identifier AS stId, p.displayName AS displayName, labels(p) AS labels " +
+                "RETURN DISTINCT p.DB_ID AS dbId, s.identifier AS stId, p._displayName AS displayName, labels(p) AS labels " +
                 "UNION " + //The second part is for the cases when identifier is STABLE_IDENTIFIER
                 "MATCH (p:Pathway)-[:regulatedBy|regulator|catalystActivity|physicalEntity|entityFunctionalStatus|diseaseEntity|hasMember|hasCandidate|hasComponent|repeatedUnit|input|output|hasEvent*]->(pe:PhysicalEntity) " +
                 "MATCH (pe)-[:stableIdentifier]->(s1:StableIdentifier) WHERE s1.identifier = $identifier " +
                 "OPTIONAL MATCH (p)-[:stableIdentifier]->(s:StableIdentifier) " +
                 "WHERE p.DB_ID IN $dbIds " +
-                "RETURN DISTINCT p.DB_ID AS dbId, s.identifier AS stId, p.displayName AS displayName, labels(p) AS labels";
+                "RETURN DISTINCT p.DB_ID AS dbId, s.identifier AS stId, p._displayName AS displayName, labels(p) AS labels";
 
         Map<String, Object> map = new HashMap<>(2);
         map.put("identifier", identifier);
@@ -80,7 +80,7 @@ public class SimpleDatabaseObjectRepository {
                 "WITH DISTINCT rle " +
                 "MATCH (rd:ReferenceDatabase)<--(n)<-[:referenceEntity|referenceSequence|crossReference|referenceGene|hasComponent|hasMember|hasCandidate|repeatedUnit*]-(pe)<-[:input|output|catalystActivity|physicalEntity|entityFunctionalStatus|diseaseEntity|regulatedBy|regulator*]-(rle) " +
                 "WHERE n.identifier = $identifier OR $identifier IN n.name OR $identifier IN n.geneName " +
-                "RETURN DISTINCT rle.DB_ID AS dbId, s1.identifier AS stId, rle.displayName AS displayName, labels(rle) AS labels " +
+                "RETURN DISTINCT rle.DB_ID AS dbId, s1.identifier AS stId, rle._displayName AS displayName, labels(rle) AS labels " +
                 "UNION " + //The second part is for the cases when identifier is STABLE_IDENTIFIER
                 "MATCH (t:Pathway) " +
                 "MATCH (t)-[:stableIdentifier]->(s:StableIdentifier) WHERE s.identifier = $stId " +
@@ -97,7 +97,7 @@ public class SimpleDatabaseObjectRepository {
                 "OPTIONAL MATCH (a)-[:stableIdentifier]->(s2:StableIdentifier) " +
                 "WITH DISTINCT pe, COLLECT(DISTINCT s2.identifier) AS participants " +
                 "WHERE s1.identifier = $identifier OR $identifier IN participants " +
-                "RETURN DISTINCT pe.DB_ID AS dbId, s1.identifier AS stId, pe.displayName AS displayName, labels(pe) AS labels";
+                "RETURN DISTINCT pe.DB_ID AS dbId, s1.identifier AS stId, pe._displayName AS displayName, labels(pe) AS labels";
 
         Map<String, Object> map = new HashMap<>(2);
         map.put("identifier", identifier);
@@ -118,7 +118,7 @@ public class SimpleDatabaseObjectRepository {
                 "WITH DISTINCT rle " +
                 "MATCH (rd:ReferenceDatabase)<--(n)<-[:referenceEntity|referenceSequence|crossReference|referenceGene|hasComponent|hasMember|hasCandidate|repeatedUnit*]-(pe)<-[:input|output|catalystActivity|physicalEntity|entityFunctionalStatus|diseaseEntity|regulatedBy|regulator*]-(rle) " +
                 "WHERE n.identifier = $identifier OR $identifier IN n.name OR $identifier IN n.geneName " +
-                "RETURN DISTINCT rle.DB_ID AS dbId, s.identifier AS stId, rle.displayName AS displayName, labels(pe) AS labels " +
+                "RETURN DISTINCT rle.DB_ID AS dbId, s.identifier AS stId, rle._displayName AS displayName, labels(pe) AS labels " +
                 "UNION " + //The second part is for the cases when identifier is STABLE_IDENTIFIER
                 "MATCH (t:Pathway{DB_ID:$dbId}) " +
                 "OPTIONAL MATCH path=(t)-[:hasEvent*]->(p:Pathway{hasDiagram:False}) " +
@@ -134,11 +134,11 @@ public class SimpleDatabaseObjectRepository {
                 "OPTIONAL MATCH (a)-[:stableIdentifier]->(s1:StableIdentifier) " +
                 "WITH DISTINCT pe, COLLECT(DISTINCT s1.identifier) AS participants " +
                 "WHERE s.identifier = $identifier OR $identifier IN participants " +
-                "RETURN DISTINCT pe.DB_ID AS dbId, s.identifier AS stId, pe.displayName AS displayName, labels(pe) AS labels";
+                "RETURN DISTINCT pe.DB_ID AS dbId, s.identifier AS stId, pe._displayName AS displayName, labels(pe) AS labels";
 
         Map<String, Object> map = new HashMap<>(2);
         map.put("identifier", identifier);
-        map.put("DB_ID", dbId);
+        map.put("dbId", dbId);
         return neo4jClient.query(query).in(databaseName).bindAll(map).fetchAs(SimpleDatabaseObject .class).mappedBy( (ts, rec) -> SimpleDatabaseObject.build(rec)).all();
     }
 

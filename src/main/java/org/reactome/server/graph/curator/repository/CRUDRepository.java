@@ -57,11 +57,11 @@ public class CRUDRepository {
 
     public void delete(Long dbId) {
         String query = "MATCH (n:DatabaseObject{DB_ID:$dbId}) OPTIONAL MATCH (n)-[r]-() DELETE n, r";
-        neo4jClient.query(query).in(databaseName).bindAll(Map.of("DB_ID", dbId)).run();
+        neo4jClient.query(query).in(databaseName).bindAll(Map.of("dbId", dbId)).run();
     }
 
     public void delete(String stId) {
-        String query = "MATCH (n:DatabaseObject{stId:$stId}) OPTIONAL MATCH (n)-[r]-() DELETE n, r";
+        String query = "MATCH (n:DatabaseObject{stId:$stId}) MATCH (n)->[:stableIdentifier]->(s:StableIdentifier) WHERE s.identifier = $stId OPTIONAL MATCH (n)-[r]-() DELETE n, r";
         neo4jClient.query(query).in(databaseName).bindAll(Map.of("stId", stId)).run();
     }
     

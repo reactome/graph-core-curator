@@ -15,7 +15,7 @@ public interface OrthologyRepository extends Neo4jRepository<DatabaseObject, Lon
     @Query(" MATCH (:DatabaseObject{DB_ID:$dbId})<-[:inferredTo]-()-[:inferredTo]->(o:DatabaseObject)-[:species]->(:Species{DB_ID:$speciesId}) RETURN DISTINCT o " +
             "UNION " +
             "MATCH (:DatabaseObject{DB_ID:$dbId})-[:inferredTo]-(o:DatabaseObject)-[:species]->(:Species{DB_ID:$speciesId}) RETURN DISTINCT o")
-    Collection<DatabaseObject> getOrthology(@Param("DB_ID") Long dbId, @Param("speciesId") Long speciesId);
+    Collection<DatabaseObject> getOrthology(@Param("dbId") Long dbId, @Param("speciesId") Long speciesId);
 
     //The relationship do not have direction because that's what is needed in this case
     @Query(" MATCH (n:DatabaseObject)<-[:inferredTo]-()-[:inferredTo]->(o:DatabaseObject)-[:species]->(:Species{DB_ID:$speciesId}) " +

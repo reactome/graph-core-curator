@@ -32,24 +32,25 @@ public class ParticipantRepository {
                 "              CASE WHEN pe IS NULL THEN m.schemaClass ELSE pe.schemaClass END AS icon " +
                 "WHERE NOT re IS NULL " +
                 "RETURN m.DB_ID AS peDbId, " +
-                "       m.displayName AS displayName, " +
+                "       m._displayName AS displayName, " +
                 "       m.schemaClass AS schemaClass, " +
                 "       COLLECT(DISTINCT({ " +
                 "              dbId: re.DB_ID, " +
-                "              displayName: re.displayName, " +
+                "              displayName: re._displayName, " +
                 "              identifier: CASE WHEN re.variantIdentifier IS NOT NULL THEN re.variantIdentifier ELSE re.identifier END, " +
                 "              url: re.url, " +
                 "              schemaClass: re.schemaClass, " +
                 "              icon: icon " +
                 "       })) AS refEntities";
 
-        return neo4jClient.query(query).in(databaseName).bindAll(Collections.singletonMap("DB_ID", dbId)).fetchAs(Participant.class).mappedBy( (t, record) -> Participant.build(record)).all();
+        return neo4jClient.query(query).in(databaseName).bindAll(Collections.singletonMap("dbId", dbId)).fetchAs(Participant.class).mappedBy( (t, record) -> Participant.build(record)).all();
     }
 
 
     public Collection<Participant> getParticipants(String stId) {
         String query = " " +
-                "MATCH (n:DatabaseObject{stId:$stId})-[:hasEvent|input|output|catalystActivity|physicalEntity|entityFunctionalStatus|diseaseEntity|regulatedBy|regulator*]->(m:PhysicalEntity) " +
+                "MATCH (n:DatabaseObject)-[:hasEvent|input|output|catalystActivity|physicalEntity|entityFunctionalStatus|diseaseEntity|regulatedBy|regulator*]->(m:PhysicalEntity) " +
+                "MATCH (n)->[:stableIdentifier]->(s:StableIdentifier) WHERE s.identifier = $stId " +
                 "OPTIONAL MATCH (m)-[:referenceEntity]->(re1:ReferenceEntity) " +
                 "OPTIONAL MATCH (m)-[:hasMember|hasComponent|hasCandidate|repeatedUnit*]->(pe:PhysicalEntity)-[:referenceEntity]->(re2:ReferenceEntity) " +
                 "WITH DISTINCT m, " +
@@ -57,11 +58,11 @@ public class ParticipantRepository {
                 "              CASE WHEN pe IS NULL THEN m.schemaClass ELSE pe.schemaClass END AS icon " +
                 "WHERE NOT re IS NULL " +
                 "RETURN m.DB_ID AS peDbId, " +
-                "       m.displayName AS displayName, " +
+                "       m._displayName AS displayName, " +
                 "       m.schemaClass AS schemaClass, " +
                 "       COLLECT(DISTINCT({ " +
                 "              dbId: re.DB_ID, " +
-                "              displayName: re.displayName, " +
+                "              displayName: re._displayName, " +
                 "              identifier: CASE WHEN re.variantIdentifier IS NOT NULL THEN re.variantIdentifier ELSE re.identifier END, " +
                 "              url: re.url, " +
                 "              schemaClass: re.schemaClass, " +
