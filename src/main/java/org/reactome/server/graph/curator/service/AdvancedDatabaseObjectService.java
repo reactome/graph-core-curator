@@ -24,18 +24,6 @@ public class AdvancedDatabaseObjectService {
     @Autowired
     private AdvancedDatabaseObjectRepository advancedDatabaseObjectRepository;
 
-    // --------------------------------------- Enhanced Finder Methods -------------------------------------------------
-
-    public <T extends DatabaseObject> T findEnhancedObjectById(Object identifier) {
-        String id = DatabaseObjectUtils.getIdentifier(identifier);
-        if (DatabaseObjectUtils.isStId(id)) {
-            return advancedDatabaseObjectRepository.findEnhancedObjectById(id);
-        } else if (DatabaseObjectUtils.isDbId(id)) {
-            return advancedDatabaseObjectRepository.findEnhancedObjectById(Long.parseLong(id));
-        }
-        return null;
-    }
-
     // --------------------------------------- Limited Finder Methods --------------------------------------------------
 
     public <T extends DatabaseObject> T findById(Object identifier, Integer limit) {

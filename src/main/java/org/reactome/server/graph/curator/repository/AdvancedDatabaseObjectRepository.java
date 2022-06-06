@@ -96,30 +96,6 @@ public class AdvancedDatabaseObjectRepository {
         return (T) neo4jTemplate.findOne(query, Map.of("stId", stId, "limit", limit), DatabaseObject.class).orElse(null);
     }
 
-    // --------------------------------------- Enhanced Finder Methods -------------------------------------------------
-
-    public <T extends DatabaseObject> T findEnhancedObjectById(Long dbId) {
-        String query = "" +
-                "MATCH (n:DatabaseObject{DB_ID:$dbId}) " +
-                "OPTIONAL MATCH (n)-[r1]-(m) " +
-                "OPTIONAL MATCH (m)-[r2:species]->(s) " +
-                "OPTIONAL MATCH (m)-[r3:regulator|regulatedBy|physicalEntity|crossReference|referenceGene|literatureReference]-(o) " +
-                "RETURN n, COLLECT(r1), COLLECT(m), COLLECT(r2), COLLECT(s), COLLECT(r3), COLLECT(o) ";
-
-        return (T) neo4jTemplate.findOne(query, Map.of("dbId", dbId), DatabaseObject.class).orElse(null);
-    }
-
-    public <T extends DatabaseObject> T findEnhancedObjectById(String stId) {
-        String query = "" +
-                "MATCH (n:DatabaseObject)-[:stableIdentifier]->(s:StableIdentifier) WHERE s.identifier = $stId " +
-                "OPTIONAL MATCH (n)-[r1]-(m) " +
-                "OPTIONAL MATCH (m)-[r2:species]->(s) " +
-                "OPTIONAL MATCH (m)-[r3:regulator|regulatedBy|physicalEntity|crossReference|referenceGene|literatureReference]-(o) " +
-                "RETURN n, COLLECT(r1), COLLECT(m), COLLECT(r2), COLLECT(s), COLLECT(r3), COLLECT(o) ";
-
-        return (T) neo4jTemplate.findOne(query, Map.of("stId", stId), DatabaseObject.class).orElse(null);
-    }
-
     // ---------------------- Methods with RelationshipDirection and Relationships -------------------------------------
 
     public <T extends DatabaseObject> T findById(Long dbId, RelationshipDirection direction) {
