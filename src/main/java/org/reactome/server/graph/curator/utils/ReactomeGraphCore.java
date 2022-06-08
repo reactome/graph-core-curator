@@ -1,7 +1,7 @@
 package org.reactome.server.graph.curator.utils;
 
 //import org.reactome.server.graph.Main;
-import org.reactome.server.graph.aop.LazyFetchAspect;
+import org.reactome.server.graph.curator.aop.LazyFetchAspect;
 import org.reactome.server.graph.curator.config.GraphCoreNeo4jConfig;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;

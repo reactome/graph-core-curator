@@ -1,4 +1,4 @@
-package org.reactome.server.graph.aop;
+package org.reactome.server.graph.curator.aop;
 
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
