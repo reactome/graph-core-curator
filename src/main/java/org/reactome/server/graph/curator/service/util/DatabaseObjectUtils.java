@@ -4,8 +4,6 @@ import org.apache.commons.lang3.StringUtils;
 import org.reactome.server.graph.curator.domain.annotations.ReactomeAllowedClasses;
 import org.reactome.server.graph.curator.domain.annotations.ReactomeSchemaIgnore;
 import org.reactome.server.graph.curator.domain.model.DatabaseObject;
-import org.reactome.server.graph.curator.domain.result.SchemaClassCount;
-import org.reactome.server.graph.curator.repository.DatabaseObjectRepository;
 import org.reactome.server.graph.curator.service.helper.AttributeProperties;
 import org.reactome.server.graph.curator.service.helper.SchemaNode;
 import org.reflections.Reflections;
@@ -31,32 +29,6 @@ public class DatabaseObjectUtils {
     private static final Logger logger = LoggerFactory.getLogger(DatabaseObjectUtils.class);
 
     private static Map<String, SchemaNode> map;
-
-    private static DatabaseObjectRepository databaseObjectRepository;
-
-    @Autowired
-    public void setDatabaseObjectRepository(DatabaseObjectRepository databaseObjectRepository) {
-        DatabaseObjectUtils.databaseObjectRepository = databaseObjectRepository;
-    }
-
-    @SuppressWarnings("unused")
-    public static SchemaNode getGraphModelTree(Collection<SchemaClassCount> schemaClassCounts) throws ClassNotFoundException {
-        map = new HashMap<>();
-        String packageName = DatabaseObject.class.getPackage().getName() + ".";
-        for (SchemaClassCount schemaClassCount : schemaClassCounts) {
-            Class<?> lowestClass = Object.class;
-            for (String label : schemaClassCount.getLabels()) {
-                Class clazz = Class.forName(packageName + label);
-                if (lowestClass.isAssignableFrom(clazz)) {
-                    lowestClass = clazz;
-                }
-            }
-            recursion(lowestClass, null, schemaClassCount.getCount());
-        }
-        SchemaNode n = map.get(DatabaseObject.class.getSimpleName());
-        correctCounts(n);
-        return n;
-    }
 
     @SuppressWarnings("unused")
     public static Map<String, Object> getAllFields(DatabaseObject databaseObject, boolean showUndefinedAttributes) {
@@ -172,17 +144,6 @@ public class DatabaseObjectUtils {
         return targets;
     }
 
-    public static String getIdentifier(Object id) {
-        if (id instanceof DatabaseObject) {
-            return "" + ((DatabaseObject) id).getDB_ID();
-        } else if (id instanceof String) {
-            return trimId((String) id);
-        } else if (id instanceof Number && !(id instanceof Double)) {
-            return id.toString();
-        }
-        return null;
-    }
-
     public static boolean isEmail(String email) {
         Pattern p = Pattern.compile(".+@.+\\.[a-z]+");
         return p.matcher(email).matches();
@@ -279,11 +240,7 @@ public class DatabaseObjectUtils {
 
     private static AttributeProperties getAttributeProperties(Method method) {
         AttributeProperties properties = new AttributeProperties();
-        String fieldName = method.getName().substring(3);
-        if (!method.getName().equals("getDB_ID")) {
-            fieldName = lowerFirst(fieldName);
-        }
-        properties.setName(fieldName);
+        properties.setName(lowerFirst(method.getName().substring(3)));
         Type returnType = method.getGenericReturnType();
         Annotation annotation = method.getAnnotation(ReactomeAllowedClasses.class);
         if (returnType instanceof ParameterizedType) {
