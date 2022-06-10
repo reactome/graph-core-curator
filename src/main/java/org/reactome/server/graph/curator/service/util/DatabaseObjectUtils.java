@@ -240,7 +240,11 @@ public class DatabaseObjectUtils {
 
     private static AttributeProperties getAttributeProperties(Method method) {
         AttributeProperties properties = new AttributeProperties();
-        properties.setName(lowerFirst(method.getName().substring(3)));
+        String attributeName = method.getName().substring(3);
+        if (!attributeName.equals("DB_ID")) {
+            attributeName = lowerFirst(attributeName);
+        }
+        properties.setName(attributeName);
         Type returnType = method.getGenericReturnType();
         Annotation annotation = method.getAnnotation(ReactomeAllowedClasses.class);
         if (returnType instanceof ParameterizedType) {
