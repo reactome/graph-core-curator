@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.reactome.server.graph.curator.domain.annotations.ReactomeConstraint;
 import org.reactome.server.graph.curator.domain.annotations.ReactomeInstanceDefiningValue;
 import org.reactome.server.graph.curator.domain.annotations.ReactomeSchemaIgnore;
+import org.reactome.server.graph.curator.domain.relationship.HasCandidate;
 import org.springframework.data.neo4j.core.schema.Node;
 import org.springframework.data.neo4j.core.schema.Relationship;
 
@@ -19,16 +20,35 @@ public class CandidateSet extends EntitySet {
     @ReactomeConstraint(constraint = ReactomeConstraint.Constraint.MANDATORY)
     @ReactomeInstanceDefiningValue(category = ReactomeInstanceDefiningValue.Category.all)
     @Relationship(type = "hasCandidate")
-    private List<PhysicalEntity> hasCandidate;
+    private SortedSet<HasCandidate> hasCandidate;
 
     public CandidateSet() {}
 
     public List<PhysicalEntity> getHasCandidate() {
-        return hasCandidate;
+        List<PhysicalEntity> rtn = null;
+        if (hasCandidate != null) {
+            rtn = new ArrayList<>();
+            //stoichiometry does NOT need to be taken into account here
+            for (HasCandidate candidate : hasCandidate) {
+                rtn.add(candidate.getPhysicalEntity());
+            }
+        }
+        return rtn;
     }
 
     public void setHasCandidate(List<PhysicalEntity> hasCandidate) {
-        this.hasCandidate = hasCandidate;
+        if (hasCandidate == null) return;
+        Map<Long, HasCandidate> components = new LinkedHashMap<>();
+        int order = 0;
+        for (PhysicalEntity physicalEntity : hasCandidate) {
+            //stoichiometry does NOT need to be taken into account here
+            HasCandidate aux = new HasCandidate();
+//            aux.setEntitySet(this);
+            aux.setPhysicalEntity(physicalEntity);
+            aux.setOrder(order++);
+            components.put(physicalEntity.getDB_ID(), aux);
+        }
+        this.hasCandidate = new TreeSet<>(components.values());
     }
 
     @ReactomeSchemaIgnore

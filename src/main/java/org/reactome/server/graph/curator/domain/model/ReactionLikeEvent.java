@@ -4,6 +4,8 @@ import org.reactome.server.graph.curator.domain.annotations.ReactomeConstraint;
 import org.reactome.server.graph.curator.domain.annotations.ReactomeInstanceDefiningValue;
 import org.reactome.server.graph.curator.domain.annotations.ReactomeProperty;
 import org.reactome.server.graph.curator.domain.annotations.ReactomeSchemaIgnore;
+import org.reactome.server.graph.curator.domain.relationship.Input;
+import org.reactome.server.graph.curator.domain.relationship.Output;
 import org.springframework.data.neo4j.core.schema.Node;
 import org.springframework.data.neo4j.core.schema.Relationship;
 
@@ -47,12 +49,12 @@ public abstract class ReactionLikeEvent extends Event {
     @ReactomeConstraint(constraint = ReactomeConstraint.Constraint.MANDATORY)
     @ReactomeInstanceDefiningValue(category = ReactomeInstanceDefiningValue.Category.all)
     @Relationship(type = "input")
-    private List<PhysicalEntity> input;
+    private Set<Input> input;
 
     @ReactomeConstraint(constraint = ReactomeConstraint.Constraint.MANDATORY)
     @ReactomeInstanceDefiningValue(category = ReactomeInstanceDefiningValue.Category.all)
     @Relationship(type = "output")
-    private List<PhysicalEntity> output;
+    private Set<Output> output;
 
     @ReactomeConstraint(constraint = ReactomeConstraint.Constraint.OPTIONAL)
     @Relationship(type = "normalReaction")
@@ -194,19 +196,51 @@ public abstract class ReactionLikeEvent extends Event {
     }
 
     public List<PhysicalEntity> getInput() {
-        return input;
+        List<PhysicalEntity> rtn = null;
+        if (input != null) {
+            rtn = new ArrayList<>();
+            for (Input aux : input) {
+                for (int i = 0; i < aux.getStoichiometry(); i++) {
+                    rtn.add(aux.getPhysicalEntity());
+                }
+            }
+        }
+        return rtn;
     }
 
-    public void setInput(List<PhysicalEntity> input) {
-        this.input = input;
+    public void setInput(List<PhysicalEntity> inputs) {
+        if (inputs == null) return;
+        // Using LinkedHashMap in order to keep the Collection Sorted previously by AOP
+        Map<Long, Input> map = new LinkedHashMap<>();
+        for (PhysicalEntity physicalEntity : inputs) {
+            Input input = map.get(physicalEntity.getDB_ID());
+            if (input == null) {
+                input = new Input();
+//                input.setReactionLikeEvent(this);
+                input.setPhysicalEntity(physicalEntity);
+                map.put(physicalEntity.getDB_ID(), input);
+            } else {
+                input.setStoichiometry(input.getStoichiometry() + 1);
+            }
+        }
+        this.input = new HashSet<>(map.values());
     }
 
-    public void setOutput(List<PhysicalEntity> output) {
+    public void setOutput(Set<Output> output) {
         this.output = output;
     }
 
     public List<PhysicalEntity> getOutput() {
-        return output;
+        List<PhysicalEntity> rtn = null;
+        if (output != null) {
+            rtn = new ArrayList<>();
+            for (Output aux : output) {
+                for (int i = 0; i < aux.getStoichiometry(); i++) {
+                    rtn.add(aux.getPhysicalEntity());
+                }
+            }
+        }
+        return rtn;
     }
 
     @ReactomeSchemaIgnore

@@ -1,6 +1,6 @@
 package org.reactome.server.graph.curator.domain.relationship;
 
-import org.reactome.server.graph.curator.domain.model.ReactionLikeEvent;
+import org.reactome.server.graph.curator.domain.model.PhysicalEntity;
 import org.springframework.data.neo4j.core.schema.GeneratedValue;
 import org.springframework.data.neo4j.core.schema.Id;
 import org.springframework.data.neo4j.core.schema.RelationshipProperties;
@@ -9,24 +9,26 @@ import org.springframework.data.neo4j.core.schema.TargetNode;
 import java.util.Objects;
 
 /**
- * ConsumedBy -> bi-directionality for
+ * HasComponent is the relationship entity of Complexes. It is needed to specify the stoichiometry and order of
+ * components.
  */
+@SuppressWarnings("unused")
 @RelationshipProperties
-public class InputForReactionLikeEvent implements Comparable<InputForReactionLikeEvent> {
+public class HasComponent implements Comparable<HasComponent> {
     @Id @GeneratedValue private Long id;
-    @TargetNode private ReactionLikeEvent reactionLikeEvent;
+    @TargetNode private PhysicalEntity physicalEntity;
 
     private Integer stoichiometry = 1;
     private int order;
 
-    public InputForReactionLikeEvent() {}
+    public HasComponent() {}
 
-    public ReactionLikeEvent getReactionLikeEvent() {
-        return reactionLikeEvent;
+    public PhysicalEntity getPhysicalEntity() {
+        return physicalEntity;
     }
 
-    public void setReactionLikeEvent(ReactionLikeEvent event) {
-        this.reactionLikeEvent = event;
+    public void setPhysicalEntity(PhysicalEntity physicalEntity) {
+        this.physicalEntity = physicalEntity;
     }
 
     public Integer getStoichiometry() {
@@ -49,16 +51,16 @@ public class InputForReactionLikeEvent implements Comparable<InputForReactionLik
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        return Objects.equals(reactionLikeEvent, ((InputForReactionLikeEvent) o).reactionLikeEvent);
+        return Objects.equals(physicalEntity, ((HasComponent) o).physicalEntity);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(reactionLikeEvent);
+        return Objects.hash(physicalEntity);
     }
 
     @Override
-    public int compareTo(InputForReactionLikeEvent o) {
+    public int compareTo(HasComponent o) {
         return this.order - o.order;
     }
 }

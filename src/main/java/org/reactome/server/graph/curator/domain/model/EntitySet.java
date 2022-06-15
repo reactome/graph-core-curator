@@ -5,6 +5,7 @@ import org.reactome.server.graph.curator.domain.annotations.ReactomeConstraint;
 import org.reactome.server.graph.curator.domain.annotations.ReactomeInstanceDefiningValue;
 import org.reactome.server.graph.curator.domain.annotations.ReactomeProperty;
 import org.reactome.server.graph.curator.domain.annotations.ReactomeSchemaIgnore;
+import org.reactome.server.graph.curator.domain.relationship.HasMember;
 import org.springframework.data.neo4j.core.schema.Node;
 import org.springframework.data.neo4j.core.schema.Relationship;
 
@@ -28,7 +29,7 @@ public abstract class EntitySet extends PhysicalEntity {
     @ReactomeConstraint(constraint = ReactomeConstraint.Constraint.MANDATORY)
     @ReactomeInstanceDefiningValue(category = ReactomeInstanceDefiningValue.Category.all)
     @Relationship(type = "hasMember")
-    private List<PhysicalEntity> hasMember;
+    private SortedSet<HasMember> hasMember;
 
     @ReactomeConstraint(constraint = ReactomeConstraint.Constraint.REQUIRED)
     @Relationship(type = "species")
@@ -49,11 +50,31 @@ public abstract class EntitySet extends PhysicalEntity {
     }
 
     public List<PhysicalEntity> getHasMember() {
-        return hasMember;
+        List<PhysicalEntity> rtn = null;
+        if (hasMember != null) {
+            rtn = new ArrayList<>();
+            //stoichiometry does NOT need to be taken into account here
+            for (HasMember component : hasMember) {
+                rtn.add(component.getPhysicalEntity());
+            }
+        }
+        return rtn;
     }
 
     public void setHasMember(List<PhysicalEntity> hasMember) {
-        this.hasMember = hasMember;
+        if (hasMember == null) return;
+        Map<Long, HasMember> components = new LinkedHashMap<>();
+        int order = 0;
+        for (PhysicalEntity physicalEntity : hasMember) {
+            //stoichiometry does NOT need to be taken into account here
+            HasMember aux = new HasMember();
+//            aux.setEntitySet(this);
+            aux.setPhysicalEntity(physicalEntity);
+            aux.setOrder(order++);
+            components.put(physicalEntity.getDB_ID(), aux);
+
+        }
+        this.hasMember = new TreeSet<>(components.values());
     }
 
     public List<Species> getSpecies() {

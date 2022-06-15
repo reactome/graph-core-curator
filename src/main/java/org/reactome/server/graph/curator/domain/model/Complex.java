@@ -5,6 +5,8 @@ import org.reactome.server.graph.curator.domain.annotations.ReactomeConstraint;
 import org.reactome.server.graph.curator.domain.annotations.ReactomeInstanceDefiningValue;
 import org.reactome.server.graph.curator.domain.annotations.ReactomeProperty;
 import org.reactome.server.graph.curator.domain.annotations.ReactomeSchemaIgnore;
+import org.reactome.server.graph.curator.domain.relationship.HasCompartment;
+import org.reactome.server.graph.curator.domain.relationship.HasComponent;
 import org.springframework.data.neo4j.core.schema.Node;
 import org.springframework.data.neo4j.core.schema.Relationship;
 
@@ -28,7 +30,7 @@ public class Complex extends PhysicalEntity {
     @ReactomeConstraint(constraint = ReactomeConstraint.Constraint.MANDATORY)
     @ReactomeInstanceDefiningValue(category = ReactomeInstanceDefiningValue.Category.all)
     @Relationship(type = "hasComponent")
-    private List<PhysicalEntity> hasComponent;
+    private SortedSet<HasComponent> hasComponent;
 
     @ReactomeConstraint(constraint = ReactomeConstraint.Constraint.OPTIONAL)
     @ReactomeProperty
@@ -40,7 +42,7 @@ public class Complex extends PhysicalEntity {
 
     @ReactomeConstraint(constraint = ReactomeConstraint.Constraint.NOMANUALEDIT)
     @Relationship(type = "includedLocation")
-    private List<Compartment> includedLocation;
+    private SortedSet<HasCompartment> includedLocation;
 
     @ReactomeConstraint(constraint = ReactomeConstraint.Constraint.REQUIRED)
     @Relationship(type = "species")
@@ -65,13 +67,35 @@ public class Complex extends PhysicalEntity {
     }
 
     public List<PhysicalEntity> getHasComponent(){
-        return hasComponent;
+        List<PhysicalEntity> rtn = null;
+        if (this.hasComponent != null) {
+            rtn = new ArrayList<>();
+            for (HasComponent component : this.hasComponent) {
+                for (int i = 0; i < component.getStoichiometry(); i++) {
+                    rtn.add(component.getPhysicalEntity());
+                }
+            }
+        }
+        return rtn;
     }
 
     public void setHasComponent(List<PhysicalEntity> hasComponent) {
-        this.hasComponent = hasComponent;
+        if (hasComponent == null) return;
+        Map<Long, HasComponent> components = new LinkedHashMap<>();
+        int order = 0;
+        for (PhysicalEntity physicalEntity : hasComponent) {
+            HasComponent component = components.get(physicalEntity.getDB_ID());
+            if (component != null) {
+                component.setStoichiometry(component.getStoichiometry() + 1);
+            } else {
+                component = new HasComponent();
+                component.setPhysicalEntity(physicalEntity);
+                component.setOrder(order++);
+                components.put(physicalEntity.getDB_ID(), component);
+            }
+        }
+        this.hasComponent = new TreeSet<>(components.values());
     }
-
     public Boolean getStoichiometryKnown() {
         return stoichiometryKnown;
     }
@@ -89,13 +113,17 @@ public class Complex extends PhysicalEntity {
     }
 
     public List<Compartment> getIncludedLocation() {
-        return includedLocation;
+        if (includedLocation == null) return null;
+        List<Compartment> rtn = new ArrayList<>();
+        for (HasCompartment c : includedLocation) {
+            rtn.add(c.getCompartment());
+        }
+        return rtn;
     }
 
-    public void setIncludedLocation(List<Compartment> includedLocation) {
+    public void setIncludedLocation(SortedSet<HasCompartment> includedLocation) {
         this.includedLocation = includedLocation;
     }
-
     public Compartment getCompartment() {
         return compartment;
     }

@@ -5,6 +5,7 @@ import org.reactome.server.graph.curator.domain.annotations.ReactomeConstraint;
 import org.reactome.server.graph.curator.domain.annotations.ReactomeInstanceDefiningValue;
 import org.reactome.server.graph.curator.domain.annotations.ReactomeProperty;
 import org.reactome.server.graph.curator.domain.annotations.ReactomeSchemaIgnore;
+import org.reactome.server.graph.curator.domain.relationship.HasModifiedResidue;
 import org.springframework.data.neo4j.core.schema.Node;
 import org.springframework.data.neo4j.core.schema.Relationship;
 
@@ -29,7 +30,7 @@ public class EntityWithAccessionedSequence extends GenomeEncodedEntity {
     @ReactomeConstraint(constraint = ReactomeConstraint.Constraint.REQUIRED)
     @ReactomeInstanceDefiningValue(category = ReactomeInstanceDefiningValue.Category.all)
     @Relationship(type = "hasModifiedResidue")
-    private List<AbstractModifiedResidue> hasModifiedResidue;
+    private SortedSet<HasModifiedResidue> hasModifiedResidue;
 
     @ReactomeConstraint(constraint = ReactomeConstraint.Constraint.MANDATORY)
     @ReactomeInstanceDefiningValue(category = ReactomeInstanceDefiningValue.Category.all)
@@ -59,11 +60,35 @@ public class EntityWithAccessionedSequence extends GenomeEncodedEntity {
     }
 
     public List<AbstractModifiedResidue> getHasModifiedResidue() {
-        return hasModifiedResidue;
+        List<AbstractModifiedResidue> rtn = null;
+        if (hasModifiedResidue != null) {
+            rtn = new ArrayList<>();
+            for (HasModifiedResidue modifiedResidue : hasModifiedResidue) {
+                for (int i = 0; i < modifiedResidue.getStoichiometry(); i++) {
+                    rtn.add(modifiedResidue.getAbstractModifiedResidue());
+                }
+            }
+        }
+        return rtn;
     }
 
     public void setHasModifiedResidue(List<AbstractModifiedResidue> hasModifiedResidue) {
-        this.hasModifiedResidue = hasModifiedResidue;
+        if (hasModifiedResidue == null) return;
+        int order = 0;
+        Map<Long, HasModifiedResidue> map = new HashMap<>();
+        for (AbstractModifiedResidue abstractModifiedResidue : hasModifiedResidue) {
+            HasModifiedResidue hmr = map.get(abstractModifiedResidue.getDB_ID());
+            if (hmr != null) {
+                hmr.setStoichiometry(hmr.getStoichiometry() + 1);
+            } else {
+                hmr = new HasModifiedResidue();
+//                hmr.setEntityWithAccessionedSequence(this);
+                hmr.setAbstractModifiedResidue(abstractModifiedResidue);
+                hmr.setOrder(order++);
+                map.put(abstractModifiedResidue.getDB_ID(), hmr);
+            }
+        }
+        this.hasModifiedResidue = new TreeSet<>(map.values());
     }
 
     public ReferenceSequence getReferenceEntity() {
