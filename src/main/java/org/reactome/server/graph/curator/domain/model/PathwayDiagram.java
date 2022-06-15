@@ -2,9 +2,11 @@ package org.reactome.server.graph.curator.domain.model;
 
 import org.reactome.server.graph.curator.domain.annotations.ReactomeInstanceDefiningValue;
 import org.reactome.server.graph.curator.domain.annotations.ReactomeProperty;
+import org.reactome.server.graph.curator.domain.relationship.HasComponent;
+import org.reactome.server.graph.curator.domain.relationship.RepresentedPathway;
 import org.springframework.data.neo4j.core.schema.Relationship;
 
-import java.util.List;
+import java.util.*;
 
 public class PathwayDiagram  extends DatabaseObject {
 
@@ -19,7 +21,7 @@ public class PathwayDiagram  extends DatabaseObject {
 
     @ReactomeInstanceDefiningValue(category = ReactomeInstanceDefiningValue.Category.all)
     @Relationship(type = "representedPathway")
-    private List<Pathway> representedPathway;
+    private SortedSet<RepresentedPathway> representedPathway;
 
     public Integer getWidth() {
         return this.width;
@@ -45,11 +47,34 @@ public class PathwayDiagram  extends DatabaseObject {
         this.storedATXML = storedATXML;
     }
 
-    public List<Pathway> getAuthored() {
-        return representedPathway;
+    public List<Pathway> getRepresentedPathway(){
+        List<Pathway> rtn = null;
+        if (this.representedPathway != null) {
+            rtn = new ArrayList<>();
+            for (RepresentedPathway representedPathway : this.representedPathway) {
+                for (int i = 0; i < representedPathway.getStoichiometry(); i++) {
+                    rtn.add(representedPathway.getPathway());
+                }
+            }
+        }
+        return rtn;
     }
 
-    public void setAuthored(List<Pathway> authored) {
-        this.representedPathway = representedPathway;
+    public void setRepresentedPathway(List<Pathway> representedPathway) {
+        if (representedPathway == null) return;
+        Map<Long, RepresentedPathway> representedPathways = new LinkedHashMap<>();
+        int order = 0;
+        for (Pathway pathway : representedPathway) {
+            RepresentedPathway rp = representedPathways.get(pathway.getDB_ID());
+            if (rp != null) {
+                rp.setStoichiometry(rp.getStoichiometry() + 1);
+            } else {
+                rp = new RepresentedPathway();
+                rp.setPathway(pathway);
+                rp.setOrder(order++);
+                representedPathways.put(pathway.getDB_ID(), rp);
+            }
+        }
+        this.representedPathway = new TreeSet<>(representedPathways.values());
     }
 }
