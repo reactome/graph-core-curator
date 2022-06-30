@@ -111,13 +111,10 @@ public abstract class DatabaseObject implements Serializable, Comparable<Databas
         this.stableIdentifier = stableIdentifier;
     }
 
-    public String getStId() {
-        return getStableIdentifier() != null ? getStableIdentifier().getIdentifier() : null;
-    }
     @Override
     public String toString() {
-        return getClass().getSimpleName() + " {" +
-                (getStId() == null ? "DB_ID=" + DB_ID : "DB_ID=" + DB_ID + ", stId='" + getStId() + '\'') +
+        return getClass().getSimpleName() +
+                " {DB_ID=" + DB_ID +
                 ", displayName='" + _displayName + '\'' +
                 "}";
     }
@@ -129,15 +126,12 @@ public abstract class DatabaseObject implements Serializable, Comparable<Databas
 
         DatabaseObject that = (DatabaseObject) o;
         return DB_ID != null ? DB_ID.equals(that.DB_ID) : that.DB_ID == null &&
-                (getStId() != null ?
-                        getStId().equals(that.getStId()) :
-                        that.getStId() == null && Objects.equals(_displayName, that._displayName));
+               Objects.equals(_displayName, that._displayName);
     }
 
     @Override
     public int hashCode() {
         int result = DB_ID != null ? DB_ID.hashCode() : 0;
-        result = 31 * result + (getStId() != null ? getStId().hashCode() : 0);
         result = 31 * result + (_displayName != null ? _displayName.hashCode() : 0);
         return result;
     }
@@ -145,10 +139,6 @@ public abstract class DatabaseObject implements Serializable, Comparable<Databas
     @Override
     public int compareTo(@NonNull DatabaseObject o) {
         return this.DB_ID.compareTo(o.DB_ID);
-    }
-
-    public final String getSchemaClass() {
-        return getClass().getSimpleName();
     }
 
     public static DatabaseObject emptyObject() {
