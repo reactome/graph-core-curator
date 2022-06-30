@@ -9,7 +9,7 @@ import org.springframework.data.neo4j.core.schema.Node;
  */
 @SuppressWarnings("unused")
 @Node
-public class FailedReaction extends ReactionLikeEvent {
+public class FailedReaction extends ReactionlikeEvent {
 
     public FailedReaction() {}
 

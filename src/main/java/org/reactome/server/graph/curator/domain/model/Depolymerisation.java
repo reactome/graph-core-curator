@@ -7,7 +7,7 @@ import org.springframework.data.neo4j.core.schema.Node;
  */
 @SuppressWarnings("unused")
 @Node
-public class Depolymerisation extends ReactionLikeEvent {
+public class Depolymerisation extends ReactionlikeEvent {
 
     public Depolymerisation() {}
 

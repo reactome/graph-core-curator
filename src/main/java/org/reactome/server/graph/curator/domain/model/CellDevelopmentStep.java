@@ -5,7 +5,7 @@ import org.springframework.data.neo4j.core.schema.Node;
 import org.springframework.data.neo4j.core.schema.Relationship;
 
 @Node
-public class CellDevelopmentStep extends ReactionLikeEvent {
+public class CellDevelopmentStep extends ReactionlikeEvent {
 
     @ReactomeConstraint(constraint = ReactomeConstraint.Constraint.REQUIRED)
     @Relationship(type = "tissue")

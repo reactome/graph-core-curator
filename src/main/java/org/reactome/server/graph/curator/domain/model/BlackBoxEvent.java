@@ -10,7 +10,7 @@ import org.springframework.data.neo4j.core.schema.Relationship;
  */
 @SuppressWarnings("unused")
 @Node
-public class BlackBoxEvent extends ReactionLikeEvent {
+public class BlackBoxEvent extends ReactionlikeEvent {
 
     @ReactomeSchemaIgnore
     @Override

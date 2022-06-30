@@ -11,7 +11,7 @@ import org.springframework.data.neo4j.core.schema.Relationship;
  */
 @SuppressWarnings("unused")
 @Node
-public class Reaction extends ReactionLikeEvent {
+public class Reaction extends ReactionlikeEvent {
 
     @ReactomeConstraint(constraint = ReactomeConstraint.Constraint.OPTIONAL)
     @Relationship(type = "reverseReaction")
