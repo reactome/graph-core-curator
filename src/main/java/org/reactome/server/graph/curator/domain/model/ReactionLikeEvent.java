@@ -18,8 +18,8 @@ import java.util.*;
  * This is still used for testing if graph and sql produce the same data import
  */
 @SuppressWarnings("unused")
-@Node
-public abstract class ReactionLikeEvent extends Event {
+@Node 
+public abstract class ReactionlikeEvent extends Event {
 
     @ReactomeConstraint(constraint = ReactomeConstraint.Constraint.OPTIONAL)
     @ReactomeProperty
@@ -58,7 +58,7 @@ public abstract class ReactionLikeEvent extends Event {
 
     @ReactomeConstraint(constraint = ReactomeConstraint.Constraint.OPTIONAL)
     @Relationship(type = "normalReaction")
-    private ReactionLikeEvent normalReaction;
+    private ReactionlikeEvent normalReaction;
 
     @ReactomeConstraint(constraint = ReactomeConstraint.Constraint.OPTIONAL)
     @Relationship(type = "regulatedBy")
@@ -84,10 +84,10 @@ public abstract class ReactionLikeEvent extends Event {
     @Relationship(type = "compartment")
     private List<Compartment> compartment;
 
-    public ReactionLikeEvent() {
+    public ReactionlikeEvent() {
     }
 
-    public ReactionLikeEvent(Long dbId) {
+    public ReactionlikeEvent(Long dbId) {
         super(dbId);
     }
 
@@ -139,11 +139,11 @@ public abstract class ReactionLikeEvent extends Event {
         this.entityOnOtherCell = entityOnOtherCell;
     }
 
-    public ReactionLikeEvent getNormalReaction() {
+    public ReactionlikeEvent getNormalReaction() {
         return normalReaction;
     }
 
-    public void setNormalReaction(ReactionLikeEvent normalReaction) {
+    public void setNormalReaction(ReactionlikeEvent normalReaction) {
         this.normalReaction = normalReaction;
     }
 
