@@ -10,8 +10,8 @@ import java.lang.annotation.Target;
 public @interface ReactomeInstanceDefiningValue {
     public Category category() default Category.none;
     enum Category {
-        all,
+        none,
         any,
-        none
+        all
     }
 }
