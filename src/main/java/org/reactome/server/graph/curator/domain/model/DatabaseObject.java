@@ -52,6 +52,10 @@ public abstract class DatabaseObject implements Serializable, Comparable<Databas
     private String _displayName;
 
     @ReactomeConstraint(constraint = ReactomeConstraint.Constraint.NOMANUALEDIT)
+    @ReactomeProperty
+    private String _timestamp;
+
+    @ReactomeConstraint(constraint = ReactomeConstraint.Constraint.NOMANUALEDIT)
     @Relationship(type = "created", direction = Relationship.Direction.INCOMING)
     private InstanceEdit created;
 
@@ -85,6 +89,14 @@ public abstract class DatabaseObject implements Serializable, Comparable<Databas
 
     public void set_displayName(String displayName) {
         this._displayName = displayName;
+    }
+
+    public String get_timestamp() {
+        return _timestamp;
+    }
+
+    public void set_timestamp(String timestamp) {
+        this._timestamp = timestamp;
     }
     
     public InstanceEdit getCreated() {
