@@ -45,11 +45,47 @@ public class Pathway extends Event {
     @Relationship(type = "normalPathway")
     private Pathway normalPathway;
 
+    @ReactomeConstraint(constraint = ReactomeConstraint.Constraint.OPTIONAL)
+    @Relationship(type = "goBiologicalProcess")
+    private GO_BiologicalProcess goBiologicalProcess;
+
+    @ReactomeConstraint(constraint = ReactomeConstraint.Constraint.REQUIRED)
+    @Relationship(type = "edited", direction = Relationship.Direction.INCOMING)
+    private List<InstanceEdit> edited;
+
+    @ReactomeConstraint(constraint = ReactomeConstraint.Constraint.REQUIRED)
+    @Relationship(type = "authored", direction = Relationship.Direction.INCOMING)
+    private List<InstanceEdit> authored;
+
     public Pathway() {
     }
 
     public Pathway(Long dbId) {
         super(dbId);
+    }
+
+    public GO_BiologicalProcess getGoBiologicalProcess() {
+        return goBiologicalProcess;
+    }
+
+    public void setGoBiologicalProcess(GO_BiologicalProcess goBiologicalProcess) {
+        this.goBiologicalProcess = goBiologicalProcess;
+    }
+
+    public List<InstanceEdit> getEdited() {
+        return edited;
+    }
+
+    public void setEdited(List<InstanceEdit> edited) {
+        this.edited = edited;
+    }
+
+    public List<InstanceEdit> getAuthored() {
+        return authored;
+    }
+
+    public void setAuthored(List<InstanceEdit> authored) {
+        this.authored = authored;
     }
 
     public String getDoi() {

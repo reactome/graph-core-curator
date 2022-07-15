@@ -21,6 +21,11 @@ public abstract class Drug extends PhysicalEntity {
     @Relationship(type = "compartment")
     private List<Compartment> compartment;
 
+    @ReactomeConstraint(constraint = ReactomeConstraint.Constraint.MANDATORY)
+    @ReactomeInstanceDefiningValue(category = ReactomeInstanceDefiningValue.Category.all)
+    @Relationship(type = "disease")
+    private List<Disease> disease;
+
     public Drug() {}
 
     public ReferenceTherapeutic getReferenceEntity() {
@@ -37,5 +42,13 @@ public abstract class Drug extends PhysicalEntity {
 
     public void setCompartment(List<Compartment> compartment) {
         this.compartment = compartment;
+    }
+
+    public List<Disease> getDisease() {
+        return disease;
+    }
+
+    public void setDisease(List<Disease> disease) {
+        this.disease = disease;
     }
 }

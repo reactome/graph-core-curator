@@ -41,6 +41,10 @@ public abstract class ReferenceSequence extends ReferenceEntity {
     @Relationship(type = "species")
     private Species species;
 
+    @ReactomeConstraint(constraint = ReactomeConstraint.Constraint.NOMANUALEDIT)
+    @ReactomeProperty
+    private List<String> otherIdentifier;
+
     public ReferenceSequence() {}
 
     public String getChecksum() {
@@ -113,6 +117,14 @@ public abstract class ReferenceSequence extends ReferenceEntity {
 
     public void setSpecies(Species species) {
         this.species = species;
+    }
+
+    public List<String> getOtherIdentifier() {
+        return otherIdentifier;
+    }
+
+    public void setOtherIdentifier(List<String> otherIdentifier) {
+        this.otherIdentifier = otherIdentifier;
     }
 
 }
