@@ -1,5 +1,6 @@
 package org.reactome.server.graph.curator.domain.model;
 
+import org.reactome.server.graph.curator.domain.annotations.ReactomeConstraint;
 import org.reactome.server.graph.curator.domain.annotations.ReactomeInstanceDefiningValue;
 import org.reactome.server.graph.curator.domain.annotations.ReactomeProperty;
 import org.reactome.server.graph.curator.domain.relationship.HasComponent;
@@ -12,13 +13,19 @@ public class PathwayDiagram  extends DatabaseObject {
 
     public PathwayDiagram() {}
 
+    @ReactomeConstraint(constraint = ReactomeConstraint.Constraint.REQUIRED)
     @ReactomeProperty
     private Integer width;
+
+    @ReactomeConstraint(constraint = ReactomeConstraint.Constraint.REQUIRED)
     @ReactomeProperty
     private Integer height;
+
+    @ReactomeConstraint(constraint = ReactomeConstraint.Constraint.REQUIRED)
     @ReactomeProperty
     private String storedATXML;
 
+    @ReactomeConstraint(constraint = ReactomeConstraint.Constraint.MANDATORY)
     @ReactomeInstanceDefiningValue(category = ReactomeInstanceDefiningValue.Category.all)
     @Relationship(type = "representedPathway")
     private SortedSet<RepresentedPathway> representedPathway;
