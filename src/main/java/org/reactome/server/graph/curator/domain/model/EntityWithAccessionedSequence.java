@@ -37,10 +37,36 @@ public class EntityWithAccessionedSequence extends GenomeEncodedEntity {
     @Relationship(type = "referenceEntity")
     private ReferenceSequence referenceEntity;
 
+    @ReactomeConstraint(constraint = ReactomeConstraint.Constraint.MANDATORY)
+    @ReactomeInstanceDefiningValue(category = ReactomeInstanceDefiningValue.Category.none)
+    @ReactomeProperty
+    private List<String> name;
+
+    @ReactomeConstraint(constraint = ReactomeConstraint.Constraint.MANDATORY)
+    @ReactomeInstanceDefiningValue(category = ReactomeInstanceDefiningValue.Category.none)
+    @Relationship(type = "species")
+    private Taxon species;
+
     public EntityWithAccessionedSequence() {}
 
     public EntityWithAccessionedSequence(Long dbId) {
         super(dbId);
+    }
+
+    public List<String> getName() {
+        return name;
+    }
+
+    public void setName(List<String> name) {
+        this.name = name;
+    }
+
+    public Taxon getSpecies() {
+        return species;
+    }
+
+    public void setSpecies(Taxon species) {
+        this.species = species;
     }
 
     public Integer getEndCoordinate() {
