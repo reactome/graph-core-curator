@@ -5,6 +5,7 @@ import org.reactome.server.graph.curator.domain.annotations.ReactomeConstraint;
 import org.reactome.server.graph.curator.domain.annotations.ReactomeInstanceDefiningValue;
 import org.reactome.server.graph.curator.domain.annotations.ReactomeProperty;
 import org.reactome.server.graph.curator.domain.annotations.ReactomeSchemaIgnore;
+import org.reactome.server.graph.curator.domain.relationship.HasEvent;
 import org.springframework.data.neo4j.core.schema.Node;
 import org.springframework.data.neo4j.core.schema.Relationship;
 
@@ -39,7 +40,7 @@ public class Pathway extends Event {
     @ReactomeConstraint(constraint = ReactomeConstraint.Constraint.MANDATORY)
     @ReactomeInstanceDefiningValue(category = ReactomeInstanceDefiningValue.Category.all)
     @Relationship(type = "hasEvent")
-    private SortedSet<org.reactome.server.graph.domain.relationship.HasEvent> hasEvent;
+    private SortedSet<HasEvent> hasEvent;
 
     @ReactomeConstraint(constraint = ReactomeConstraint.Constraint.OPTIONAL)
     @Relationship(type = "normalPathway")
@@ -124,7 +125,7 @@ public class Pathway extends Event {
         if (hasEvent == null) return null;
         List<Event> rtn = new ArrayList<>();
 
-        for (org.reactome.server.graph.domain.relationship.HasEvent he : hasEvent) {
+        for (HasEvent he : hasEvent) {
             rtn.add(he.getEvent());
         }
         return rtn;
@@ -134,7 +135,7 @@ public class Pathway extends Event {
         this.hasEvent = new TreeSet<>();
         int order = 0;
         for (Event event : hasEvent) {
-            org.reactome.server.graph.domain.relationship.HasEvent aux = new org.reactome.server.graph.domain.relationship.HasEvent();
+            HasEvent aux = new HasEvent();
             aux.setEvent(event);
             aux.setOrder(order++);
             this.hasEvent.add(aux);
