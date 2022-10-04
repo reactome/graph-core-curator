@@ -1,4 +1,4 @@
-package org.reactome.server.graph.domain.relationship;
+package org.reactome.server.graph.curator.domain.relationship;
 
 import org.reactome.server.graph.curator.domain.model.Event;
 import org.springframework.data.neo4j.core.schema.GeneratedValue;
