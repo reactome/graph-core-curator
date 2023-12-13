@@ -8,7 +8,7 @@ import org.springframework.data.neo4j.core.schema.Relationship;
 
 import java.util.*;
 
-@SuppressWarnings({"unused"})
+@SuppressWarnings("unused")
 
 @Node
 public abstract class Event extends DatabaseObject {
@@ -110,8 +110,8 @@ public abstract class Event extends DatabaseObject {
         return _doRelease;
     }
 
-    public void set_doRelease(Boolean doRelease) {
-        this._doRelease = doRelease;
+    public void set_doRelease(Boolean _doRelease) {
+        this._doRelease = _doRelease;
     }
 
     public String getDefinition() {

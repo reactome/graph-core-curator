@@ -99,19 +99,19 @@ public class BlackBoxEvent extends ReactionlikeEvent {
         return rtn;
     }
 
-    public void setInput(List<PhysicalEntity> inputs) {
-        if (inputs == null) return;
+    public void setInput(List<PhysicalEntity> input) {
+        if (input == null) return;
         // Using LinkedHashMap in order to keep the Collection Sorted previously by AOP
         Map<Long, Input> map = new LinkedHashMap<>();
-        for (PhysicalEntity physicalEntity : inputs) {
-            Input input = map.get(physicalEntity.getDB_ID());
-            if (input == null) {
-                input = new Input();
-//                input.setReactionLikeEvent(this);
-                input.setPhysicalEntity(physicalEntity);
-                map.put(physicalEntity.getDB_ID(), input);
+        for (PhysicalEntity physicalEntity : input) {
+            Input i = map.get(physicalEntity.getDB_ID());
+            if (i == null) {
+                i = new Input();
+//                i.setReactionLikeEvent(this);
+                i.setPhysicalEntity(physicalEntity);
+                map.put(physicalEntity.getDB_ID(), i);
             } else {
-                input.setStoichiometry(input.getStoichiometry() + 1);
+                i.setStoichiometry(i.getStoichiometry() + 1);
             }
         }
         this.input = new HashSet<>(map.values());

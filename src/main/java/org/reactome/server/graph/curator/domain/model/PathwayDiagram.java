@@ -9,7 +9,7 @@ import org.springframework.data.neo4j.core.schema.Relationship;
 
 import java.util.*;
 
-public class PathwayDiagram  extends DatabaseObject {
+public class PathwayDiagram extends DatabaseObject {
 
     public PathwayDiagram() {}
 
@@ -50,7 +50,7 @@ public class PathwayDiagram  extends DatabaseObject {
         return this.storedATXML;
     }
 
-    public void setStoredATXML(String height) {
+    public void setStoredATXML(String storedATXML) {
         this.storedATXML = storedATXML;
     }
 

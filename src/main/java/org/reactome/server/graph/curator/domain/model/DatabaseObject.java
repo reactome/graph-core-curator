@@ -9,7 +9,6 @@ import org.reactome.server.graph.curator.domain.annotations.ReactomeProperty;
 import org.reactome.server.graph.curator.domain.annotations.ReactomeSchemaIgnore;
 import org.reactome.server.graph.curator.domain.annotations.ReactomeTransient;
 import org.reactome.server.graph.curator.domain.result.DatabaseObjectLike;
-import org.springframework.data.neo4j.core.schema.GeneratedValue;
 import org.springframework.data.neo4j.core.schema.Id;
 import org.springframework.data.neo4j.core.schema.Node;
 import org.springframework.data.neo4j.core.schema.Relationship;
@@ -87,16 +86,16 @@ public abstract class DatabaseObject implements Serializable, Comparable<Databas
         return _displayName;
     }
 
-    public void set_displayName(String displayName) {
-        this._displayName = displayName;
+    public void set_displayName(String _displayName) {
+        this._displayName = _displayName;
     }
 
     public String get_timestamp() {
         return _timestamp;
     }
 
-    public void set_timestamp(String timestamp) {
-        this._timestamp = timestamp;
+    public void set_timestamp(String _timestamp) {
+        this._timestamp = _timestamp;
     }
     
     public InstanceEdit getCreated() {
@@ -119,7 +118,7 @@ public abstract class DatabaseObject implements Serializable, Comparable<Databas
         return stableIdentifier;
     }
 
-    public void setStableIdentifier(StableIdentifier  stableIdentifier) {
+    public void setStableIdentifier(StableIdentifier stableIdentifier) {
         this.stableIdentifier = stableIdentifier;
     }
 

@@ -81,6 +81,10 @@ public class Book extends Publication {
         return chapterAuthors;
     }
 
+    public void setChapterAuthors(List<Person> chapterAuthors) {
+        this.chapterAuthors = chapterAuthors;
+    }
+
     public void setSummation(List<Person> chapterAuthors) {
         this.chapterAuthors = chapterAuthors;
     }

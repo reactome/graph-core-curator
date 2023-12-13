@@ -30,11 +30,11 @@ public class StableIdentifierReleaseStatus extends DatabaseObject {
         this.releaseNumber = releaseNumber;
     }
 
-    public String getReleaseStatus() {
+    public String getStatus() {
         return status.toString();
     }
 
-    public void setReleaseStatus(String releaseStatus) {
-        this.status = ReleaseStatus.valueOf(releaseStatus);
+    public void setStatus(String status) {
+        this.status = ReleaseStatus.valueOf(status);
     }
 }

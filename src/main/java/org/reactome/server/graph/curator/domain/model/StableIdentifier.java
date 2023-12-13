@@ -70,8 +70,8 @@ public class StableIdentifier extends DatabaseObject {
         return history;
     }
 
-    public void setHistoryStatus(List<StableIdentifierHistory> historyStatus) {
-        this.history = historyStatus;
+    public void setHistory(List<StableIdentifierHistory> history) {
+        this.history = history;
     }
 
 }

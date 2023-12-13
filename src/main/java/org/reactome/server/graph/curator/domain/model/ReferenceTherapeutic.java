@@ -80,7 +80,7 @@ public class ReferenceTherapeutic extends ReferenceEntity{
         return withdrawn;
     }
 
-    public void setWithdrawn(Boolean approved) {
+    public void setWithdrawn(Boolean withdrawn) {
         this.withdrawn = withdrawn;
     }
 

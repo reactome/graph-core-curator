@@ -9,7 +9,7 @@ import java.util.List;
 
 @SuppressWarnings("unused")
 @Node
-public class Affiliation extends  DatabaseObject{
+public class Affiliation extends DatabaseObject{
 
     @ReactomeConstraint(constraint = ReactomeConstraint.Constraint.REQUIRED)
     @ReactomeProperty

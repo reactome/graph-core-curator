@@ -38,7 +38,7 @@ public class _Deleted extends DatabaseObject{
 
     public DeletedControlledVocabulary getReason() { return this.reason; }
 
-    public void setReason(DeletedControlledVocabulary curatorComment) {
+    public void setReason(DeletedControlledVocabulary reason) {
         this.reason = reason;
     }
 

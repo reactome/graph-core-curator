@@ -54,7 +54,7 @@ public class InstanceEdit extends DatabaseObject {
         return this._applyToAllEditedInstances;
     }
 
-    public void set_applyToAllEditedInstances(String applyToAllEditedInstances) {
-        this._applyToAllEditedInstances = applyToAllEditedInstances;
+    public void set_applyToAllEditedInstances(String _applyToAllEditedInstances) {
+        this._applyToAllEditedInstances = _applyToAllEditedInstances;
     }
 }

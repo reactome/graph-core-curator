@@ -12,7 +12,7 @@ import java.util.List;
 public class Cell extends PhysicalEntity {
     @ReactomeConstraint(constraint = ReactomeConstraint.Constraint.REQUIRED)
     @Relationship(type = "rnaMarker")
-    private List<EntityWithAccessionedSequence> RNAMarker;
+    private List<EntityWithAccessionedSequence> rnaMarker;
 
     @ReactomeConstraint(constraint = ReactomeConstraint.Constraint.REQUIRED)
     @Relationship(type = "markerReference")
@@ -49,11 +49,11 @@ public class Cell extends PhysicalEntity {
     }
 
     public List<EntityWithAccessionedSequence> getRNAMarker() {
-        return RNAMarker;
+        return rnaMarker;
     }
 
-    public void setRNAMarker(List<EntityWithAccessionedSequence> rNAMarker) {
-        RNAMarker = rNAMarker;
+    public void setRNAMarker(List<EntityWithAccessionedSequence> rnaMarker) {
+        rnaMarker = rnaMarker;
     }
 
     public List<MarkerReference> getMarkerReference() {

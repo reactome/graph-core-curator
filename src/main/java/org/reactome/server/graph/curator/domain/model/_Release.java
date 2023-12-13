@@ -14,11 +14,11 @@ public class _Release extends DatabaseObject{
     @ReactomeProperty
     private String releaseDate;
 
-    public String getName() {
+    public String getReleaseDate() {
         return this.releaseDate;
     }
 
-    public void setName(String releaseDate) {
+    public void setReleaseDate(String releaseDate) {
         this.releaseDate = releaseDate;
     }
 

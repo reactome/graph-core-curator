@@ -24,11 +24,11 @@ public class _UpdateTracker extends DatabaseObject {
     @ReactomeAllowedClasses(allowed = {Event.class, PhysicalEntity.class})
     private List<DatabaseObject> updatedInstance;
 
-    public List<String> getSpecies() {
+    public List<String> getAction() {
         return action;
     }
 
-    public void setSpecies(List<String> action) {
+    public void setAction(List<String> action) {
         this.action = action;
     }
 
@@ -36,16 +36,20 @@ public class _UpdateTracker extends DatabaseObject {
         return this._release;
     }
 
-    public void set_release(_Release releaseDate) {
-        this._release = releaseDate;
+    public void set_release(_Release _release) {
+        this._release = _release;
     }
 
-    public List<DatabaseObject> getUpdatedInstance() {
-        return updatedInstance;
-    }
+    @ReactomeAllowedClasses(allowed = {Event.class, PhysicalEntity.class})
+    public List<DatabaseObject> getUpdatedInstance() { return updatedInstance; }
 
-    public void setUpdatedInstance(List<DatabaseObject> replacementInstances) {
-        this.updatedInstance = replacementInstances;
-    }
+    public void setUpdatedInstance(List<DatabaseObject> updatedInstance) {
+        if(updatedInstance == null) return;
 
+        if (updatedInstance instanceof Event || updatedInstance instanceof PhysicalEntity) {
+            this.updatedInstance = updatedInstance;
+        } else {
+            throw new RuntimeException(updatedInstance + " is none of: Event, PhysicalEntity");
+        }
+    }
 }

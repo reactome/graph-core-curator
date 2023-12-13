@@ -31,8 +31,8 @@ public class ReferenceGeneProduct extends ReferenceSequence {
         return _chainChangeLog;
     }
 
-    public void set_chainChangeLog(String chainChangeLog) {
-        this._chainChangeLog = chainChangeLog;
+    public void set_chainChangeLog(String _chainChangeLog) {
+        this._chainChangeLog = _chainChangeLog;
     }
 
     public List<String> getChain() {
