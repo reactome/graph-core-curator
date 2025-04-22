@@ -1,32 +1,64 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
-    <groupId>org.reactome.server.graph.curator</groupId>
-    <artifactId>graph-core-curator</artifactId>
-
-    <packaging>jar</packaging>
-    <version>1.0.0-SNAPSHOT</version>
-    <name>Graph Core for Curator Tool</name>
-
-    <description>
-        The Reactome Graph Project aims to model the Reactome knowledgebase into a interconnected graph. For more information visit the reactome github repository.
-    </description>
-
-    <url>https://github.com/reactome/graph-core-curator</url>
-
-    <organization>
-        <name>The European Bioinformatics Institute</name>
-        <url>http://www.ebi.ac.uk/</url>
-    </organization>
-
-    <developers>
-    </developers>
 
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-parent</artifactId>
         <version>2.6.6</version>
     </parent>
+
+    <groupId>org.reactome.server.graph.curator</groupId>
+    <artifactId>graph-core-curator</artifactId>
+    <version>1.0.0-SNAPSHOT</version>
+    <packaging>jar</packaging>
+
+    <name>Graph Core for Curator Tool</name>
+    <description>
+        The Reactome Graph Project aims to model the Reactome knowledgebase into a interconnected graph. For more information visit the reactome github repository.
+    </description>
+    <url>https://github.com/reactome/graph-core-curator</url>
+    <organization>
+        <name>Reactome</name>
+        <url>https://reactome.org</url>
+    </organization>
+    <licenses>
+        <license>
+            <name>The Apache Software License, Version 2.0</name>
+            <url>https://www.apache.org/licenses/LICENSE-2.0.txt</url>
+        </license>
+    </licenses>
+
+    <developers>
+        <developer>
+            <name>Reactome Team</name>
+            <email>help@reactome.org</email>
+            <organization>Reactome</organization>
+            <organizationUrl>https://reactome.org</organizationUrl>
+        </developer>
+    </developers>
+
+    <scm>
+        <connection>scm:git:git://github.com/reactome/graph-core-curator.git</connection>
+        <developerConnection>scm:git:ssh://github.com:reactome/graph-core-curator.git</developerConnection>
+        <url>https://github.com/reactome/graph-core-curator/tree/master</url>
+    </scm>
+    <!--Configures the distribution to nexus repository -->
+    <distributionManagement>
+        <!-- Sonatype Release repo -->
+        <repository>
+            <id>ossrh</id>
+            <name>Sonatype Release Repository</name>
+            <url>https://oss.sonatype.org/service/local/staging/deploy/maven2</url>
+        </repository>
+
+        <!-- Sonatype SNAPSHOT repo -->
+        <snapshotRepository>
+            <id>ossrh</id>
+            <name>Sonatype Snapshot Repository</name>
+            <url>https://oss.sonatype.org/content/repositories/snapshots</url>
+        </snapshotRepository>
+    </distributionManagement>
 
     <properties>
 
@@ -47,11 +79,16 @@
         <!--maven build and plugins-->
         <maven.compiler.version>3.8.1</maven.compiler.version>
         <maven.resources.version>3.2.0</maven.resources.version>
-        <maven.jar.version>3.2.0</maven.jar.version>
+        <maven.jar.version>3.4.2</maven.jar.version>
+        <maven.gpg.version>3.2.7</maven.gpg.version>
+        <maven.javadoc.version>3.11.2</maven.javadoc.version>
+        <maven.release.version>3.3.1</maven.release.version>
         <maven.source.version>3.2.1</maven.source.version>
+        <nexus-staging-maven-plugin>1.7.0</nexus-staging-maven-plugin>
 
         <!-- Test dependencies -->
         <reactome.base>1.2.21</reactome.base>
+
     </properties>
 
     <dependencies>
@@ -130,23 +167,51 @@
         </dependency>
     </dependencies>
 
+    <repositories>
+        <repository>
+            <id>mvn-central</id>
+            <name>The Maven Central repository</name>
+            <url>https://oss.sonatype.org/content/repositories/releases/</url>
+            <releases>
+                <enabled>true</enabled>
+            </releases>
+            <snapshots>
+                <enabled>false</enabled>
+            </snapshots>
+        </repository>
+        <repository>
+            <id>nexus-ebi-repo</id>
+            <name>The EBI internal repository</name>
+            <url>https://www.ebi.ac.uk/Tools/maven/repos/content/groups/ebi-repo/</url>
+            <releases>
+                <enabled>true</enabled>
+            </releases>
+            <snapshots>
+                <enabled>false</enabled>
+            </snapshots>
+        </repository>
+
+        <repository>
+            <id>spring-libs-release</id>
+            <url>https://repo.spring.io/libs-snapshot</url>
+        </repository>
+
+    </repositories>
+
     <build>
         <finalName>${artifactId}</finalName>
-
         <resources>
             <resource>
                 <directory>src/main/resources</directory>
                 <filtering>false</filtering>
             </resource>
         </resources>
-
         <testResources>
             <testResource>
                 <directory>src/test/resources</directory>
                 <filtering>true</filtering>
             </testResource>
         </testResources>
-
         <plugins>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
@@ -189,7 +254,6 @@
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-resources-plugin</artifactId>
                 <version>${maven.resources.version}</version>
-
                 <configuration>
                     <escapeString>\</escapeString>
                 </configuration>
@@ -276,54 +340,69 @@
                     </execution>
                 </executions>
             </plugin>
+
+            <!-- Nexus staging plugin for Sonatype deployment -->
+            <plugin>
+                <groupId>org.sonatype.plugins</groupId>
+                <artifactId>nexus-staging-maven-plugin</artifactId>
+                <version>${nexus-staging-maven-plugin}</version>
+                <extensions>true</extensions>
+                <configuration>
+                    <serverId>ossrh</serverId>
+                    <nexusUrl>https://s01.oss.sonatype.org/</nexusUrl>
+                    <autoReleaseAfterClose>true</autoReleaseAfterClose>
+                </configuration>
+            </plugin>
+
+            <!-- Generate JavaDoc jar file -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-javadoc-plugin</artifactId>
+                <version>${maven.javadoc.version}</version>
+                <executions>
+                    <execution>
+                        <id>attach-javadocs</id>
+                        <goals>
+                            <goal>jar</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+
+            <!-- Signs deployed jar, source jar, and JavaDoc jar with GPG -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-gpg-plugin</artifactId>
+                <version>${maven.gpg.version}</version>
+                <executions>
+                    <execution>
+                        <id>sign-artifacts</id>
+                        <phase>verify</phase>
+                        <goals>
+                            <goal>sign</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+
+            <!-- Allows "release" mvn goal to deploy a SNAPSHOT or version release to Sonatype -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-release-plugin</artifactId>
+                <version>${maven.release.version}</version>
+                <configuration>
+                    <autoVersionSubmodules>true</autoVersionSubmodules>
+                    <useReleaseProfile>false</useReleaseProfile>
+                    <releaseProfiles>release</releaseProfiles>
+                    <goals>deploy</goals>
+                </configuration>
+            </plugin>
+
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>tidy-maven-plugin</artifactId>
+                <version>1.4.0</version>
+            </plugin>
         </plugins>
     </build>
-
-    <repositories>
-        <repository>
-            <id>mvn-central</id>
-            <name>The Maven Central repository</name>
-            <url>https://oss.sonatype.org/content/repositories/releases/</url>
-            <releases>
-                <enabled>true</enabled>
-            </releases>
-            <snapshots>
-                <enabled>false</enabled>
-            </snapshots>
-        </repository>
-        <repository>
-            <id>nexus-ebi-repo</id>
-            <name>The EBI internal repository</name>
-            <url>https://www.ebi.ac.uk/Tools/maven/repos/content/groups/ebi-repo/</url>
-            <releases>
-                <enabled>true</enabled>
-            </releases>
-            <snapshots>
-                <enabled>false</enabled>
-            </snapshots>
-        </repository>
-
-        <repository>
-            <id>spring-libs-release</id>
-            <url>https://repo.spring.io/libs-snapshot</url>
-        </repository>
-
-    </repositories>
-
-    <!--Configures the distribution to nexus repository -->
-    <distributionManagement>
-        <!-- EBI repo -->
-        <repository>
-            <id>pst-release</id>
-            <name>EBI Nexus Repository</name>
-            <url>https://www.ebi.ac.uk/Tools/maven/repos/content/repositories/pst-release</url>
-        </repository>
-        <!-- EBI SNAPSHOT repo -->
-        <snapshotRepository>
-            <uniqueVersion>false</uniqueVersion>
-            <id>pst-snapshots</id>
-            <name>EBI Nexus Snapshots Repository</name>
-            <url>https://www.ebi.ac.uk/Tools/maven/repos/content/repositories/pst-snapshots</url>
-        </snapshotRepository>
-    </distributionManagement>
 </project>
